@@ -54,6 +54,7 @@ def plot_thin_map_hawaii(ax):
 
     # Set the extent to focus on Hawaii and surrounding areas
     ax.set_extent([-179, -153, 15, 30])  # Adjust to focus on Hawaii
+    return ax,gl
 
 
 def plot_station_labels(ax, station_info):# Add labels to the stations
