@@ -92,4 +92,6 @@ def calculate_ntr(ds):
         print(f'Saved data for station {station_name} to {datapath}')
 
 ## run the function
-calculate_ntr(ds)
+# calculate_ntr(ds)
+
+
