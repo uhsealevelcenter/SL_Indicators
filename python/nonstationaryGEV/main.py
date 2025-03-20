@@ -36,16 +36,17 @@ print(f"Base directory: {base_dir}")
 dirs = make_directoryDict(base_dir)
 
 recordIDs = [50,52,57,58,59,60,61,552]
-recordIDs = [52,57,58,59,60,61,552]
+# recordIDs = [52,57,58,59,60,61,552]
 
 # recordIDs = [61,552]
-recordID = 57
+# recordID = 60
+# recordID = recordIDs[7]
 runWithoutModel = True
 returnPeriod = [2,10,50,100]
 year0plot = 1993
 saveToFile = True
 numProcesses = 8 # number of processes to run in parallel, select 1 if you want to run in serial
-climateIndex = ['AO','AAO','BEST','DMI','ONI','PDO','PMM','PNA','TNA']
+climateIndex = ['AO','BEST','ONI','PDO','PMM','PNA','TNA']
 # climateIndex = ['BEST']
 # climateIndex = ['AO','AAO','DMI','PDO','PMM','PNA','TNA']
 
@@ -61,21 +62,28 @@ rsl.close()
 
 make_directories(rsl_hourly,dirs)
 
+# check for limits file
+limitsPath = dirs['run_dir'] / 'limits.txt'
+if not limitsPath.exists():
+    define_limits(dirs['run_dir'])
+
 #%%
 # from models import prep_model_input_data
 # STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl,recordID,dirs, CIname='None')
 
 #%%
-# Preallocate the significance array
-SignifCvte1 = np.zeros(len(climateIndex))
-SignifCvte2_loc = np.zeros(len(climateIndex))
-SignifCvte2_T = np.zeros(len(climateIndex))
 
-runWithoutModel=True
-# run the models for all recordIDs
-# for recordID in recordIDs:
-_, _, _, _, _, _, x_N, w_N, wcomp, SignifN = run_noClimateIndex_models(rsl_hourly,recordID,runWithoutModel,dirs, returnPeriod, CIname='None', nproc=numProcesses)
-STNDtoMHHW, station_name, year0, mm, ampCvte1, SignifCvte1 = run_CI_models(rsl_hourly,recordID,False,dirs, returnPeriod, climateIndex,x_N, w_N, wcomp, SignifN, nproc=numProcesses)
+for recordID in recordIDs:
+    # Preallocate the significance array
+    SignifCvte1 = np.zeros(len(climateIndex))
+    SignifCvte2_loc = np.zeros(len(climateIndex))
+    SignifCvte2_T = np.zeros(len(climateIndex))
+    
+    runWithoutModel=True
+    # run the models for all recordIDs
+    # for recordID in recordIDs:
+    _, _, _, _, _, _, x_N, w_N, wcomp, SignifN = run_noClimateIndex_models(rsl_hourly,recordID,runWithoutModel,dirs, returnPeriod, CIname='None', nproc=numProcesses)
+    STNDtoMHHW, station_name, year0, mm, ampCvte1, SignifCvte1 = run_CI_models(rsl_hourly,recordID,False,dirs, returnPeriod, climateIndex,x_N, w_N, wcomp, SignifN, nproc=numProcesses)
 
 #%%
 # Initialize an empty list to store results

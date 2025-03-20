@@ -46,7 +46,7 @@ dirs = make_directoryDict(base_dir)
 
 #%% Define climate indices and record ID
 CI_dir = dirs['CI_dir']
-climateIndex = ['AO','AAO','BEST','DMI','ONI','PDO','PMM','PNA','TNA']
+climateIndex = ['AO','BEST','ONI','PDO','PMM','PNA','TNA']
 
 # Initialize a list to store DataFrames for each station
 dataframes_list = []
@@ -70,11 +70,20 @@ for recordID in rsl_hourly.record_id.values:  # Ensure recordID is a value
 
     # Loop through each climate index
     for indCI in range(len(climateIndex)):
-        CI = get_covariate(mm['t_monthly_max'], CI_dir, CIname=climateIndex[indCI])
+        CIname = climateIndex[indCI]
+        CI = get_covariate(mm['t_monthly_max'], CI_dir, CIname=CIname)
 
         # Define the number of lags
-        lag = 30
-        corr = np.zeros(lag)
+        orig_lag = 30
+        lag = orig_lag
+
+        if CIname == 'PDO': # choose a reasonable maximum lag for a given climate index based on literature
+            lag = 20
+
+        if CIname == 'PMM': # choose a reasonable maximum lag for a given climate index based on literature
+            lag = 15
+
+        corr = np.zeros(orig_lag)
 
         # Calculate lagged correlation
         for i in range(1, lag + 1):
@@ -101,14 +110,40 @@ for recordID in rsl_hourly.record_id.values:  # Ensure recordID is a value
         #     CIcorr_max_lag[indCI] = 0
 
         # get max correlation and lag
-        CIcorr_max_peaks[indCI] = np.max(CIcorr[indCI,:])
-        CIcorr_max_lag[indCI] = np.argmax(CIcorr[indCI,:])
+        CIcorr_max_peaks[indCI] = CIcorr[indCI, np.argmax(np.abs(CIcorr[indCI,:]))]
+        CIcorr_max_lag[indCI] = np.argmax(np.abs(CIcorr[indCI,:]))
 
-        
+        ##****######****### THE FOLLOWING LINES SET THE LAGS!!! ######****######****###
+        ####****######### REMOVE THIS SECTION TO ALLOW FOR AUTOMATIC LAG DETECTION ####
+
+        #if CIname is ONI or BEST, enforce 18-month lag
+        # # This is based on Long et al 2020
+        ## ONLY DO THIS FOR HAWAII STATIONS ###
+        if recordID in [57,58,59,60,61,552]:
+            if CIname in ['ONI', 'BEST']:
+                CIcorr_max_lag[indCI] = 18
+                CIcorr_max_peaks[indCI] = CIcorr[indCI, 18]
+
+            # if CIname is PDO, enforce 16-month lag
+            if CIname == 'PDO':
+                CIcorr_max_lag[indCI] = 16
+                CIcorr_max_peaks[indCI] = CIcorr[indCI, 16]
+
+            # if CIname is PMM, enforce 10-month lag
+            if CIname == 'PMM':
+                CIcorr_max_lag[indCI] = 10
+                CIcorr_max_peaks[indCI] = CIcorr[indCI, 10]
+
+        ####****##### REMOVE THIS SECTION TO ALLOW FOR AUTOMATIC LAG DETECTION ####***
+        ##****######****### THE ABOVE LINES SET THE LAGS!!!#######****######****###***
 
     #% Plot correlation for each climate index
     fig, ax = plt.subplots()
-    ax.plot(np.arange(1, 31), CIcorr.T)
+    
+    # fill zeros with nan
+    CIcorr[CIcorr == 0] = np.nan
+
+    ax.plot(np.arange(1, orig_lag+1), CIcorr.T)
 
     for indCI in range(len(climateIndex)):
         if CIcorr_max_lag[indCI] is not None:
@@ -164,17 +199,21 @@ for recordID in rsl_hourly.record_id.values:  # Ensure recordID is a value
 # After the loop, concatenate all DataFrames into a master DataFrame
 master_df = pd.concat(dataframes_list, ignore_index=True)
 
-# Enforce 18-month lag for ONI, BEST
-# This is based on Long et al 2020
-master_df.loc[master_df['climateIndex'].isin(['ONI', 'BEST']), 'lag'] = 19
 
-# Enforce 16-month lag for PDO
-# average lag from bulk of HI stations
-master_df.loc[master_df['climateIndex'] == 'PDO', 'lag'] = 16
+# master_df.to_csv(dirs['CI_dir'] / 'CI_correlation_results.csv', index=False)
 
-# Enforce 10-month lag for PMM
-# Long et al 2020 uses 8-month lag for upper 100m 
-master_df.loc[master_df['climateIndex'] == 'PMM', 'lag'] = 10
+
+# # Enforce 18-month lag for ONI, BEST
+
+# master_df.loc[master_df['climateIndex'].isin(['ONI', 'BEST']), 'lag'] = 19
+
+# # Enforce 16-month lag for PDO
+# # average lag from bulk of HI stations
+# master_df.loc[master_df['climateIndex'] == 'PDO', 'lag'] = 16
+
+# # Enforce 10-month lag for PMM
+# # Long et al 2020 uses 8-month lag for upper 100m 
+# master_df.loc[master_df['climateIndex'] == 'PMM', 'lag'] = 10
 
 
 # Now `master_df` contains all the results across stations
