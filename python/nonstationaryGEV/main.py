@@ -74,6 +74,8 @@ if not limitsPath.exists():
 #%%
 
 for recordID in recordIDs:
+    print(f'Processing recordID: {recordID}')
+    
     # Preallocate the significance array
     SignifCvte1 = np.zeros(len(climateIndex))
     SignifCvte2_loc = np.zeros(len(climateIndex))
