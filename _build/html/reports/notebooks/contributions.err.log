@@ -15,40 +15,90 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-climateIndex = ['AO','AAO','BEST','DMI','ONI','PDO','PMM','PNA','TNA']
+recordID = 57
+jsonpath = Path(dirs['model_output_dir']) / str(recordID) / 'best_params.json'
+with open(jsonpath, 'r') as f:
+    output = json.load(f)
+    modelInfo = output['modelInfo']
+    params = output['w']
+    x = output['x']
 
-# get list of all directories in dirs['model_output_dir']
-dirs_list = os.listdir(dirs['model_output_dir'])
+w = adjust_w_for_plotting(x, params)    
 
-# only keep the directories that are numbers
-recordIDs = [int(d) for d in dirs_list if d.isdigit()]
+# params should be a dictionary with the following
+paramNames = ['b0','a0','g0','b1', 'b2', 'b3', 'b4', 'b5', 'b6', 'bLT', 'bCI', 'cCI', 'bN1', 'bN2']
+params = {paramNames[i]: w[i] for i in range(len(paramNames))}
 
-# remove 57
-# recordIDs.remove(57)
+t = np.array(modelInfo['t'])
+ci = np.array(modelInfo['covariate'])
+# Convert t to years
+tyears = t + modelInfo['year0']
 
-# get station names from the best_params.json files
-station_names = {}
-for recordID in recordIDs:
-    jsonpath = Path(dirs['model_output_dir']) / str(recordID) / 'best_params.json'
-    with open(jsonpath, 'r') as f:
-        output = json.load(f)
-        station_names[recordID] = output['modelInfo']['station_name']
+# Constants
+api = np.pi # pi
+ak = 2 * api # 2pi
+ak18 = 2 * api / 18.61  # 18.61-year nodal cycle
 
-# sort the station names by the recordID
-station_names = {k: v for k, v in sorted(station_names.items(), key=lambda item: item[0])}
+mut = (params['b0'] * np.exp(params['bLT'] * t) +
+        params['b1'] * np.cos(ak * t) + params['b2'] * np.sin(ak * t) +
+        params['b3'] * np.cos(2 * ak * t) + params['b4'] * np.sin(2 * ak * t) +
+        params['b5'] * np.cos(4 * ak * t) + params['b6'] * np.sin(4 * ak * t) +
+        params['bN1'] * np.cos(ak18 * t) + params['bN2'] * np.sin(ak18 * t) +
+        params['bCI'] * ci)
 
-station_names
+mut = mut - modelInfo['STNDtoMHHW']
+
+
+tfrac = t-np.floor(t)
+
+import calendar
+fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+
+t00 = np.arange(1993,2023)
+# make colormap the same length as t00
+cmap = plt.cm.Blues(np.linspace(0,1,len(t00)))
+# plt.plot(tyears(np.floor(tyears)==t00),mut[np.floor(tyears)==t00])
+for t0 in t00:
+    inYear = np.floor(tyears).astype(int) == t0
+    color_index = np.where(t00 == t0)[0][0]  # Find the index of t0 in t00
+    plt.plot(np.arange(0, 1, 1/12), mut[inYear], label=str(t0), color=cmap[color_index])
+
+# xlim([0,1])
+# set the xlimits to 0 and 1
+plt.xlim(0,1-1/12)
+# set the xticks to be the months
+plt.xticks(np.arange(0, 1, 1/12), [calendar.month_abbr[i] for i in range(1, 13)])
+plt.xlabel('Month')
+plt.ylabel('$\mu_t$, relative to MHHW (m)')
+plt.title('Location Parameter by Year: ' + modelInfo['station_name'])
+
+
+sm = plt.cm.ScalarMappable(cmap=plt.cm.Blues, norm=plt.Normalize(vmin=t00.min(), vmax=t00.max()))
+cbar = plt.colorbar(sm, ax=plt.gca(), orientation='vertical', pad=0.02)
+cbar.set_label('Year')
+
+glue("location_by_year",fig,display=False)
+savename = 'location_by_year_' + modelInfo['station_name'] + '.png'
+plt.savefig(output_dir / savename, dpi=300, bbox_inches='tight')
+
+#glue the CI name
+glue("CI_name",modelInfo['covariateName'],display=False)
+glue("station",modelInfo['station_name'],display=False)
+
+# get lag for covariateName
+df_cvteLocation = pd.read_json(Path(dirs['model_output_dir']) / str(recordID) / 'cvte_location_params_ALL.json')
+
+CI_lags = df_cvteLocation[df_cvteLocation['Climate Index'] == modelInfo['covariateName']]['lag'].values
+glue("CI_lag",CI_lag,display=False)
 ------------------
 
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-Cell [0;32mIn[2], line 4[0m
-[1;32m      1[0m climateIndex [38;5;241m=[39m [[38;5;124m'[39m[38;5;124mAO[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mAAO[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mBEST[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mDMI[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mONI[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mPDO[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mPMM[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mPNA[39m[38;5;124m'[39m,[38;5;124m'[39m[38;5;124mTNA[39m[38;5;124m'[39m]
-[1;32m      3[0m [38;5;66;03m# get list of all directories in dirs['model_output_dir'][39;00m
-[0;32m----> 4[0m dirs_list [38;5;241m=[39m [43mos[49m[38;5;241;43m.[39;49m[43mlistdir[49m[43m([49m[43mdirs[49m[43m[[49m[38;5;124;43m'[39;49m[38;5;124;43mmodel_output_dir[39;49m[38;5;124;43m'[39;49m[43m][49m[43m)[49m
-[1;32m      6[0m [38;5;66;03m# only keep the directories that are numbers[39;00m
-[1;32m      7[0m recordIDs [38;5;241m=[39m [[38;5;28mint[39m(d) [38;5;28;01mfor[39;00m d [38;5;129;01min[39;00m dirs_list [38;5;28;01mif[39;00m d[38;5;241m.[39misdigit()]
+[0;31mNameError[0m                                 Traceback (most recent call last)
+Cell [0;32mIn[16], line 75[0m
+[1;32m     72[0m df_cvteLocation [38;5;241m=[39m pd[38;5;241m.[39mread_json(Path(dirs[[38;5;124m'[39m[38;5;124mmodel_output_dir[39m[38;5;124m'[39m]) [38;5;241m/[39m [38;5;28mstr[39m(recordID) [38;5;241m/[39m [38;5;124m'[39m[38;5;124mcvte_location_params_ALL.json[39m[38;5;124m'[39m)
+[1;32m     74[0m CI_lags [38;5;241m=[39m df_cvteLocation[df_cvteLocation[[38;5;124m'[39m[38;5;124mClimate Index[39m[38;5;124m'[39m] [38;5;241m==[39m modelInfo[[38;5;124m'[39m[38;5;124mcovariateName[39m[38;5;124m'[39m]][[38;5;124m'[39m[38;5;124mlag[39m[38;5;124m'[39m][38;5;241m.[39mvalues
+[0;32m---> 75[0m glue([38;5;124m"[39m[38;5;124mCI_lag[39m[38;5;124m"[39m,[43mCI_lag[49m,display[38;5;241m=[39m[38;5;28;01mFalse[39;00m)
 
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '/Users/jfiedler/Documents/Repositories/SL_Hawaii/SL_Hawaii/data/GEV_model_output'
+[0;31mNameError[0m: name 'CI_lag' is not defined
 
