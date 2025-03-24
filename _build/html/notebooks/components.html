@@ -60,8 +60,9 @@
     <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\\\(", "\\\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/components';</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
@@ -207,9 +208,6 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Components</a></li>
 <li class="toctree-l2"><a class="reference internal" href="nonstationaryGEV/monthly_extremes_non-stationaryGEV.html">Nonstationary Extremes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="contributions.html">Contributions</a></li>
-
-
-
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="Flood.html">Minor Flood Frequency and Duration</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -499,7 +497,10 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-components">Plot components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-table">Make a Table</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-map">Make a map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-map">Make a map</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#citations">Citations</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -539,23 +540,26 @@ timeframes = {'Interdecadal': '>30 yr cycles',
 <h2>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">run</span> setup.ipynb
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Loading libraries...&#39;</span><span class="p">)</span>
+<span class="o">%</span><span class="k">run</span> setup.ipynb
 <span class="o">%</span><span class="k">run</span> plotting_functions.ipynb
 <span class="o">%</span><span class="k">run</span> tseries_functions.py
 <span class="kn">from</span> <span class="nn">tide_functions</span> <span class="kn">import</span> <span class="n">calculate_ntr</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;hello&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Setup complete.&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Loading libraries...
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Setup complete.
+</pre></div>
+</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/anaconda3/envs/SLI39/lib/python3.9/site-packages/utide/harmonics.py:16: RuntimeWarning: invalid value encountered in cast
   nshallow = np.ma.masked_invalid(const.nshallow).astype(int)
 /opt/anaconda3/envs/SLI39/lib/python3.9/site-packages/utide/harmonics.py:17: RuntimeWarning: invalid value encountered in cast
   ishallow = np.ma.masked_invalid(const.ishallow).astype(int) - 1
-</pre></div>
-</div>
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>hello
 </pre></div>
 </div>
 </div>
@@ -765,7 +769,7 @@ Station name: Midway
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x15fd31e80&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x169dad370&gt;
 </pre></div>
 </div>
 <img alt="../_images/1ca46accc4571bce6a9f8df42af18fa02e66b006a4bf8c8c9ca2a60f78f63b7f.png" src="../_images/1ca46accc4571bce6a9f8df42af18fa02e66b006a4bf8c8c9ca2a60f78f63b7f.png" />
@@ -896,11 +900,10 @@ Station name: Midway
 <div class="admonition caution">
 <p class="admonition-title">Caution</p>
 <p>The timescales probably need some refinement. For example: mesoscale processes. Higher the latitude the longer the period!!</p>
-</div>
-<p>From Chen, S., and B. Qiu (2010), Mesoscale eddies northeast of the Hawaiian archipelago from satellite altimeter observations, J. Geophys. Res., 115, C03016, doi:10.1029/2009JC005698</p>
+<p>For example, <span id="id1">Firing and Merrifield [<a class="reference internal" href="#id34" title="Yvonne L. Firing and Mark A. Merrifield. Extreme sea level events at Hawaii: Influence of mesoscale eddies. Geophysical Research Letters, 2004. doi:10.1029/2004GL021539.">2</a>]</span> provide a nice diagnosis on extreme sea levels in the Hawaiian Islands for 2003, discussing the role of westbound anti-cyclonic eddies. These features propagate at mode 1 Rossby wave speeds (8 cm/s near 21<span class="math notranslate nohighlight">\(\deg\)</span> N), with an eddy size of approximately 300 km.</p>
+<p>A Rossby wave speed changes with latitude - increasing latitude slows the waves down considerably. <span id="id2">Chen and Qiu [<a class="reference internal" href="#id33" title="Shuiming Chen and Bo Qiu. Mesoscale eddies northeast of the Hawaiian archipelago from satellite altimeter observations. Journal of Geophysical Research: Oceans, 2010. doi:10.1029/2009JC005698.">1</a>]</span> discuss this when examining satellite data around the Hawaiian Islands:</p>
 <p>“We define dominant periods of the mesoscale eddy activity by locating the periods at which the spectral peaks within the mesoscale range of 90–180 days. This definition is crude yet robust for the subregions with sharp spectral peaks like the 24°N–27°N, 160°W–155°W one (130 days) and the 18°N–21°N, 170°W–165°W one (90 days), but is also applicable to other subregions. In the lee of the island of Hawaii, 90 day oscillations dominate the mesoscale eddy activity. In the subregions between 24°N and 30°N, a 130 day peak often prevails, but in the 30°N–33°N band, a weak 180 day peak emerges. The pattern is that the higher the latitude, the longer the dominant period.”</p>
-<p>Also:
-Firing, Y. L., and M. A. Merrifield (2004), Extreme sea level events at Hawaii: Influence of mesoscale eddies, Geophys. Res. Lett., 31, L24306, doi:10.1029/2004GL021539.</p>
+</div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define timescales (in days)</span>
@@ -987,9 +990,9 @@ Firing, Y. L., and M. A. Merrifield (2004), Extreme sea level events at Hawaii: 
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Filled 5 % of data with noise (std = 92.3913).
-Filled 5 % of data with noise (std = 90.1718).
-Filled 5 % of data with noise (std = 89.0497).
-Filled 5 % of data with noise (std = 88.5547).
+Filled 5 % of data with noise (std = 90.1724).
+Filled 5 % of data with noise (std = 89.0481).
+Filled 5 % of data with noise (std = 88.5526).
 </pre></div>
 </div>
 </div>
@@ -1077,13 +1080,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1189.0</td>
       <td>969.008791</td>
       <td>-12.397006</td>
-      <td>57.938948</td>
-      <td>34.792097</td>
-      <td>-9.898817</td>
-      <td>-10.990150</td>
-      <td>9.225626</td>
-      <td>12.676075</td>
-      <td>27.834256</td>
+      <td>57.872896</td>
+      <td>34.816557</td>
+      <td>-9.935264</td>
+      <td>-10.757516</td>
+      <td>9.111416</td>
+      <td>12.635643</td>
+      <td>27.834304</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1092,13 +1095,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1250.0</td>
       <td>994.867836</td>
       <td>-16.478207</td>
-      <td>57.938514</td>
-      <td>34.787641</td>
-      <td>-9.923063</td>
-      <td>-10.985279</td>
-      <td>9.189910</td>
-      <td>11.660839</td>
-      <td>64.050602</td>
+      <td>57.872463</td>
+      <td>34.812110</td>
+      <td>-9.959385</td>
+      <td>-10.753268</td>
+      <td>9.076203</td>
+      <td>11.620401</td>
+      <td>64.050641</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1107,13 +1110,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1250.0</td>
       <td>982.739545</td>
       <td>-18.188605</td>
-      <td>57.938080</td>
-      <td>34.783185</td>
-      <td>-9.947308</td>
-      <td>-10.980341</td>
-      <td>9.154044</td>
-      <td>10.614999</td>
-      <td>77.284970</td>
+      <td>57.872030</td>
+      <td>34.807662</td>
+      <td>-9.983506</td>
+      <td>-10.748955</td>
+      <td>9.040842</td>
+      <td>10.574556</td>
+      <td>77.284999</td>
     </tr>
     <tr>
       <th>3</th>
@@ -1122,13 +1125,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1219.0</td>
       <td>934.268918</td>
       <td>-18.475715</td>
-      <td>57.937645</td>
-      <td>34.778730</td>
-      <td>-9.971552</td>
-      <td>-10.975337</td>
-      <td>9.118029</td>
-      <td>9.539262</td>
-      <td>95.891655</td>
+      <td>57.871598</td>
+      <td>34.803215</td>
+      <td>-10.007626</td>
+      <td>-10.744578</td>
+      <td>9.005333</td>
+      <td>9.498814</td>
+      <td>95.891676</td>
     </tr>
     <tr>
       <th>4</th>
@@ -1137,13 +1140,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1158.0</td>
       <td>864.043801</td>
       <td>-18.088657</td>
-      <td>57.937211</td>
-      <td>34.774274</td>
-      <td>-9.995796</td>
-      <td>-10.970267</td>
-      <td>9.081864</td>
-      <td>8.434382</td>
-      <td>106.282055</td>
+      <td>57.871165</td>
+      <td>34.798768</td>
+      <td>-10.031745</td>
+      <td>-10.740138</td>
+      <td>8.969676</td>
+      <td>8.393929</td>
+      <td>106.282068</td>
     </tr>
     <tr>
       <th>...</th>
@@ -1167,13 +1170,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1317.0</td>
       <td>1294.630630</td>
       <td>8.408938</td>
-      <td>22.578525</td>
-      <td>8.705190</td>
-      <td>-50.331580</td>
-      <td>-11.013509</td>
-      <td>101.511221</td>
-      <td>-66.727378</td>
-      <td>38.482698</td>
+      <td>22.578145</td>
+      <td>8.752595</td>
+      <td>-50.552666</td>
+      <td>-10.777791</td>
+      <td>102.473757</td>
+      <td>-67.718146</td>
+      <td>38.449273</td>
     </tr>
     <tr>
       <th>683584</th>
@@ -1182,13 +1185,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1240.0</td>
       <td>1229.500704</td>
       <td>11.343860</td>
-      <td>22.578525</td>
-      <td>8.705190</td>
-      <td>-50.331580</td>
-      <td>-11.008971</td>
-      <td>101.511221</td>
-      <td>-66.722837</td>
-      <td>26.603720</td>
+      <td>22.578145</td>
+      <td>8.752595</td>
+      <td>-50.552666</td>
+      <td>-10.773865</td>
+      <td>102.473757</td>
+      <td>-67.713601</td>
+      <td>26.570902</td>
     </tr>
     <tr>
       <th>683585</th>
@@ -1197,13 +1200,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1159.0</td>
       <td>1152.134025</td>
       <td>12.839269</td>
-      <td>22.578525</td>
-      <td>8.705190</td>
-      <td>-50.331580</td>
-      <td>-11.004366</td>
-      <td>101.511221</td>
-      <td>-66.719176</td>
-      <td>22.962307</td>
+      <td>22.578145</td>
+      <td>8.752595</td>
+      <td>-50.552666</td>
+      <td>-10.769875</td>
+      <td>102.473757</td>
+      <td>-67.709936</td>
+      <td>22.930101</td>
     </tr>
     <tr>
       <th>683586</th>
@@ -1212,13 +1215,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1080.0</td>
       <td>1081.348111</td>
       <td>12.557502</td>
-      <td>22.578525</td>
-      <td>8.705190</td>
-      <td>-50.331580</td>
-      <td>-10.999694</td>
-      <td>101.511221</td>
-      <td>-66.716259</td>
-      <td>14.740808</td>
+      <td>22.578145</td>
+      <td>8.752595</td>
+      <td>-50.552666</td>
+      <td>-10.765820</td>
+      <td>102.473757</td>
+      <td>-67.707017</td>
+      <td>14.709215</td>
     </tr>
     <tr>
       <th>683587</th>
@@ -1227,13 +1230,13 @@ Filled 0 % of data with noise (std = 5.2863).
       <td>1025.0</td>
       <td>1036.071445</td>
       <td>10.556340</td>
-      <td>22.578525</td>
-      <td>8.705190</td>
-      <td>-50.331580</td>
-      <td>-10.994956</td>
-      <td>101.511221</td>
-      <td>-66.713966</td>
-      <td>5.010615</td>
+      <td>22.578145</td>
+      <td>8.752595</td>
+      <td>-50.552666</td>
+      <td>-10.761700</td>
+      <td>102.473757</td>
+      <td>-67.704721</td>
+      <td>4.979640</td>
     </tr>
   </tbody>
 </table>
@@ -1251,13 +1254,13 @@ Filled 0 % of data with noise (std = 5.2863).
 sea_level        152.46451
 tide            136.468595
 Nodal            11.228485
-Interdecadal     23.679396
-Decadal          11.448025
-Interannual       34.90248
-Seasonal         19.707275
-Intraannual      43.084135
-Weekly           43.831919
-Storms &amp; HF      40.587583
+Interdecadal     23.667298
+Decadal          11.444029
+Interannual      34.916719
+Seasonal          19.74828
+Intraannual      43.080945
+Weekly           43.825812
+Storms &amp; HF      40.541538
 dtype: object
 </pre></div>
 </div>
@@ -1278,7 +1281,7 @@ dtype: object
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Correlation Matrix\n of upper nodal envelope components&#39;)
 </pre></div>
 </div>
-<img alt="../_images/44c263603e2fa12dc8a08dcfdd09dbbbfd602c02aee6691d5f9bfcd94c3231db.png" src="../_images/44c263603e2fa12dc8a08dcfdd09dbbbfd602c02aee6691d5f9bfcd94c3231db.png" />
+<img alt="../_images/b7de40b9e08079e98a85c2fc88466c291ecc70bce9e5fbf98a2b7ce2397beeec.png" src="../_images/b7de40b9e08079e98a85c2fc88466c291ecc70bce9e5fbf98a2b7ce2397beeec.png" />
 </div>
 </div>
 <p>Note that to define the upper envelope we used monthly maxima. So there should be NO correlation in the weekly/storms.</p>
@@ -1363,13 +1366,13 @@ dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Interdecadal    23.679396
-Decadal         27.580426
-Interannual     43.454701
-Seasonal        49.201242
-Intraannual     67.496652
-Weekly          81.467042
-Storms &amp; HF     92.190174
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Interdecadal    23.667298
+Decadal         27.580530
+Interannual     43.465725
+Seasonal        49.227237
+Intraannual     67.502923
+Weekly          81.472067
+Storms &amp; HF     92.171121
 dtype: float64
 </pre></div>
 </div>
@@ -1424,7 +1427,7 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/236e7895d3ba7c316b8f7ccde9d4471b41ef950d2ce5d52790ed587bbccd7658.png" src="../_images/236e7895d3ba7c316b8f7ccde9d4471b41ef950d2ce5d52790ed587bbccd7658.png" />
+<img alt="../_images/3dbabdd399985f573b46024d5f52cfb1a5d076bb6df031f0adccbec737924e57.png" src="../_images/3dbabdd399985f573b46024d5f52cfb1a5d076bb6df031f0adccbec737924e57.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -1439,13 +1442,13 @@ dtype: float64
 sea_level        152.46451
 tide            136.468595
 Nodal            11.228485
-Interdecadal     23.679396
-Decadal          11.448025
-Interannual       34.90248
-Seasonal         19.707275
-Intraannual      43.084135
-Weekly           43.831919
-Storms &amp; HF      40.587583
+Interdecadal     23.667298
+Decadal          11.444029
+Interannual      34.916719
+Seasonal          19.74828
+Intraannual      43.080945
+Weekly           43.825812
+Storms &amp; HF      40.541538
 dtype: object
 </pre></div>
 </div>
@@ -1471,7 +1474,7 @@ dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/7b3b0b871e0e494eb6d943bb5edccdff32155888263ffa511b076a4d6fa750e4.png" src="../_images/7b3b0b871e0e494eb6d943bb5edccdff32155888263ffa511b076a4d6fa750e4.png" />
+<img alt="../_images/370655e5178fffe700eb2df91f99ff3897bdb3fe0fdcc6523be0b1cafe45edaa.png" src="../_images/370655e5178fffe700eb2df91f99ff3897bdb3fe0fdcc6523be0b1cafe45edaa.png" />
 </div>
 </div>
 </section>
@@ -1508,7 +1511,7 @@ dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/qp/nn19rcjs5bdcdvxmff5bd3pr0000gn/T/ipykernel_8324/3394451137.py:7: FutureWarning: Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/qp/nn19rcjs5bdcdvxmff5bd3pr0000gn/T/ipykernel_16488/3394451137.py:7: FutureWarning: Series.__getitem__ treating keys as positions is deprecated. In a future version, integer keys will always be treated as labels (consistent with DataFrame behavior). To access a value by position, use `ser.iloc[pos]`
   ax.bar(&#39;Components&#39;, 0.4*ntr_cumsum_stds[i], bottom=0, label=ntr_cumsum_stds.index[i].replace(&#39;\n&#39;, &#39; &#39;))
 </pre></div>
 </div>
@@ -1803,12 +1806,12 @@ dtype: object
       <td>1884.0</td>
       <td>1152.778443</td>
       <td>-0.212692</td>
-      <td>-14.615291</td>
-      <td>-10.711434</td>
-      <td>29.544969</td>
-      <td>21.679415</td>
-      <td>96.884845</td>
-      <td>208.880890</td>
+      <td>-14.612411</td>
+      <td>-10.718573</td>
+      <td>29.547408</td>
+      <td>21.730125</td>
+      <td>96.835038</td>
+      <td>208.881808</td>
       <td>379.154700</td>
     </tr>
     <tr>
@@ -1818,12 +1821,12 @@ dtype: object
       <td>1826.0</td>
       <td>1259.063599</td>
       <td>8.949944</td>
-      <td>-9.006174</td>
-      <td>14.662707</td>
-      <td>38.777457</td>
-      <td>7.554062</td>
-      <td>26.969309</td>
-      <td>48.430911</td>
+      <td>-9.013362</td>
+      <td>14.641464</td>
+      <td>38.800375</td>
+      <td>7.744436</td>
+      <td>26.786987</td>
+      <td>48.428371</td>
       <td>422.225400</td>
     </tr>
     <tr>
@@ -1833,13 +1836,13 @@ dtype: object
       <td>1818.0</td>
       <td>1193.516700</td>
       <td>-15.644105</td>
-      <td>-0.835543</td>
-      <td>13.772772</td>
-      <td>30.301572</td>
-      <td>-5.466056</td>
-      <td>96.730616</td>
-      <td>80.385340</td>
-      <td>396.754633</td>
+      <td>-0.852975</td>
+      <td>13.705435</td>
+      <td>29.834907</td>
+      <td>-5.256625</td>
+      <td>96.845526</td>
+      <td>80.612436</td>
+      <td>396.754631</td>
     </tr>
     <tr>
       <th>498999</th>
@@ -1848,12 +1851,12 @@ dtype: object
       <td>1853.0</td>
       <td>1265.156752</td>
       <td>12.049090</td>
-      <td>1.727593</td>
-      <td>2.222940</td>
-      <td>4.645230</td>
-      <td>16.444757</td>
-      <td>114.139843</td>
-      <td>191.909134</td>
+      <td>1.708307</td>
+      <td>2.174487</td>
+      <td>4.674068</td>
+      <td>16.473963</td>
+      <td>114.148191</td>
+      <td>191.910481</td>
       <td>245.389432</td>
     </tr>
     <tr>
@@ -1863,12 +1866,12 @@ dtype: object
       <td>1924.0</td>
       <td>1164.926560</td>
       <td>-8.196638</td>
-      <td>4.316923</td>
-      <td>-9.740215</td>
-      <td>25.868135</td>
-      <td>15.179877</td>
-      <td>70.482304</td>
-      <td>320.518903</td>
+      <td>4.296542</td>
+      <td>-9.763107</td>
+      <td>26.189283</td>
+      <td>15.193298</td>
+      <td>70.458861</td>
+      <td>320.251050</td>
       <td>322.634376</td>
     </tr>
     <tr>
@@ -1878,12 +1881,12 @@ dtype: object
       <td>1951.0</td>
       <td>1142.959542</td>
       <td>1.966056</td>
-      <td>16.536242</td>
-      <td>7.656548</td>
-      <td>7.862282</td>
-      <td>22.590706</td>
-      <td>66.273179</td>
-      <td>144.724990</td>
+      <td>16.522381</td>
+      <td>7.681503</td>
+      <td>7.830250</td>
+      <td>22.443621</td>
+      <td>66.441242</td>
+      <td>144.724950</td>
       <td>541.750387</td>
     </tr>
     <tr>
@@ -1893,12 +1896,12 @@ dtype: object
       <td>1859.0</td>
       <td>1173.273313</td>
       <td>-16.699959</td>
-      <td>19.998555</td>
-      <td>9.387919</td>
-      <td>-10.208527</td>
-      <td>25.753236</td>
-      <td>99.864548</td>
-      <td>207.008666</td>
+      <td>19.990489</td>
+      <td>9.394950</td>
+      <td>-10.212407</td>
+      <td>25.759574</td>
+      <td>99.862252</td>
+      <td>207.009539</td>
       <td>337.751777</td>
     </tr>
     <tr>
@@ -1908,13 +1911,13 @@ dtype: object
       <td>1831.0</td>
       <td>1308.853227</td>
       <td>-3.607441</td>
-      <td>20.844550</td>
-      <td>4.561598</td>
-      <td>-20.519319</td>
-      <td>11.721726</td>
-      <td>39.121708</td>
-      <td>259.272844</td>
-      <td>212.638598</td>
+      <td>20.838393</td>
+      <td>4.564773</td>
+      <td>-20.517182</td>
+      <td>11.715728</td>
+      <td>39.130495</td>
+      <td>259.270901</td>
+      <td>212.638597</td>
     </tr>
     <tr>
       <th>622238</th>
@@ -1923,12 +1926,12 @@ dtype: object
       <td>1879.0</td>
       <td>1301.821655</td>
       <td>9.667739</td>
-      <td>22.180846</td>
-      <td>-2.678453</td>
-      <td>12.791808</td>
-      <td>-3.074562</td>
-      <td>52.320408</td>
-      <td>304.022971</td>
+      <td>22.178567</td>
+      <td>-2.676785</td>
+      <td>12.788708</td>
+      <td>-3.069169</td>
+      <td>52.318240</td>
+      <td>304.023458</td>
       <td>201.749674</td>
     </tr>
     <tr>
@@ -1938,12 +1941,12 @@ dtype: object
       <td>1936.0</td>
       <td>1329.454718</td>
       <td>9.901046</td>
-      <td>22.481975</td>
-      <td>-1.973597</td>
-      <td>-29.021446</td>
-      <td>24.117712</td>
-      <td>21.733794</td>
-      <td>267.881767</td>
+      <td>22.480969</td>
+      <td>-1.956923</td>
+      <td>-29.041462</td>
+      <td>24.137542</td>
+      <td>21.716963</td>
+      <td>267.883115</td>
       <td>314.373562</td>
     </tr>
   </tbody>
@@ -2072,7 +2075,7 @@ dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/37c474e290d0e3072893c54d8eb8dff318119a33a0b96f945c24e7e09ad53f54.png" src="../_images/37c474e290d0e3072893c54d8eb8dff318119a33a0b96f945c24e7e09ad53f54.png" />
+<img alt="../_images/ff98c505856f9ac9683b327c77abec0b3f98ae7c2dfe801c1acd77e84b3e23c4.png" src="../_images/ff98c505856f9ac9683b327c77abec0b3f98ae7c2dfe801c1acd77e84b3e23c4.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2138,12 +2141,12 @@ dtype: object
       <td>1884.0</td>
       <td>1152.778443</td>
       <td>-0.212692</td>
-      <td>-14.615291</td>
-      <td>-10.711434</td>
-      <td>29.544969</td>
-      <td>21.679415</td>
-      <td>96.884845</td>
-      <td>208.880890</td>
+      <td>-14.612411</td>
+      <td>-10.718573</td>
+      <td>29.547408</td>
+      <td>21.730125</td>
+      <td>96.835038</td>
+      <td>208.881808</td>
       <td>379.154700</td>
     </tr>
     <tr>
@@ -2153,12 +2156,12 @@ dtype: object
       <td>1826.0</td>
       <td>1259.063599</td>
       <td>8.949944</td>
-      <td>-9.006174</td>
-      <td>14.662707</td>
-      <td>38.777457</td>
-      <td>7.554062</td>
-      <td>26.969309</td>
-      <td>48.430911</td>
+      <td>-9.013362</td>
+      <td>14.641464</td>
+      <td>38.800375</td>
+      <td>7.744436</td>
+      <td>26.786987</td>
+      <td>48.428371</td>
       <td>422.225400</td>
     </tr>
     <tr>
@@ -2168,13 +2171,13 @@ dtype: object
       <td>1818.0</td>
       <td>1193.516700</td>
       <td>-15.644105</td>
-      <td>-0.835543</td>
-      <td>13.772772</td>
-      <td>30.301572</td>
-      <td>-5.466056</td>
-      <td>96.730616</td>
-      <td>80.385340</td>
-      <td>396.754633</td>
+      <td>-0.852975</td>
+      <td>13.705435</td>
+      <td>29.834907</td>
+      <td>-5.256625</td>
+      <td>96.845526</td>
+      <td>80.612436</td>
+      <td>396.754631</td>
     </tr>
     <tr>
       <th>498999</th>
@@ -2183,12 +2186,12 @@ dtype: object
       <td>1853.0</td>
       <td>1265.156752</td>
       <td>12.049090</td>
-      <td>1.727593</td>
-      <td>2.222940</td>
-      <td>4.645230</td>
-      <td>16.444757</td>
-      <td>114.139843</td>
-      <td>191.909134</td>
+      <td>1.708307</td>
+      <td>2.174487</td>
+      <td>4.674068</td>
+      <td>16.473963</td>
+      <td>114.148191</td>
+      <td>191.910481</td>
       <td>245.389432</td>
     </tr>
     <tr>
@@ -2198,12 +2201,12 @@ dtype: object
       <td>1924.0</td>
       <td>1164.926560</td>
       <td>-8.196638</td>
-      <td>4.316923</td>
-      <td>-9.740215</td>
-      <td>25.868135</td>
-      <td>15.179877</td>
-      <td>70.482304</td>
-      <td>320.518903</td>
+      <td>4.296542</td>
+      <td>-9.763107</td>
+      <td>26.189283</td>
+      <td>15.193298</td>
+      <td>70.458861</td>
+      <td>320.251050</td>
       <td>322.634376</td>
     </tr>
     <tr>
@@ -2213,12 +2216,12 @@ dtype: object
       <td>1951.0</td>
       <td>1142.959542</td>
       <td>1.966056</td>
-      <td>16.536242</td>
-      <td>7.656548</td>
-      <td>7.862282</td>
-      <td>22.590706</td>
-      <td>66.273179</td>
-      <td>144.724990</td>
+      <td>16.522381</td>
+      <td>7.681503</td>
+      <td>7.830250</td>
+      <td>22.443621</td>
+      <td>66.441242</td>
+      <td>144.724950</td>
       <td>541.750387</td>
     </tr>
     <tr>
@@ -2228,12 +2231,12 @@ dtype: object
       <td>1859.0</td>
       <td>1173.273313</td>
       <td>-16.699959</td>
-      <td>19.998555</td>
-      <td>9.387919</td>
-      <td>-10.208527</td>
-      <td>25.753236</td>
-      <td>99.864548</td>
-      <td>207.008666</td>
+      <td>19.990489</td>
+      <td>9.394950</td>
+      <td>-10.212407</td>
+      <td>25.759574</td>
+      <td>99.862252</td>
+      <td>207.009539</td>
       <td>337.751777</td>
     </tr>
     <tr>
@@ -2243,13 +2246,13 @@ dtype: object
       <td>1831.0</td>
       <td>1308.853227</td>
       <td>-3.607441</td>
-      <td>20.844550</td>
-      <td>4.561598</td>
-      <td>-20.519319</td>
-      <td>11.721726</td>
-      <td>39.121708</td>
-      <td>259.272844</td>
-      <td>212.638598</td>
+      <td>20.838393</td>
+      <td>4.564773</td>
+      <td>-20.517182</td>
+      <td>11.715728</td>
+      <td>39.130495</td>
+      <td>259.270901</td>
+      <td>212.638597</td>
     </tr>
     <tr>
       <th>622238</th>
@@ -2258,12 +2261,12 @@ dtype: object
       <td>1879.0</td>
       <td>1301.821655</td>
       <td>9.667739</td>
-      <td>22.180846</td>
-      <td>-2.678453</td>
-      <td>12.791808</td>
-      <td>-3.074562</td>
-      <td>52.320408</td>
-      <td>304.022971</td>
+      <td>22.178567</td>
+      <td>-2.676785</td>
+      <td>12.788708</td>
+      <td>-3.069169</td>
+      <td>52.318240</td>
+      <td>304.023458</td>
       <td>201.749674</td>
     </tr>
     <tr>
@@ -2273,12 +2276,12 @@ dtype: object
       <td>1936.0</td>
       <td>1329.454718</td>
       <td>9.901046</td>
-      <td>22.481975</td>
-      <td>-1.973597</td>
-      <td>-29.021446</td>
-      <td>24.117712</td>
-      <td>21.733794</td>
-      <td>267.881767</td>
+      <td>22.480969</td>
+      <td>-1.956923</td>
+      <td>-29.041462</td>
+      <td>24.137542</td>
+      <td>21.716963</td>
+      <td>267.883115</td>
       <td>314.373562</td>
     </tr>
   </tbody>
@@ -2389,7 +2392,7 @@ dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/32f4c9354f33bdac068275740d6c41e4dbefbf5c12d5c9c96059e27e8e248e39.png" src="../_images/32f4c9354f33bdac068275740d6c41e4dbefbf5c12d5c9c96059e27e8e248e39.png" />
+<img alt="../_images/564de2e283060f3bc273cb7ee82911b813198f7feffef1df05507277707ac616.png" src="../_images/564de2e283060f3bc273cb7ee82911b813198f7feffef1df05507277707ac616.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -2407,7 +2410,7 @@ dtype: object
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>../output/SL_rankings_NTR_relative_amplitudes_top10_Midway_high.png
 </pre></div>
 </div>
-<img alt="../_images/1f30b270a75f400557876884c41c16783cd519ae203ce12d9540d280b59b7d58.png" src="../_images/1f30b270a75f400557876884c41c16783cd519ae203ce12d9540d280b59b7d58.png" />
+<img alt="../_images/67e3123bcb9d6e6166f0dc7272a82acec5b5a0dc0e7a40876bd9d9a581390c05.png" src="../_images/67e3123bcb9d6e6166f0dc7272a82acec5b5a0dc0e7a40876bd9d9a581390c05.png" />
 </div>
 </div>
 </section>
@@ -2475,11 +2478,11 @@ dtype: object
       <td>747.0</td>
       <td>-61.04</td>
       <td>1.97</td>
-      <td>16.54</td>
-      <td>7.66</td>
-      <td>7.86</td>
-      <td>22.59</td>
-      <td>66.27</td>
+      <td>16.52</td>
+      <td>7.68</td>
+      <td>7.83</td>
+      <td>22.44</td>
+      <td>66.44</td>
       <td>144.72</td>
       <td>541.75</td>
     </tr>
@@ -2491,10 +2494,10 @@ dtype: object
       <td>125.45</td>
       <td>9.90</td>
       <td>22.48</td>
-      <td>-1.97</td>
-      <td>-29.02</td>
-      <td>24.12</td>
-      <td>21.73</td>
+      <td>-1.96</td>
+      <td>-29.04</td>
+      <td>24.14</td>
+      <td>21.72</td>
       <td>267.88</td>
       <td>314.37</td>
     </tr>
@@ -2505,12 +2508,12 @@ dtype: object
       <td>720.0</td>
       <td>-39.07</td>
       <td>-8.20</td>
-      <td>4.32</td>
-      <td>-9.74</td>
-      <td>25.87</td>
-      <td>15.18</td>
-      <td>70.48</td>
-      <td>320.52</td>
+      <td>4.30</td>
+      <td>-9.76</td>
+      <td>26.19</td>
+      <td>15.19</td>
+      <td>70.46</td>
+      <td>320.25</td>
       <td>322.63</td>
     </tr>
     <tr>
@@ -2520,11 +2523,11 @@ dtype: object
       <td>680.0</td>
       <td>-51.22</td>
       <td>-0.21</td>
-      <td>-14.62</td>
-      <td>-10.71</td>
-      <td>29.54</td>
-      <td>21.68</td>
-      <td>96.88</td>
+      <td>-14.61</td>
+      <td>-10.72</td>
+      <td>29.55</td>
+      <td>21.73</td>
+      <td>96.84</td>
       <td>208.88</td>
       <td>379.15</td>
     </tr>
@@ -2550,10 +2553,10 @@ dtype: object
       <td>655.0</td>
       <td>-30.73</td>
       <td>-16.70</td>
-      <td>20.00</td>
+      <td>19.99</td>
       <td>9.39</td>
       <td>-10.21</td>
-      <td>25.75</td>
+      <td>25.76</td>
       <td>99.86</td>
       <td>207.01</td>
       <td>337.75</td>
@@ -2565,11 +2568,11 @@ dtype: object
       <td>649.0</td>
       <td>61.16</td>
       <td>12.05</td>
-      <td>1.73</td>
-      <td>2.22</td>
-      <td>4.65</td>
-      <td>16.44</td>
-      <td>114.14</td>
+      <td>1.71</td>
+      <td>2.17</td>
+      <td>4.67</td>
+      <td>16.47</td>
+      <td>114.15</td>
       <td>191.91</td>
       <td>245.39</td>
     </tr>
@@ -2584,7 +2587,7 @@ dtype: object
       <td>4.56</td>
       <td>-20.52</td>
       <td>11.72</td>
-      <td>39.12</td>
+      <td>39.13</td>
       <td>259.27</td>
       <td>212.64</td>
     </tr>
@@ -2596,10 +2599,10 @@ dtype: object
       <td>55.06</td>
       <td>8.95</td>
       <td>-9.01</td>
-      <td>14.66</td>
-      <td>38.78</td>
-      <td>7.55</td>
-      <td>26.97</td>
+      <td>14.64</td>
+      <td>38.80</td>
+      <td>7.74</td>
+      <td>26.79</td>
       <td>48.43</td>
       <td>422.23</td>
     </tr>
@@ -2610,12 +2613,12 @@ dtype: object
       <td>614.0</td>
       <td>-10.48</td>
       <td>-15.64</td>
-      <td>-0.84</td>
-      <td>13.77</td>
-      <td>30.30</td>
-      <td>-5.47</td>
-      <td>96.73</td>
-      <td>80.39</td>
+      <td>-0.85</td>
+      <td>13.71</td>
+      <td>29.83</td>
+      <td>-5.26</td>
+      <td>96.85</td>
+      <td>80.61</td>
       <td>396.75</td>
     </tr>
   </tbody>
@@ -2658,7 +2661,7 @@ dtype: object
     <tr>
       <th>560440</th>
       <td>807.39</td>
-      <td>807.39</td>
+      <td>807.38</td>
     </tr>
     <tr>
       <th>638943</th>
@@ -2673,7 +2676,7 @@ dtype: object
     <tr>
       <th>447183</th>
       <td>710.82</td>
-      <td>710.80</td>
+      <td>710.82</td>
     </tr>
     <tr>
       <th>622238</th>
@@ -2688,22 +2691,22 @@ dtype: object
     <tr>
       <th>498999</th>
       <td>576.48</td>
-      <td>576.48</td>
+      <td>576.47</td>
     </tr>
     <tr>
       <th>595643</th>
       <td>527.64</td>
-      <td>527.63</td>
+      <td>527.64</td>
     </tr>
     <tr>
       <th>464843</th>
       <td>549.61</td>
-      <td>549.61</td>
+      <td>549.62</td>
     </tr>
     <tr>
       <th>490540</th>
       <td>611.64</td>
-      <td>611.63</td>
+      <td>611.64</td>
     </tr>
   </tbody>
 </table>
@@ -2783,7 +2786,7 @@ dtype: object
       <td>1.7</td>
       <td>0.8</td>
       <td>0.8</td>
-      <td>2.3</td>
+      <td>2.2</td>
       <td>6.6</td>
       <td>14.5</td>
       <td>54.2</td>
@@ -2815,7 +2818,7 @@ dtype: object
       <td>2.6</td>
       <td>1.5</td>
       <td>7.0</td>
-      <td>32.1</td>
+      <td>32.0</td>
       <td>32.3</td>
     </tr>
     <tr>
@@ -2920,24 +2923,12 @@ dtype: object
       <td>3.0</td>
       <td>-0.5</td>
       <td>9.7</td>
-      <td>8.0</td>
+      <td>8.1</td>
       <td>39.7</td>
     </tr>
   </tbody>
 </table>
 </div></div></div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">clear</span> <span class="n">formatted_table</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3064,14 +3055,14 @@ dtype: object
       <td>0.7</td>
       <td>0.8</td>
       <td>0.2</td>
-      <td>2.3</td>
+      <td>2.2</td>
       <td>1.1</td>
       <td>6.6</td>
       <td>1.5</td>
       <td>14.5</td>
       <td>3.3</td>
       <td>54.2</td>
-      <td>13.3</td>
+      <td>13.4</td>
     </tr>
     <tr>
       <th>2019-12-29 19:00:00</th>
@@ -3094,7 +3085,7 @@ dtype: object
       <td>26.8</td>
       <td>6.1</td>
       <td>31.4</td>
-      <td>7.7</td>
+      <td>7.8</td>
     </tr>
     <tr>
       <th>2005-01-16 07:00:00</th>
@@ -3109,15 +3100,15 @@ dtype: object
       <td>-1.0</td>
       <td>-0.9</td>
       <td>2.6</td>
-      <td>0.7</td>
+      <td>0.8</td>
       <td>1.5</td>
       <td>0.8</td>
       <td>7.0</td>
       <td>1.6</td>
-      <td>32.1</td>
+      <td>32.0</td>
       <td>7.3</td>
       <td>32.3</td>
-      <td>7.9</td>
+      <td>8.0</td>
     </tr>
     <tr>
       <th>1998-02-12 19:00:00</th>
@@ -3140,7 +3131,7 @@ dtype: object
       <td>20.9</td>
       <td>4.8</td>
       <td>37.9</td>
-      <td>9.3</td>
+      <td>9.4</td>
     </tr>
     <tr>
       <th>2018-02-01 18:00:00</th>
@@ -3209,7 +3200,7 @@ dtype: object
       <td>19.2</td>
       <td>4.4</td>
       <td>24.5</td>
-      <td>6.0</td>
+      <td>6.1</td>
     </tr>
     <tr>
       <th>2015-01-20 15:00:00</th>
@@ -3275,7 +3266,7 @@ dtype: object
       <td>-0.3</td>
       <td>9.7</td>
       <td>2.2</td>
-      <td>8.0</td>
+      <td>8.1</td>
       <td>1.8</td>
       <td>39.7</td>
       <td>9.8</td>
@@ -3341,52 +3332,52 @@ dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div id="idiyyvuxze" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div class="output text_html"><div id="rzxymiozqt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>
-#idiyyvuxze table {
+#rzxymiozqt table {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
         }
 
-#idiyyvuxze thead, tbody, tfoot, tr, td, th { border-style: none; }
+#rzxymiozqt thead, tbody, tfoot, tr, td, th { border-style: none; }
  tr { background-color: transparent; }
-#idiyyvuxze p { margin: 0; padding: 0; }
- #idiyyvuxze .gt_table { display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 12px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; }
- #idiyyvuxze .gt_caption { padding-top: 4px; padding-bottom: 4px; }
- #idiyyvuxze .gt_title { color: #333333; font-size: 125%; font-weight: initial; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; border-bottom-color: #FFFFFF; border-bottom-width: 0; }
- #idiyyvuxze .gt_subtitle { color: #333333; font-size: 85%; font-weight: initial; padding-top: 3px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; border-top-color: #FFFFFF; border-top-width: 0; }
- #idiyyvuxze .gt_heading { background-color: #FFFFFF; text-align: center; border-bottom-color: #FFFFFF; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #idiyyvuxze .gt_bottom_border { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #idiyyvuxze .gt_col_headings { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #idiyyvuxze .gt_col_heading { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; }
- #idiyyvuxze .gt_column_spanner_outer { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; padding-top: 0; padding-bottom: 0; padding-left: 4px; padding-right: 4px; }
- #idiyyvuxze .gt_column_spanner_outer:first-child { padding-left: 0; }
- #idiyyvuxze .gt_column_spanner_outer:last-child { padding-right: 0; }
- #idiyyvuxze .gt_column_spanner { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; overflow-x: hidden; display: inline-block; width: 100%; }
- #idiyyvuxze .gt_spanner_row { border-bottom-style: hidden; }
- #idiyyvuxze .gt_group_heading { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left; }
- #idiyyvuxze .gt_empty_group_heading { padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle; }
- #idiyyvuxze .gt_from_md> :first-child { margin-top: 0; }
- #idiyyvuxze .gt_from_md> :last-child { margin-bottom: 0; }
- #idiyyvuxze .gt_row { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; }
- #idiyyvuxze .gt_stub { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; }
- #idiyyvuxze .gt_stub_row_group { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; vertical-align: top; }
- #idiyyvuxze .gt_row_group_first td { border-top-width: 2px; }
- #idiyyvuxze .gt_row_group_first th { border-top-width: 2px; }
- #idiyyvuxze .gt_striped { background-color: rgba(128,128,128,0.05); }
- #idiyyvuxze .gt_table_body { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #idiyyvuxze .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #idiyyvuxze .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
- #idiyyvuxze .gt_left { text-align: left; }
- #idiyyvuxze .gt_center { text-align: center; }
- #idiyyvuxze .gt_right { text-align: right; font-variant-numeric: tabular-nums; }
- #idiyyvuxze .gt_font_normal { font-weight: normal; }
- #idiyyvuxze .gt_font_bold { font-weight: bold; }
- #idiyyvuxze .gt_font_italic { font-style: italic; }
- #idiyyvuxze .gt_super { font-size: 65%; }
- #idiyyvuxze .gt_footnote_marks { font-size: 75%; vertical-align: 0.4em; position: initial; }
- #idiyyvuxze .gt_asterisk { font-size: 100%; vertical-align: 0; }
+#rzxymiozqt p { margin: 0; padding: 0; }
+ #rzxymiozqt .gt_table { display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 12px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; }
+ #rzxymiozqt .gt_caption { padding-top: 4px; padding-bottom: 4px; }
+ #rzxymiozqt .gt_title { color: #333333; font-size: 125%; font-weight: initial; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; border-bottom-color: #FFFFFF; border-bottom-width: 0; }
+ #rzxymiozqt .gt_subtitle { color: #333333; font-size: 85%; font-weight: initial; padding-top: 3px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; border-top-color: #FFFFFF; border-top-width: 0; }
+ #rzxymiozqt .gt_heading { background-color: #FFFFFF; text-align: center; border-bottom-color: #FFFFFF; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
+ #rzxymiozqt .gt_bottom_border { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
+ #rzxymiozqt .gt_col_headings { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
+ #rzxymiozqt .gt_col_heading { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; }
+ #rzxymiozqt .gt_column_spanner_outer { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; padding-top: 0; padding-bottom: 0; padding-left: 4px; padding-right: 4px; }
+ #rzxymiozqt .gt_column_spanner_outer:first-child { padding-left: 0; }
+ #rzxymiozqt .gt_column_spanner_outer:last-child { padding-right: 0; }
+ #rzxymiozqt .gt_column_spanner { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; overflow-x: hidden; display: inline-block; width: 100%; }
+ #rzxymiozqt .gt_spanner_row { border-bottom-style: hidden; }
+ #rzxymiozqt .gt_group_heading { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left; }
+ #rzxymiozqt .gt_empty_group_heading { padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle; }
+ #rzxymiozqt .gt_from_md> :first-child { margin-top: 0; }
+ #rzxymiozqt .gt_from_md> :last-child { margin-bottom: 0; }
+ #rzxymiozqt .gt_row { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; }
+ #rzxymiozqt .gt_stub { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; }
+ #rzxymiozqt .gt_stub_row_group { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; vertical-align: top; }
+ #rzxymiozqt .gt_row_group_first td { border-top-width: 2px; }
+ #rzxymiozqt .gt_row_group_first th { border-top-width: 2px; }
+ #rzxymiozqt .gt_striped { background-color: rgba(128,128,128,0.05); }
+ #rzxymiozqt .gt_table_body { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
+ #rzxymiozqt .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
+ #rzxymiozqt .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
+ #rzxymiozqt .gt_left { text-align: left; }
+ #rzxymiozqt .gt_center { text-align: center; }
+ #rzxymiozqt .gt_right { text-align: right; font-variant-numeric: tabular-nums; }
+ #rzxymiozqt .gt_font_normal { font-weight: normal; }
+ #rzxymiozqt .gt_font_bold { font-weight: bold; }
+ #rzxymiozqt .gt_font_italic { font-style: italic; }
+ #rzxymiozqt .gt_super { font-size: 65%; }
+ #rzxymiozqt .gt_footnote_marks { font-size: 75%; vertical-align: 0.4em; position: initial; }
+ #rzxymiozqt .gt_asterisk { font-size: 100%; vertical-align: 0; }
  
 </style>
 <table style="table-layout: fixed;" class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
@@ -3469,14 +3460,14 @@ annual</th>
     <td style="color: #000000; background-color: #fcdecd;" class="gt_row gt_right">(0.7)</td>
     <td class="gt_row gt_right">0.8</td>
     <td style="color: #000000; background-color: #f8f0eb;" class="gt_row gt_right">(0.2)</td>
-    <td class="gt_row gt_right">2.3</td>
+    <td class="gt_row gt_right">2.2</td>
     <td style="color: #000000; background-color: #fac7ad;" class="gt_row gt_right">(1.1)</td>
     <td class="gt_row gt_right">6.6</td>
     <td style="color: #000000; background-color: #f5ac8b;" class="gt_row gt_right">(1.5)</td>
     <td class="gt_row gt_right">14.5</td>
     <td style="color: #FFFFFF; background-color: #a9152a;" class="gt_row gt_right">(3.3)</td>
     <td class="gt_row gt_right">54.2</td>
-    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(13.3)</td>
+    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(13.4)</td>
   </tr>
   <tr>
     <td class="gt_row gt_right">2019-12-29 19:00</td>
@@ -3499,7 +3490,7 @@ annual</th>
     <td class="gt_row gt_right">26.8</td>
     <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(6.1)</td>
     <td class="gt_row gt_right">31.4</td>
-    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(7.7)</td>
+    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(7.8)</td>
   </tr>
   <tr>
     <td class="gt_row gt_right">2005-01-16 07:00</td>
@@ -3514,15 +3505,15 @@ annual</th>
     <td class="gt_row gt_right">-1.0</td>
     <td style="color: #000000; background-color: #c9e1ee;" class="gt_row gt_right">(−0.9)</td>
     <td class="gt_row gt_right">2.6</td>
-    <td style="color: #000000; background-color: #fcdecd;" class="gt_row gt_right">(0.7)</td>
+    <td style="color: #000000; background-color: #fddbc7;" class="gt_row gt_right">(0.8)</td>
     <td class="gt_row gt_right">1.5</td>
     <td style="color: #000000; background-color: #fddbc7;" class="gt_row gt_right">(0.8)</td>
     <td class="gt_row gt_right">7.0</td>
     <td style="color: #000000; background-color: #f4a582;" class="gt_row gt_right">(1.6)</td>
-    <td class="gt_row gt_right">32.1</td>
+    <td class="gt_row gt_right">32.0</td>
     <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(7.3)</td>
     <td class="gt_row gt_right">32.3</td>
-    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(7.9)</td>
+    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(8.0)</td>
   </tr>
   <tr>
     <td class="gt_row gt_right">1998-02-12 19:00</td>
@@ -3545,7 +3536,7 @@ annual</th>
     <td class="gt_row gt_right">20.9</td>
     <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(4.8)</td>
     <td class="gt_row gt_right">37.9</td>
-    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(9.3)</td>
+    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(9.4)</td>
   </tr>
   <tr>
     <td class="gt_row gt_right">2018-02-01 18:00</td>
@@ -3614,7 +3605,7 @@ annual</th>
     <td class="gt_row gt_right">19.2</td>
     <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(4.4)</td>
     <td class="gt_row gt_right">24.5</td>
-    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(6.0)</td>
+    <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(6.1)</td>
   </tr>
   <tr>
     <td class="gt_row gt_right">2015-01-20 15:00</td>
@@ -3680,7 +3671,7 @@ annual</th>
     <td style="color: #000000; background-color: #e9f0f4;" class="gt_row gt_right">(−0.3)</td>
     <td class="gt_row gt_right">9.7</td>
     <td style="color: #000000; background-color: #de715a;" class="gt_row gt_right">(2.2)</td>
-    <td class="gt_row gt_right">8.0</td>
+    <td class="gt_row gt_right">8.1</td>
     <td style="color: #000000; background-color: #ed9475;" class="gt_row gt_right">(1.8)</td>
     <td class="gt_row gt_right">39.7</td>
     <td style="color: #000000; background-color: #808080;" class="gt_row gt_right">(9.8)</td>
@@ -3759,52 +3750,52 @@ annual</th>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div id="uhkswbkgpl" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div class="output text_html"><div id="dztqonlnby" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>
-#uhkswbkgpl table {
+#dztqonlnby table {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', 'Fira Sans', 'Droid Sans', Arial, sans-serif;
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
         }
 
-#uhkswbkgpl thead, tbody, tfoot, tr, td, th { border-style: none; }
+#dztqonlnby thead, tbody, tfoot, tr, td, th { border-style: none; }
  tr { background-color: transparent; }
-#uhkswbkgpl p { margin: 0; padding: 0; }
- #uhkswbkgpl .gt_table { display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 13px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; }
- #uhkswbkgpl .gt_caption { padding-top: 4px; padding-bottom: 4px; }
- #uhkswbkgpl .gt_title { color: #333333; font-size: 125%; font-weight: initial; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; border-bottom-color: #FFFFFF; border-bottom-width: 0; }
- #uhkswbkgpl .gt_subtitle { color: #333333; font-size: 85%; font-weight: initial; padding-top: 3px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; border-top-color: #FFFFFF; border-top-width: 0; }
- #uhkswbkgpl .gt_heading { background-color: #FFFFFF; text-align: center; border-bottom-color: #FFFFFF; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #uhkswbkgpl .gt_bottom_border { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #uhkswbkgpl .gt_col_headings { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
- #uhkswbkgpl .gt_col_heading { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; }
- #uhkswbkgpl .gt_column_spanner_outer { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; padding-top: 0; padding-bottom: 0; padding-left: 4px; padding-right: 4px; }
- #uhkswbkgpl .gt_column_spanner_outer:first-child { padding-left: 0; }
- #uhkswbkgpl .gt_column_spanner_outer:last-child { padding-right: 0; }
- #uhkswbkgpl .gt_column_spanner { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; overflow-x: hidden; display: inline-block; width: 100%; }
- #uhkswbkgpl .gt_spanner_row { border-bottom-style: hidden; }
- #uhkswbkgpl .gt_group_heading { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left; }
- #uhkswbkgpl .gt_empty_group_heading { padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle; }
- #uhkswbkgpl .gt_from_md> :first-child { margin-top: 0; }
- #uhkswbkgpl .gt_from_md> :last-child { margin-bottom: 0; }
- #uhkswbkgpl .gt_row { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; }
- #uhkswbkgpl .gt_stub { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; }
- #uhkswbkgpl .gt_stub_row_group { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; vertical-align: top; }
- #uhkswbkgpl .gt_row_group_first td { border-top-width: 2px; }
- #uhkswbkgpl .gt_row_group_first th { border-top-width: 2px; }
- #uhkswbkgpl .gt_striped { background-color: rgba(128,128,128,0.05); }
- #uhkswbkgpl .gt_table_body { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
- #uhkswbkgpl .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
- #uhkswbkgpl .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
- #uhkswbkgpl .gt_left { text-align: left; }
- #uhkswbkgpl .gt_center { text-align: center; }
- #uhkswbkgpl .gt_right { text-align: right; font-variant-numeric: tabular-nums; }
- #uhkswbkgpl .gt_font_normal { font-weight: normal; }
- #uhkswbkgpl .gt_font_bold { font-weight: bold; }
- #uhkswbkgpl .gt_font_italic { font-style: italic; }
- #uhkswbkgpl .gt_super { font-size: 65%; }
- #uhkswbkgpl .gt_footnote_marks { font-size: 75%; vertical-align: 0.4em; position: initial; }
- #uhkswbkgpl .gt_asterisk { font-size: 100%; vertical-align: 0; }
+#dztqonlnby p { margin: 0; padding: 0; }
+ #dztqonlnby .gt_table { display: table; border-collapse: collapse; line-height: normal; margin-left: auto; margin-right: auto; color: #333333; font-size: 13px; font-weight: normal; font-style: normal; background-color: #FFFFFF; width: auto; border-top-style: solid; border-top-width: 2px; border-top-color: #A8A8A8; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #A8A8A8; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; }
+ #dztqonlnby .gt_caption { padding-top: 4px; padding-bottom: 4px; }
+ #dztqonlnby .gt_title { color: #333333; font-size: 125%; font-weight: initial; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; border-bottom-color: #FFFFFF; border-bottom-width: 0; }
+ #dztqonlnby .gt_subtitle { color: #333333; font-size: 85%; font-weight: initial; padding-top: 3px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; border-top-color: #FFFFFF; border-top-width: 0; }
+ #dztqonlnby .gt_heading { background-color: #FFFFFF; text-align: center; border-bottom-color: #FFFFFF; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
+ #dztqonlnby .gt_bottom_border { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
+ #dztqonlnby .gt_col_headings { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; }
+ #dztqonlnby .gt_col_heading { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; padding-left: 5px; padding-right: 5px; overflow-x: hidden; }
+ #dztqonlnby .gt_column_spanner_outer { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: normal; text-transform: inherit; padding-top: 0; padding-bottom: 0; padding-left: 4px; padding-right: 4px; }
+ #dztqonlnby .gt_column_spanner_outer:first-child { padding-left: 0; }
+ #dztqonlnby .gt_column_spanner_outer:last-child { padding-right: 0; }
+ #dztqonlnby .gt_column_spanner { border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: bottom; padding-top: 5px; padding-bottom: 5px; overflow-x: hidden; display: inline-block; width: 100%; }
+ #dztqonlnby .gt_spanner_row { border-bottom-style: hidden; }
+ #dztqonlnby .gt_group_heading { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; text-align: left; }
+ #dztqonlnby .gt_empty_group_heading { padding: 0.5px; color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; vertical-align: middle; }
+ #dztqonlnby .gt_from_md> :first-child { margin-top: 0; }
+ #dztqonlnby .gt_from_md> :last-child { margin-bottom: 0; }
+ #dztqonlnby .gt_row { padding-top: 8px; padding-bottom: 8px; padding-left: 5px; padding-right: 5px; margin: 10px; border-top-style: solid; border-top-width: 1px; border-top-color: #D3D3D3; border-left-style: none; border-left-width: 1px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 1px; border-right-color: #D3D3D3; vertical-align: middle; overflow-x: hidden; }
+ #dztqonlnby .gt_stub { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; }
+ #dztqonlnby .gt_stub_row_group { color: #333333; background-color: #FFFFFF; font-size: 100%; font-weight: initial; text-transform: inherit; border-right-style: solid; border-right-width: 2px; border-right-color: #D3D3D3; padding-left: 5px; padding-right: 5px; vertical-align: top; }
+ #dztqonlnby .gt_row_group_first td { border-top-width: 2px; }
+ #dztqonlnby .gt_row_group_first th { border-top-width: 2px; }
+ #dztqonlnby .gt_striped { background-color: rgba(128,128,128,0.05); }
+ #dztqonlnby .gt_table_body { border-top-style: solid; border-top-width: 2px; border-top-color: #D3D3D3; border-bottom-style: solid; border-bottom-width: 2px; border-bottom-color: #D3D3D3; }
+ #dztqonlnby .gt_sourcenotes { color: #333333; background-color: #FFFFFF; border-bottom-style: none; border-bottom-width: 2px; border-bottom-color: #D3D3D3; border-left-style: none; border-left-width: 2px; border-left-color: #D3D3D3; border-right-style: none; border-right-width: 2px; border-right-color: #D3D3D3; }
+ #dztqonlnby .gt_sourcenote { font-size: 90%; padding-top: 4px; padding-bottom: 4px; padding-left: 5px; padding-right: 5px; text-align: left; }
+ #dztqonlnby .gt_left { text-align: left; }
+ #dztqonlnby .gt_center { text-align: center; }
+ #dztqonlnby .gt_right { text-align: right; font-variant-numeric: tabular-nums; }
+ #dztqonlnby .gt_font_normal { font-weight: normal; }
+ #dztqonlnby .gt_font_bold { font-weight: bold; }
+ #dztqonlnby .gt_font_italic { font-style: italic; }
+ #dztqonlnby .gt_super { font-size: 65%; }
+ #dztqonlnby .gt_footnote_marks { font-size: 75%; vertical-align: 0.4em; position: initial; }
+ #dztqonlnby .gt_asterisk { font-size: 100%; vertical-align: 0; }
  
 </style>
 <table style="table-layout: fixed;" class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
@@ -3864,7 +3855,7 @@ annual</th>
     <td class="gt_row gt_right">1.7</td>
     <td class="gt_row gt_right">0.8</td>
     <td class="gt_row gt_right">0.8</td>
-    <td class="gt_row gt_right">2.3</td>
+    <td class="gt_row gt_right">2.2</td>
     <td class="gt_row gt_right">6.6</td>
     <td class="gt_row gt_right">14.5</td>
     <td class="gt_row gt_right">54.2</td>
@@ -3894,7 +3885,7 @@ annual</th>
     <td class="gt_row gt_right">2.6</td>
     <td class="gt_row gt_right">1.5</td>
     <td class="gt_row gt_right">7.0</td>
-    <td class="gt_row gt_right">32.1</td>
+    <td class="gt_row gt_right">32.0</td>
     <td class="gt_row gt_right">32.3</td>
   </tr>
   <tr>
@@ -3992,7 +3983,7 @@ annual</th>
     <td class="gt_row gt_right">3.0</td>
     <td class="gt_row gt_right">-0.5</td>
     <td class="gt_row gt_right">9.7</td>
-    <td class="gt_row gt_right">8.0</td>
+    <td class="gt_row gt_right">8.1</td>
     <td class="gt_row gt_right">39.7</td>
   </tr>
 </tbody>
@@ -4044,10 +4035,10 @@ annual</th>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.patches.Circle at 0x164e31cd0&gt;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.patches.Circle at 0x1699df820&gt;
 </pre></div>
 </div>
-<img alt="../_images/db1b8a9eec9a49b9156c1dc0f56cc8386eecc155f02c7079728e0f48e2b07a5f.png" src="../_images/db1b8a9eec9a49b9156c1dc0f56cc8386eecc155f02c7079728e0f48e2b07a5f.png" />
+<img alt="../_images/dbd8de38fb1fbc4fbd929e960da92ea772104e236a88c650b8d3b3fefcfdff11.png" src="../_images/dbd8de38fb1fbc4fbd929e960da92ea772104e236a88c650b8d3b3fefcfdff11.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -4075,8 +4066,6 @@ annual</th>
 </div>
 <div class="cell_output docutils container">
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;French Frigate&#39;: 14,
- &#39;Funafuti&#39;: 25,
- &quot;Nuku&#39;alofa&quot;: 38,
  &#39;Midway&#39;: 50,
  &#39;Johnston&#39;: 52,
  &#39;Honolulu, Hawaii&#39;: 57,
@@ -4184,7 +4173,7 @@ annual</th>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Text(0.5, 1.0, &#39;Non-Tidal Residual Component Beachballs by Station&#39;)
 </pre></div>
 </div>
-<img alt="../_images/7f7262e66bf559d863df0dcc07c3a45675e829612d0c5a8e0b9403e063d39daa.png" src="../_images/7f7262e66bf559d863df0dcc07c3a45675e829612d0c5a8e0b9403e063d39daa.png" />
+<img alt="../_images/ad2882290abf6766eeb2523cc966c6d53a197562862ab2f94d2581efbaa7326b.png" src="../_images/ad2882290abf6766eeb2523cc966c6d53a197562862ab2f94d2581efbaa7326b.png" />
 </div>
 </div>
 <div class="cell docutils container">
@@ -4212,7 +4201,7 @@ annual</th>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/qp/nn19rcjs5bdcdvxmff5bd3pr0000gn/T/ipykernel_8324/4155686509.py:17: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/var/folders/qp/nn19rcjs5bdcdvxmff5bd3pr0000gn/T/ipykernel_16488/4155686509.py:17: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
   ntr_component_stds_df = ntr_component_stds_df.fillna(0).infer_objects(copy=False)
 </pre></div>
 </div>
@@ -4244,8 +4233,6 @@ annual</th>
     <tr style="text-align: right;">
       <th></th>
       <th>French Frigate</th>
-      <th>Funafuti</th>
-      <th>Nuku'alofa</th>
       <th>Midway</th>
       <th>Johnston</th>
       <th>Honolulu, Hawaii</th>
@@ -4262,8 +4249,6 @@ annual</th>
     <tr>
       <th>ntr</th>
       <td>0</td>
-      <td>80.312141</td>
-      <td>64.384297</td>
       <td>92.391399</td>
       <td>90.104389</td>
       <td>64.739695</td>
@@ -4278,8 +4263,6 @@ annual</th>
     <tr>
       <th>sea_level</th>
       <td>0</td>
-      <td>475.137279</td>
-      <td>394.176600</td>
       <td>152.464510</td>
       <td>236.701174</td>
       <td>198.394132</td>
@@ -4294,8 +4277,6 @@ annual</th>
     <tr>
       <th>Tide</th>
       <td>0</td>
-      <td>470.282670</td>
-      <td>391.562621</td>
       <td>136.468595</td>
       <td>220.644687</td>
       <td>187.029051</td>
@@ -4310,8 +4291,6 @@ annual</th>
     <tr>
       <th>Nodal</th>
       <td>0</td>
-      <td>28.348202</td>
-      <td>18.821874</td>
       <td>11.228485</td>
       <td>13.271974</td>
       <td>19.701486</td>
@@ -4326,9 +4305,7 @@ annual</th>
     <tr>
       <th>Interdecadal</th>
       <td>0</td>
-      <td>0.591677</td>
-      <td>17.512991</td>
-      <td>23.679396</td>
+      <td>23.667298</td>
       <td>9.179115</td>
       <td>6.097591</td>
       <td>10.974042</td>
@@ -4342,9 +4319,7 @@ annual</th>
     <tr>
       <th>Decadal</th>
       <td>0</td>
-      <td>16.825801</td>
-      <td>28.539358</td>
-      <td>11.448025</td>
+      <td>11.444029</td>
       <td>9.743551</td>
       <td>19.390535</td>
       <td>17.444609</td>
@@ -4358,9 +4333,7 @@ annual</th>
     <tr>
       <th>Interannual</th>
       <td>0</td>
-      <td>49.896996</td>
-      <td>31.389328</td>
-      <td>34.902480</td>
+      <td>34.916719</td>
       <td>37.544738</td>
       <td>32.525634</td>
       <td>31.101024</td>
@@ -4374,9 +4347,7 @@ annual</th>
     <tr>
       <th>Seasonal</th>
       <td>0</td>
-      <td>22.225112</td>
-      <td>14.593408</td>
-      <td>19.707275</td>
+      <td>19.748280</td>
       <td>19.554461</td>
       <td>11.180329</td>
       <td>14.572673</td>
@@ -4390,9 +4361,7 @@ annual</th>
     <tr>
       <th>Intraannual</th>
       <td>0</td>
-      <td>33.136991</td>
-      <td>29.093386</td>
-      <td>43.084135</td>
+      <td>43.080945</td>
       <td>48.960144</td>
       <td>25.469826</td>
       <td>31.703260</td>
@@ -4406,9 +4375,7 @@ annual</th>
     <tr>
       <th>Weekly</th>
       <td>0</td>
-      <td>24.530909</td>
-      <td>25.226859</td>
-      <td>43.831919</td>
+      <td>43.825812</td>
       <td>33.674295</td>
       <td>20.484482</td>
       <td>24.511261</td>
@@ -4422,9 +4389,7 @@ annual</th>
     <tr>
       <th>Storms &amp; HF</th>
       <td>0</td>
-      <td>25.693085</td>
-      <td>21.490229</td>
-      <td>40.587583</td>
+      <td>40.541538</td>
       <td>40.297862</td>
       <td>32.969038</td>
       <td>23.568157</td>
@@ -4488,9 +4453,23 @@ annual</th>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/d177ec8ddcd5249b635171e0f95a96d59a44a24f12e67bb7f1f09896213d4709.png" src="../_images/d177ec8ddcd5249b635171e0f95a96d59a44a24f12e67bb7f1f09896213d4709.png" />
+<img alt="../_images/5e2d779e079edabf813fecab86046341236559a7e33645be9ef8d976f8112abd.png" src="../_images/5e2d779e079edabf813fecab86046341236559a7e33645be9ef8d976f8112abd.png" />
 </div>
 </div>
+<hr class="docutils" />
+<section id="citations">
+<h3>Citations<a class="headerlink" href="#citations" title="Permalink to this heading">#</a></h3>
+<div class="docutils container" id="id3">
+<dl class="citation">
+<dt class="label" id="id33"><span class="brackets"><a class="fn-backref" href="#id2">1</a></span></dt>
+<dd><p>Shuiming Chen and Bo Qiu. Mesoscale eddies northeast of the Hawaiian archipelago from satellite altimeter observations. <em>Journal of Geophysical Research: Oceans</em>, 2010. <a class="reference external" href="https://doi.org/10.1029/2009JC005698">doi:10.1029/2009JC005698</a>.</p>
+</dd>
+<dt class="label" id="id34"><span class="brackets"><a class="fn-backref" href="#id1">2</a></span></dt>
+<dd><p>Yvonne L. Firing and Mark A. Merrifield. Extreme sea level events at Hawaii: Influence of mesoscale eddies. <em>Geophysical Research Letters</em>, 2004. <a class="reference external" href="https://doi.org/10.1029/2004GL021539">doi:10.1029/2004GL021539</a>.</p>
+</dd>
+</dl>
+</div>
+</section>
 </section>
 </section>
 
@@ -4566,7 +4545,10 @@ annual</th>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-components">Plot components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-table">Make a Table</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-map">Make a map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#make-a-map">Make a map</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#citations">Citations</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
