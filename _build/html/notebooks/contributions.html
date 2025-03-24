@@ -884,13 +884,13 @@ document.write(`
 </figure>
 <p>Note that here PDO, BEST, PMM and ONI all have the same lag if they are Hawaiian Island stations. This is a fixed lag based on average results across all stations and/or pre-existing literature. I’m doing this for consistency across the region.</p>
 <p>For the record, we can look at the original “best” lags from the original correlation output file.</p>
-<div class="cell tag_hide-input tag_hide-ouput docutils container">
+<div class="cell tag_hide-input tag_hide-ouput tag_hide-output docutils container">
 <details class="hide above-input">
 <summary aria-label="Toggle hidden content">
 <span class="collapsed">Show code cell source</span>
 <span class="expanded">Hide code cell source</span>
 </summary>
-<div class="cell_input docutils container">
+<div class="cell_input above-output-prompt docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data</span>
 <span class="n">dfLagsOriginal</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">dirs</span><span class="p">[</span><span class="s1">&#39;CI_dir&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="s1">&#39;CI_correlation_results.csv&#39;</span><span class="p">)</span>
 <span class="n">dfLagsSet</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">dirs</span><span class="p">[</span><span class="s1">&#39;CI_dir&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="s1">&#39;CI_correlation_results_v2.csv&#39;</span><span class="p">)</span>
@@ -977,9 +977,15 @@ document.write(`
 </div>
 </div>
 </details>
+<details class="hide below-input">
+<summary aria-label="Toggle hidden content">
+<span class="collapsed">Show code cell output</span>
+<span class="expanded">Hide code cell output</span>
+</summary>
 <div class="cell_output docutils container">
 <img alt="../_images/edd434434f63f4d15c0327c5337027f31aeb701606f75f1222820ef5593b55b8.png" src="../_images/edd434434f63f4d15c0327c5337027f31aeb701606f75f1222820ef5593b55b8.png" />
 </div>
+</details>
 </div>
 <figure class="align-default" id="ci-lag-correlation">
 <img alt="../_images/edd434434f63f4d15c0327c5337027f31aeb701606f75f1222820ef5593b55b8.png" src="../_images/edd434434f63f4d15c0327c5337027f31aeb701606f75f1222820ef5593b55b8.png" />
