@@ -28,21 +28,21 @@ param_names = ['Annual seasonal cycle',
 
 
 
-def make_directoryDict(base_dir):
+# def make_directoryDict(base_dir):
 
-    base_dir = Path(base_dir)
-    base_data_dir = Path(base_dir / 'data')
+#     base_dir = Path(base_dir)
+#     base_data_dir = Path(base_dir / 'data')
 
-    dirs = {
-        'data_dir': base_data_dir, 
-        'output_dir': base_dir / 'output/extremes',
-        'input_dir': base_dir / 'model_input',
-        'matrix_dir': base_dir / 'matrix',
-        'model_output_dir': base_data_dir / 'GEV_model_output',
-        'CI_dir': base_data_dir / 'climate_indices',
-        'run_dir': base_data_dir / 'model_run'
-    }
+#     dirs = {
+#         'data_dir': base_data_dir, 
+#         'output_dir': base_dir / 'output/extremes',
+#         'input_dir': base_dir / 'model_input',
+#         'matrix_dir': base_dir / 'matrix',
+#         'model_output_dir': base_data_dir / 'GEV_model_output',
+#         'CI_dir': base_data_dir / 'climate_indices',
+#         'run_dir': base_data_dir / 'model_run'
+#     }
     
-    return dirs
+#     return dirs
 
 

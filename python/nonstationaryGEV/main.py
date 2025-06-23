@@ -1,164 +1,62 @@
 #%%
-from models import run_CI_models
-from models import run_noClimateIndex_models
-from imports import *
-from plotting import plotExtremeSeasonality, plotTimeDependentReturnValue
-from helpers import make_directories
-import sys
+from models import run_CI_models, run_noClimateIndex_models
+from helpers import make_directories, make_directoryDict
+import os
+import xarray as xr
+from config import RSL_FILENAME, STATION_IDS, RUN_WITHOUT_MODEL, RETURN_PERIOD, NUM_PROCESSES, CLIMATE_INDEX, BASE_DIR, LIMITS
 
-def in_debug_mode():
-    gettrace = getattr(sys, 'gettrace', None)
-    if gettrace is None:
-        return False
-    return gettrace() is not None
-
-def in_interactive_mode():
-    try:
-        get_ipython()
-        return True
-    except NameError:
-        return False
-
-# Determine base directory based on mode
-cwd = os.getcwd()
-
-if in_debug_mode():
-    base_dir = cwd  # For debug mode
-elif in_interactive_mode():
-    base_dir = os.path.abspath(os.path.join(cwd, "../.."))  # For interactive mode (Jupyter/IPython)
-else:
-    #base_dir = os.path.abspath(os.path.join(cwd, "../.."))
-    base_dir = cwd  # For normal execution
-
-print(f"Base directory: {base_dir}")
-
-
-dirs = make_directoryDict(base_dir)
-
-recordIDs = [50,52,57,58,59,60,61,552]
-recordIDs = [52,57,58,59,60,61,552]
-
-# recordIDs = [61,552]
-recordID = 57
-runWithoutModel = True
-returnPeriod = [2,10,50,100]
-year0plot = 1993
-saveToFile = True
-numProcesses = 8 # number of processes to run in parallel, select 1 if you want to run in serial
-climateIndex = ['AO','AAO','BEST','DMI','ONI','PDO','PMM','PNA','TNA']
-# climateIndex = ['BEST']
-# climateIndex = ['AO','AAO','DMI','PDO','PMM','PNA','TNA']
 
 #%%
-# get dataset of hourly sea level data
-rsl = xr.open_dataset(dirs['data_dir']/ 'rsl_hawaii.nc')
+def load_and_clean_data(data_dir,rsl_filename, station_ids):
+    """Load and clean the sea level dataset."""
+    with xr.open_dataset(data_dir / rsl_filename) as rsl:
+        rsl_hourly = rsl.sel(record_id=rsl.record_id.isin(station_ids)).load()
+    return rsl_hourly
 
-# remove stations 547,548, 14
-rsl_hourly = rsl.sel(record_id=~rsl.record_id.isin([547,548,14]))
-
-# close the file
-rsl.close()
-
-make_directories(rsl_hourly,dirs)
-
-#%%
-# from models import prep_model_input_data
-# STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl,recordID,dirs, CIname='None')
-
-#%%
-# Preallocate the significance array
-SignifCvte1 = np.zeros(len(climateIndex))
-SignifCvte2_loc = np.zeros(len(climateIndex))
-SignifCvte2_T = np.zeros(len(climateIndex))
-
-runWithoutModel=True
-# run the models for all recordIDs
-# for recordID in recordIDs:
-_, _, _, _, _, _, x_N, w_N, wcomp, SignifN = run_noClimateIndex_models(rsl_hourly,recordID,runWithoutModel,dirs, returnPeriod, CIname='None', nproc=numProcesses)
-STNDtoMHHW, station_name, year0, mm, ampCvte1, SignifCvte1 = run_CI_models(rsl_hourly,recordID,False,dirs, returnPeriod, climateIndex,x_N, w_N, wcomp, SignifN, nproc=numProcesses)
-
-#%%
-# Initialize an empty list to store results
-# results = []
-
-# for i in np.arange(0, len(climateIndex)):
-#     covariate_params = f'cvte_location_params_{climateIndex[i]}.json'
+def main(
+        rsl_filename=RSL_FILENAME,
+        station_ids=STATION_IDS, 
+        runWithoutModel=RUN_WITHOUT_MODEL, 
+        returnPeriod=RETURN_PERIOD, 
+        climateIndex=CLIMATE_INDEX, 
+        numProcesses=NUM_PROCESSES,
+        base_dir=BASE_DIR,
+        limits=LIMITS):
+    """ Main function to run the nonstationary GEV models for sea level data. """
     
-#     # Create the full path for the JSON file
-#     jsonpath = Path(dirs['model_output_dir']) / str(recordID) / covariate_params
+    # base_dir = os.getcwd()  # Get the current working directory
+    print(f"Base directory: {base_dir}")  # This is where the script will run
+    dirs = make_directoryDict(base_dir)  # Create directory structure
+    
+    # Load and clean the dataset
+    rsl_hourly = load_and_clean_data(dirs['data_dir'], rsl_filename, station_ids)    
+    make_directories(rsl_hourly, dirs)  # Create necessary directories  
 
-#     # Open and read the JSON file
-#     with open(jsonpath, 'r') as f:
-#         output = json.load(f)
-#         w, mio, standard_error = (np.array(output[key]) for key in ['w', 'mio', 'standard_error'])
+    # write limits to a text file
+    # check if limits.txt already exists, if not, create it
+    if not os.path.exists(dirs['run_dir'] / 'limits.txt'):
+        with open(dirs['run_dir'] / 'limits.txt', 'w') as f:
+            for value in LIMITS.values():
+                line = ' '.join(str(v) for v in value)
+                f.write(f"{line}\n")
 
-#     # Store the results in a list
-#     results.append({
-#         'Climate Index': climateIndex[i],
-#         'Amplitude of CI param': w[-1],  
-#         'Standard Error of CI param': standard_error[-1]
-#     })
-
-# # Convert the results list to a DataFrame
-# df_cvteLocation = pd.DataFrame(results)
-
-# # add Significance to the dataframe
-# df_cvteLocation['Significance (over trend)'] = SignifCvte1
-
-# df_cvteLocation
-
-# #%%
-# # Initialize an empty list to store results
-# results = []
-
-# for i in np.arange(0, len(climateIndex)):
-#     covariate_params = f'cvte_scale_params_{climateIndex[i]}.json'
-  
-#     # Create the full path for the JSON file
-#     jsonpath = Path(dirs['model_output_dir']) / str(recordID) / covariate_params
-
-#     # Open and read the JSON file
-#     with open(jsonpath, 'r') as f:
-#         output = json.load(f)
-#         w, mio, standard_error = (np.array(output[key]) for key in ['w', 'mio', 'standard_error'])
-
-#     if standard_error[-1] == 0:
-#          standard_error[-1] = np.nan
-
-
-# # Store the results in a list
-# results.append({
-#     'Climate Index': climateIndex[i],
-#     'Amplitude of CI param': w[-1],  
-#     'Standard Error of CI param': standard_error[-1]
-# })
-
-# # Convert the results list to a DataFrame
-# df_cvteScale = pd.DataFrame(results)
-
-# # add Significance to the dataframe
-# df_cvteScale['Significance over cvte_loc'] = SignifCvte2_loc
-# df_cvteScale['Significance over trend'] = SignifCvte2_T
-# df_cvteScale
-
-# #%%
-
-# # # plot seasonal cycle
-# # figSeasonal, cmap = plotExtremeSeasonality(mm['t'],mm['monthly_max'],x_s,w_s,recordID, STNDtoMHHW, dirs, station_name, ReturnPeriod=returnPeriod,SampleRate=12,saveToFile=saveToFile)
-# # #%%
-# # # plot time series
-# # figTimeSeries = plotTimeDependentReturnValue(str(recordID), STNDtoMHHW, dirs['model_output_dir'], station_name, dirs['output_dir'], mm, year0plot, saveToFile=saveToFile)
+    # run the models for all recordIDs
+    for recordID in STATION_IDS:
+        _, _, _, _, _, _, x_N, w_N, wcomp, SignifN = run_noClimateIndex_models(rsl_hourly,recordID,runWithoutModel,dirs, returnPeriod, CIname='None', nproc=numProcesses)
+        run_CI_models(rsl_hourly,recordID,False,dirs, returnPeriod, climateIndex,x_N, w_N, wcomp, SignifN, nproc=numProcesses)
 
 
 
-# # figSeasonal.show()
-# # figTimeSeries.show()
-# # # %%
+#%%
+if __name__ == "__main__":
+    main(
+        rsl_filename=RSL_FILENAME,
+        station_ids=STATION_IDS, 
+        runWithoutModel=RUN_WITHOUT_MODEL, 
+        returnPeriod=RETURN_PERIOD, 
+        climateIndex=CLIMATE_INDEX, 
+        numProcesses=NUM_PROCESSES,
+        base_dir=BASE_DIR,
+        limits=LIMITS
+    )
 
-# # #%% Test correlation and lag between climate index and sea level
-# # from helpers import get_monthly_max_time_series, get_covariate
-# # CI_dir = dirs['CI_dir']
-# # # get dataset of monthly max sea level data
-# # df, STNDtoMHHW, station_name, year0 = get_monthly_max_time_series(recordID, dirs)
-# # CI = get_covariate(mm['t_monthly_max'], CI_dir, CIname = 'ONI')
-# # # %%
