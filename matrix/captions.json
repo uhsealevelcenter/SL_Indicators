@@ -1,0 +1,198 @@
+{
+  "sl_magnitude_map": {
+    "figure": "Figure 1.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_magnitude_map.png",
+    "alt": "Map showing sea level change near Hawaiian Islands from altimetry and tide gauge data",
+    "text": "Map of absolute and relative sea level change from the altimetry and tide gauge record (dots) near the Hawaiian Islands stations from 1993-01-01 to 2022-12-31. White dots indicate station locations that do not have suitable records for this analysis. See <a href=\"https://ccar.colorado.edu/altimetry/\">The Sea Level Explorer</a> for more."
+  },
+  "cmems_trend_rate": {
+    "figure": "Figure 1.2",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/cmems_trend_rate_1993_2023.png",
+    "alt": "Sea level anomaly trend map showing background patterns from 1993-2023",
+    "text": "Background trend of sea level anomalies relative to 1993-2001 epoch, using Storm Years."
+  },
+  "sl_magnitude_timeseries_500": {
+    "figure": "Figure 1.3",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_magnitude_timeseries_500.png",
+    "alt": "Time series comparing absolute and relative sea level trends at Midway station",
+    "text": "Absolute sea level trend (red) from altimetry, and relative sea level trend (blue) from the Midway tide gauge record from 1993-01-01 to 2022-12-31. See <a href=\"https://ccar.colorado.edu/altimetry/\">The Sea Level Explorer</a> for more."
+  },
+  "sl_magnitude_timeseries": {
+    "figure": "Figure 1.4",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_magnitude_timeseries.png",
+    "alt": "Time series comparing absolute and relative sea level trends at Hawaiian Islands stations",
+    "text": "Absolute sea level trend (red) from altimetry, and relative sea level trend (blue) from the tide gauge record at the Hawaiian Islands stations from 1993-01-01 to 2022-12-31."
+  },
+  "sl_trend_table": {
+    "figure": "Table 1.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_trend_table.png",
+    "alt": "Table of sea level trend results for Hawaiian Islands region 1993-2023",
+    "text": "Sea level trend results for the Hawaiian Islands region from 1993 to 2023."
+  },
+  "sl_anomaly_annual_map_decadal": {
+    "figure": "Figure 2.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_anomaly_annual_map_decadal.png",
+    "alt": "Decadal mean sea level anomaly map for Hawaiian Islands region",
+    "text": "Decadal mean anomalies of the Hawaiian Islands region, background trend (Storm Years 1993-2023) removed. Note that the sea level is plotted in units of m. The mean anomaly is near zero when using the full timeseries and grid-level trends (i.e. no area-weighted averaging). Mean monthly anomalies at the stations are plotted as well."
+  },
+  "sl_mma_annual_kawaihae": {
+    "figure": "Figure 2.2",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_MMA_annual_Kawaihae.png",
+    "alt": "Yearly mean sea level anomalies at Kawaihae tide gauge with El Niño/La Niña periods",
+    "text": "Yearly mean anomalies at the Kawaihae tide gauge with background trend removed (blue). The shaded region about the annual mean denotes the annual means of the daily min and max sea level. Note that the sea level is plotted in units of m. The monthly mean anomaly (gray) is calculated with respect to the annual cycle. El Niño and La Niña time periods are derived from the <a href=\"https://origin.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php\">Oceanic Niño Index (ONI)</a>."
+  },
+  "sl_mma_annual": {
+    "figure": "Figure 2.3",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_MMA_annual.png",
+    "alt": "Yearly mean sea level anomalies at all Hawaiian Islands tide gauges",
+    "text": "Yearly mean anomalies at all Hawaiian Island region tide gauges with background trend removed (blue). The shaded region about the annual mean denotes the annual means of the daily min and max sea level. Note that the sea level is plotted in units of m. The monthly mean anomaly (gray) is calculated with respect to the annual cycle."
+  },
+  "sl_rankings_map": {
+    "figure": "Figure 3.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_rankings_map.png",
+    "alt": "Map showing lowest and highest observed sea levels relative to MHHW",
+    "text": "Lowest and highest observed sea levels, relative to MHHW."
+  },
+  "sl_rankings_kahului": {
+    "figure": "Figure 3.2",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_rankings_Kahului.png",
+    "alt": "Time series of sea level rankings at Kahului with El Niño/La Niña events highlighted",
+    "text": "Lowest and highest observed sea levels, relative to MHHW, at the Kahului tide gauge. El Niño events are highlighted with red stars, and La Niña events are highlighted with blue circles. The monthly mean sea level is shown in solid blue, with the monthly minimum and maximum (range) shown in shaded light blue. Click the image above to display the interactive plot."
+  },
+  "sl_top_10_table_honolulu": {
+    "figure": "Table 3.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_top_10_table_Honolulu,Hawaii.png",
+    "alt": "Table of top 10 extreme water levels at Honolulu tide gauge",
+    "text": "Top 10 minimum and maximum water levels, relative to MHHW for the Honolulu tide gauge."
+  },
+  "sl_extremes_map": {
+    "figure": "Figure 4.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_extremes_map.png",
+    "alt": "Map of extreme water levels at various return periods for Hawaiian Island stations",
+    "text": "Extreme water levels at the 2,10,50, and 100 year return periods for Hawaiian Island stations, using stationary GEV analysis."
+  },
+  "sl_extremes_monthly_annual_maxima_honolulu": {
+    "figure": "Figure 4.2",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_extremes_monthly_annual_maxima_Honolulu.png",
+    "alt": "Annual and monthly extreme sea levels at Honolulu with return level thresholds",
+    "text": "Annual and monthly extremes above MHHW for the Honolulu tide gauge. Colored horizontal lines indicate the 2,10,50 and 100 year return levels."
+  },
+  "sl_extremes_return_values_honolulu": {
+    "figure": "Figure 4.3",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_extremes_return_values_Honolulu.png",
+    "alt": "Return values plot for Honolulu showing extreme value distribution",
+    "text": "Return values plot, stationary station-based. Colored vertical lines indicate the 2,10,50 and 100 year return levels."
+  },
+  "sl_extremes_histogram_pp_qq_honolulu": {
+    "figure": "Figure 4.4",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_extremes_histogram_pp_qq_Honolulu.png",
+    "alt": "Statistical diagnostic plots for GEV analysis at Honolulu tide gauge",
+    "text": "Histogram, pp, qq plots for stationary GEV at the Honolulu tide gauge."
+  },
+  "sl_extremes_table_honolulu": {
+    "figure": "Table 4.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_rankings_merge_Honolulu.png",
+    "alt": "Table of extreme water level return periods at Honolulu tide gauge",
+    "text": "Extreme water levels, coupled with the 2,10,50, and 100 year return period water levels for the Honolulu tide gauge, using nonstationary GEV analysis. See also <a href=\"https://pacificislandsflooding.org/observed-flooding?station-id=057&units=meters&threshold=030\">the Pacific Islands Flooding tool</a>: Extreme Water Levels table."
+  },
+  "time_dependent_return_value_57": {
+    "figure": "Figure 5.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/extremes/TimeDependentReturnValue_57.png",
+    "alt": "Time-dependent return values showing nonstationary extreme water levels at Honolulu",
+    "text": "Time series of the nonstationary GEV-based extreme water level return values for Honolulu. The monthly maxima (+) are displayed spanning data from 1993 to 2023. The return levels (at 2, 10, 50, and 100 year levels) are shown in solid lines. The 95% Confidence Interval (shaded area) also varies in time, and is shown only for the 2 and 10 year return levels. Years 2008 and 2020 are highlighted on these curves to show the differences in values when taking seasonality, a long-term trend, and the 18.6 nodal-cycle into account."
+  },
+  "components_trend_plot": {
+    "figure": "Figure 6.1",
+    "src": "placeholders/Picture4.jpg",
+    "alt": "Components breakdown of sea level trend at Honolulu tide gauge",
+    "text": "Components of sea level trend at the Honolulu tide gauge. See the <a href=\"https://pacificislandsflooding.org/sea-level-rise?station-id=057&units=meters&threshold=030\">PI-Casc Flooding Tool</a>."
+  },
+  "location_param_component_amps": {
+    "figure": "Figure 7.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/extremes/location_param_component_amps.png",
+    "alt": "Amplitude of covariate contributions to sea level location parameter",
+    "text": "Amplitude of individual covariate contributions (seasonal, long-term trend, climate variability and nodal tidal cycle) to sea level in the location parameter. The amplitude of each factor is displayed in centimeters."
+  },
+  "sl_flood_frequency_map": {
+    "figure": "Figure 8.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_FloodFrequency_map.png",
+    "alt": "Map showing rate of change in flood frequency at Hawaiian Islands tide gauges",
+    "text": "Map of the rate of change in average flood (a) days and (b) hours per year above the 99th threshold of water levels at the Hawaiian Islands tide gauges from 1983-01-01 to 2023-12-31."
+  },
+  "sl_flood_frequency_honolulu_days": {
+    "figure": "Figure 8.2",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_FloodFrequency_threshold_counts_Honolulu, Hawaii.png",
+    "alt": "Flood duration in days per year at Honolulu tide gauge",
+    "text": "Average flood duration in <b>days</b> above a threshold of 30 cm per year for the Honolulu tide gauge from 1983-01-01 to 2023-12-31."
+  },
+  "sl_flood_frequency_honolulu_hours": {
+    "figure": "Figure 8.3",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_FloodFrequency_threshold_counts_HOURS_Honolulu, Hawaii.png",
+    "alt": "Flood duration in hours per year at Honolulu tide gauge",
+    "text": "Average flood duration in <b>hours</b> above a threshold of 30 cm per year for the Honolulu tide gauge from 1983-01-01 to 2023-12-31."
+  },
+  "sl_flood_frequency_hours": {
+    "figure": "Figure 8.4",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_FloodFrequency_threshold_counts_hours.png",
+    "alt": "Regional flood duration in hours per year for Hawaiian Islands tide gauges",
+    "text": "Average flood duration in hours above a threshold of 30 cm per year for 'Hawaiian Islands' region tide gauges from 1983-01-01 to 2023-12-31."
+  },
+  "sl_flood_frequency_days": {
+    "figure": "Figure 8.5",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_FloodFrequency_threshold_counts_days.png",
+    "alt": "Regional flood duration in days per year for Hawaiian Islands tide gauges",
+    "text": "Average flood duration in days above a threshold of 30 cm per year for 'Hawaiian Islands' region tide gauges from 1983-01-01 to 2023-12-31."
+  },
+  "sl_flood_frequency_table": {
+    "figure": "Table 8.1",
+    "src": "output/SL_FloodFrequency_table.png",
+    "alt": "Table summarizing flood frequency analysis results",
+    "text": "Flood frequency results table."
+  },
+  "flood_duration_histograms": {
+    "figure": "Figure 9.1",
+    "src": "plotly/flood_duration_histograms.html",
+    "alt": "Interactive histograms showing flood event duration distributions",
+    "text": "Histograms of the duration of flood events in days above 30cm MHHW at the Hawaiian Islands tide gauges from 1983-01-01 to 2023-12-31."
+  },
+  "sl_anomaly_map_intra": {
+    "figure": "Figure 10.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_anomaly_map.png",
+    "alt": "Map of monthly mean sea level anomalies from satellite altimetry",
+    "text": "Map of absolute monthly mean sea level anomalies from altimetry for the full record at Hawaiian Islands stations from 1993-01-01 to 2022-12-31."
+  },
+  "sl_mmma_intra": {
+    "figure": "Figure 10.2",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_MMMA_intra.png",
+    "alt": "Monthly climatology of sea level at Honolulu tide gauge",
+    "text": "Monthly means at the Honolulu tide gauge for the epoch 1983-2001. Note that the sea level is plotted in units of m, relative to . Note also that this differs from the plot available at <a href=\"https://uhslc.soest.hawaii.edu/stations/?stn=057#climatology\">UHSLC</a>, because we are using records only from the epoch."
+  },
+  "sl_rankings_intra": {
+    "figure": "Figure 11.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/SL_rankings_Honolulu, Hawaii.png",
+    "alt": "Time series of extreme sea level rankings at Honolulu with climate indicators",
+    "text": "Timeseries of lowest and highest observed sea levels, relative to MHHW. Monthly means are shown in solid blue, with the range (monthly max and monthly min) shown in shaded light blue. Blue circles indicate La Niña events, red stars indicate El Niño events."
+  },
+  "seasonal_extreme_variations_57": {
+    "figure": "Figure 12.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/extremes/SeasonalExtremeVariations_57.png",
+    "alt": "Seasonal climatology of extreme sea levels showing return level variations throughout the year",
+    "text": "A climatology of extreme sea levels at the Honolulu tide gauge. Monthly maxima (+), determined from hourly sea level data, are shown from 1993-2023. The solid line corresponds to projected sea level return levels at 2,10,50 and 100 years, using 1993-2003 data. This line uses a nonstationary GEV to take the seasonal variations of sea level into account. The 2, 10, 50 and 100-year return levels are shown to vary throughout the year (dashed line), with the lowest extremes occuring in March, and highest extremes peaking in July. No long-term trend is used in this model, and the scale and location parameters are held constant."
+  },
+  "honolulu_hawaii_flood_days_intra_annual": {
+    "figure": "Figure 13.1",
+    "src": "https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/output/Honolulu_Hawaii_flood_days_intra_annual.png",
+    "alt": "Calendar table showing flood days by month and year at Honolulu",
+    "text": "Table of sea level records exceeding a given threshold. The data are organized into years, and months. Each 'event' is considered a 'flooding day,' where at least one hour of that day exceeds the threshold. The monthly percentage shown at the bottom of the table is relative to the total number of flooding days (for all months and years in the record)."
+  },
+  "location_param_component_amps_scale": {
+    "figure": "Figure 7.2",
+    "alt": "Amplitude of covariate contributions to sea level scale parameter",
+    "text": "Amplitude of individual covariate contributions (seasonal, long-term trend, climate variability and nodal tidal cycle) to sea level in the scale parameter. The amplitude of each factor is displayed in centimeters."
+  },
+  "location_param_component_amps_shape": {
+    "figure": "Figure 7.3",
+    "alt": "Amplitude of covariate contributions to sea level shape parameter",
+    "text": "Amplitude of individual covariate contributions (seasonal, long-term trend, climate variability and nodal tidal cycle) to sea level in the shape parameter. The amplitude of each factor is displayed in centimeters."
+  }
+}

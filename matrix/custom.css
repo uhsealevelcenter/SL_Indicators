@@ -2,7 +2,8 @@
             font-family: "open-sans", Helvetica, Arial, sans-serif;
             color: #222;
             font-weight: lighter;
-            font-size: 11pt;
+            font-size: 10pt;
+            line-height: 1.4;
         }
         table {
             width: 100%;
@@ -37,6 +38,7 @@
             font-weight: bold;
             margin-top: 30px;
             font-variant-caps: all-small-caps;
+            letter-spacing: 0.5px;
         }
 
         h3_custom {
