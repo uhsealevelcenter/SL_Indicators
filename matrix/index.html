@@ -1148,16 +1148,15 @@
                     let newIconSrc;
                     
                     if (hasRealContent) {
-                        // Convert to color versions - ONLY for icons that have confirmed color versions
+                        // Convert to color versions - temporarily skip map emoji until it's on main branch
                         if (currentSrc.includes('plot_icon_small.png')) {
                             newIconSrc = currentSrc.replace('plot_icon_small.png', 'plot_icon_color_small.png');
                         } else if (currentSrc.includes('table_icon_small.png')) {
                             newIconSrc = currentSrc.replace('table_icon_small.png', 'table_icon_color_small.png');
                         } else if (currentSrc.includes('text_icon_small.png')) {
                             newIconSrc = currentSrc.replace('text_icon_small.png', 'text_icon_color_small.png');
-                        }
-                        // Map emojis stay as regular versions (map_emoji_small.png) - no color conversion
-                        else if (currentSrc.includes('map_emoji_bw_small.png')) {
+                        } else if (currentSrc.includes('map_emoji_bw_small.png')) {
+                            // Use regular map emoji instead of color until color version is on main branch
                             newIconSrc = currentSrc.replace('map_emoji_bw_small.png', 'map_emoji_small.png');
                         }
                     } else {
