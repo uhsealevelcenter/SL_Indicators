@@ -47,13 +47,13 @@
                                                   <img src="#" alt="#" class="active">
                                               </a>
                                           </div>
-                                          <div class="caption" data-caption-id="sl_magnitude_map">Loading caption...</div>
+                                          <div class="caption" data-caption-id="sl_trend_map">Loading caption...</div>
                                           
                                           <div class="image-container-multi">
                                              <a href="#" download>
                                                  <img id="current-image" src="#" alt="#"></a>
                                           </div>  
-                                          <div class="caption" data-caption-id="cmems_trend_rate">Loading caption...</div>
+                                          <div class="caption" data-caption-id="sl_trend_rate_map">Loading caption...</div>
                                    </div>
                             </div>
                         </div>
@@ -66,13 +66,13 @@
                                         <img src="#" alt="#" >
                                     </a>
                                     </div>
-                                <div class="caption" data-caption-id="sl_magnitude_timeseries_500">Loading caption...</div>
+                                <div class="caption" data-caption-id="sl_trend_timeseries_station">Loading caption...</div>
                                 <div class="image-container-multi">
                                     <a href="#" download>
                                         <img src="#" alt="#" >
                                     </a>
                                 </div>
-                                <div class="caption" data-caption-id="sl_magnitude_timeseries">Loading caption...</div>
+                                <div class="caption" data-caption-id="sl_trend_timeseries">Loading caption...</div>
                             
                             </div>
                             </div>
@@ -120,6 +120,7 @@
                                    <div class="image-container-multi">
                                        <a href="#" download>
                                            <img id="current-image" src="#" alt="#">
+                                       </a>
                                    </div>  
                                    <div class="caption" data-caption-id="sl_anomaly_annual_map_decadal">Loading caption...</div>
                                </div>
@@ -134,7 +135,8 @@
                                     <a href="#" download>
                                         <img id="current-image" src="#" alt="#"></a>
                                 </div>  
-                                <div class="caption" data-caption-id="sl_mma_annual_kawaihae">Loading caption...</div>
+                                <div class="caption" data-caption-id="sl_mma_annual_station">Loading caption...</div>
+
                                 <div class="image-container-multi">
                                     <a href="#" download>
                                         <img id="current-image" src="#" alt="#">
@@ -192,7 +194,7 @@
                                 <a href="plotly/SL_top_10_plot_Kahului.html" target="_blank">
                                     <img src="#" alt="Annual Historical Rankings Plot" >
                                 </a>
-                            <div class="caption" data-caption-id="sl_rankings_kahului">Loading caption...</div>
+                            <div class="caption" data-caption-id="sl_rankings_station">Loading caption...</div>
                             </div>
                             
                         </div>
@@ -200,10 +202,10 @@
                             <img src='https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/icons/table_icon_small.png' >
                             <div class="hover-content">
                                 <a href="#" download>
-                                   <img src="#" alt="Annual Historical Rankings Table" >
+                                   <img src="#" alt="#" >
                                 </a>
                                 
-                                <div class="caption" data-caption-id="sl_top_10_table_honolulu">Loading caption...</div> 
+                                <div class="caption" data-caption-id="sl_top_10_table_station">Loading caption...</div> 
                             </div>
                         </div>
                     </td>
@@ -1045,53 +1047,46 @@
                     
                     // Also update the associated image source, alt text, and download link if it exists
                     if (caption.src) {
-                        // Look for the image container that contains this caption
-                        const container = element.closest('.hover-content, .image-container, .image-container-multi, .table-container') || element.parentElement;
+                        // Look for the closest image-container that comes immediately before this caption
+                        let img = null;
+                        let downloadLink = null;
                         
-                        if (container) {
-                            // Find images in the same container or in sibling containers
-                            let img = container.querySelector('img');
-                            if (!img) {
-                                // Look in the previous sibling container
-                                const prevContainer = container.previousElementSibling;
-                                if (prevContainer) {
-                                    img = prevContainer.querySelector('img');
+                        // First, try to find the previous sibling that contains an image
+                        const prevSibling = element.previousElementSibling;
+                        if (prevSibling && (prevSibling.classList.contains('image-container-multi') || prevSibling.classList.contains('image-container'))) {
+                            img = prevSibling.querySelector('img:not([src*="icons/"])');
+                            downloadLink = prevSibling.querySelector('a[href] img')?.parentElement;
+                        }
+                        
+                        // If not found, look for any image in the same parent container
+                        if (!img) {
+                            const container = element.closest('.hover-content, .image-container, .table-container') || element.parentElement;
+                            if (container) {
+                                // Find all images and try to match by position
+                                const allImages = container.querySelectorAll('img:not([src*="icons/"])');
+                                const allCaptions = container.querySelectorAll('[data-caption-id]');
+                                const captionIndex = Array.from(allCaptions).indexOf(element);
+                                if (allImages[captionIndex]) {
+                                    img = allImages[captionIndex];
+                                    // Find the corresponding download link - look for the immediate parent if it's an anchor
+                                    if (img.parentElement && img.parentElement.tagName === 'A') {
+                                        downloadLink = img.parentElement;
+                                    }
                                 }
                             }
-                            if (!img) {
-                                // Look in the parent container and then search all images
-                                const parentContainer = container.parentElement;
-                                if (parentContainer) {
-                                    img = parentContainer.querySelector('img:not([src*="icons/"])');
-                                }
+                        }
+                        
+                        // Update the image
+                        if (img && !img.src.includes('icons/')) {
+                            img.src = caption.src;
+                            if (caption.alt) {
+                                img.alt = caption.alt;
                             }
-                            
-                            if (img && !img.src.includes('icons/')) { // Don't change icon images
-                                img.src = caption.src;
-                                if (caption.alt) {
-                                    img.alt = caption.alt;
-                                }
-                            }
-                            
-                            // Update download links in the same way
-                            let downloadLink = container.querySelector('a[href][download], a[href*="raw.githubusercontent.com"]');
-                            if (!downloadLink) {
-                                const prevContainer = container.previousElementSibling;
-                                if (prevContainer) {
-                                    downloadLink = prevContainer.querySelector('a[href][download], a[href*="raw.githubusercontent.com"]');
-                                }
-                            }
-                            if (!downloadLink) {
-                                // Look in parent container for download links
-                                const parentContainer = container.parentElement;
-                                if (parentContainer) {
-                                    downloadLink = parentContainer.querySelector('a[href][download], a[href*="raw.githubusercontent.com"]');
-                                }
-                            }
-                            
-                            if (downloadLink && !downloadLink.href.includes('icons/')) { // Don't change icon links
-                                downloadLink.href = caption.src;
-                            }
+                        }
+                        
+                        // Update the download link
+                        if (downloadLink && !downloadLink.href.includes('icons/')) {
+                            downloadLink.href = caption.src;
                         }
                     }
                 }
