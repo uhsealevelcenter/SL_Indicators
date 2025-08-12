@@ -3,7 +3,7 @@
     "figure": "Map 1.1.1",
     "src": "https://uhslc.soest.hawaii.edu/jfiedler/SeaLevelIndicators/output/Hawaii_Region_Output/SL_magnitude_map.png",
     "alt": "Map showing sea level change near Hawaiian Islands from altimetry and tide gauge data",
-    "text": "Map of absolute and relative sea level change from the altimetry and tide gauge record (dots) near the Hawaiian Islands stations from 1993-01-01 to 2022-12-31. White dots indicate station locations that do not have suitable records for this analysis. See <a href=\"https://ccar.colorado.edu/altimetry/\">The Sea Level Explorer</a> for more."
+    "text": "Map of absolute and relative sea level change from the altimetry and tide gauge record (dots) near the Hawaiian Islands stations from 1993-01-01 to 2023-12-31. White dots indicate station locations that do not have suitable records for this analysis. See <a href=\"https://ccar.colorado.edu/altimetry/\">The Sea Level Explorer</a> for more."
   },
   "sl_trend_rate_map": {
     "figure": "Map 1.1.2",
@@ -15,19 +15,19 @@
     "figure": "Figure 1.1.1",
     "src": "https://uhslc.soest.hawaii.edu/jfiedler/SeaLevelIndicators/output/Hawaii_Region_Output/SL_magnitude_timeseries_58.png",
     "alt": "Time series comparing absolute and relative sea level trends at Midway station",
-    "text": "Absolute sea level trend (red) from altimetry, and relative sea level trend (blue) from the Midway tide gauge record from 1993-01-01 to 2022-12-31. See <a href=\"https://ccar.colorado.edu/altimetry/\">The Sea Level Explorer</a> for more."
+    "text": "Absolute sea level trend (red) from altimetry, and relative sea level trend (blue) from the Midway tide gauge record from 1993-01-01 to 2023-12-31. See <a href=\"https://ccar.colorado.edu/altimetry/\">The Sea Level Explorer</a> for more."
   },
   "sl_trend_timeseries": {
     "figure": "Figure 1.1.2",
     "src": "https://uhslc.soest.hawaii.edu/jfiedler/SeaLevelIndicators/output/Hawaii_Region_Output/SL_magnitude_timeseries.png",
     "alt": "Time series comparing absolute and relative sea level trends at Hawaiian Islands stations",
-    "text": "Absolute sea level trend (red) from altimetry, and relative sea level trend (blue) from the tide gauge record at the Hawaiian Islands stations from 1993-01-01 to 2022-12-31."
+    "text": "Absolute sea level trend (red) from altimetry, and relative sea level trend (blue) from the tide gauge record at the Hawaiian Islands stations from 1993-01-01 to 2023-12-31."
   },
   "sl_trend_table": {
     "figure": "Table 1.1",
     "src": "https://uhslc.soest.hawaii.edu/jfiedler/SeaLevelIndicators/output/Hawaii_Region_Output/Sea_level_magnitude_table.png",
-    "alt": "Table of sea level trend results for Hawaiian Islands region 1993-2023",
-    "text": "Sea level trend results for the Hawaiian Islands region from 1993 to 2023."
+    "alt": "Table of sea level trend results for Hawaiian Islands region 1993-2024",
+    "text": "Sea level trend results for the Hawaiian Islands region from 1993 to 2024."
   },
   "sl_anomaly_annual_map_decadal": {
     "figure": "Map 1.2",
