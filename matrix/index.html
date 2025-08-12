@@ -47,13 +47,13 @@
                                                   <img src="#" alt="#" class="active">
                                               </a>
                                           </div>
-                                          <div class="caption" data-caption-id="sl_magnitude_map">Loading caption...</div>
+                                          <div class="caption" data-caption-id="sl_trend_map">Loading caption...</div>
                                           
                                           <div class="image-container-multi">
                                              <a href="#" download>
                                                  <img id="current-image" src="#" alt="#"></a>
                                           </div>  
-                                          <div class="caption" data-caption-id="cmems_trend_rate">Loading caption...</div>
+                                          <div class="caption" data-caption-id="sl_trend_rate_map">Loading caption...</div>
                                    </div>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                                    
                                    <div class="image-container-multi">
                                        <a href="#" download>
-                                           <img id="current-image" src="#" alt="#">
+                                           <img id="current-image" src="#" alt="#"></a>
                                    </div>  
                                    <div class="caption" data-caption-id="sl_anomaly_annual_map_decadal">Loading caption...</div>
                                </div>
@@ -1032,9 +1032,12 @@
     
     // Load and update captions from external JSON file
     async function loadCaptions() {
+        console.log('loadCaptions() function started');
         try {
             const response = await fetch('./captions.json');
+            console.log('Fetched captions.json, response:', response);
             const captions = await response.json();
+            console.log('Parsed captions:', Object.keys(captions));
             
             // Update all captions with data-caption-id attributes
             document.querySelectorAll('[data-caption-id]').forEach(element => {
@@ -1045,24 +1048,38 @@
                     
                     // Also update the associated image source, alt text, and download link if it exists
                     if (caption.src) {
+                        console.log(`Processing caption ID: ${captionId}, src: ${caption.src}`);
+                        
                         // Look for the image container that contains this caption
                         const container = element.closest('.hover-content, .image-container, .image-container-multi, .table-container') || element.parentElement;
                         
                         if (container) {
-                            // Find images in the same container or in sibling containers
-                            let img = container.querySelector('img');
-                            if (!img) {
-                                // Look in the previous sibling container
-                                const prevContainer = container.previousElementSibling;
-                                if (prevContainer) {
-                                    img = prevContainer.querySelector('img');
-                                }
+                            console.log(`Container for ${captionId}:`, container);
+                            
+                            let img = null;
+                            
+                            // First try to find image in the immediately preceding image-container-multi
+                            let prevElement = element.previousElementSibling;
+                            while (prevElement && prevElement.nodeType !== 1) {
+                                prevElement = prevElement.previousElementSibling;
                             }
+                            if (prevElement && prevElement.classList.contains('image-container-multi')) {
+                                img = prevElement.querySelector('img');
+                                console.log(`Found image in immediately previous image-container-multi for ${captionId}:`, img);
+                            }
+                            
+                            // If not found, try same container
                             if (!img) {
-                                // Look in the parent container and then search all images
+                                img = container.querySelector('img');
+                                console.log(`Image in same container for ${captionId}:`, img);
+                            }
+                            
+                            // If still not found, look in parent container
+                            if (!img) {
                                 const parentContainer = container.parentElement;
                                 if (parentContainer) {
                                     img = parentContainer.querySelector('img:not([src*="icons/"])');
+                                    console.log(`Found image in parent for ${captionId}:`, img);
                                 }
                             }
                             
