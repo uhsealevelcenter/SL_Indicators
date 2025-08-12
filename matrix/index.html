@@ -66,13 +66,13 @@
                                         <img src="#" alt="#" >
                                     </a>
                                     </div>
-                                <div class="caption" data-caption-id="sl_trend_timeseries_station">Loading caption...</div>
+                                <div class="caption" data-caption-id="sl_magnitude_timeseries_500">Loading caption...</div>
                                 <div class="image-container-multi">
                                     <a href="#" download>
                                         <img src="#" alt="#" >
                                     </a>
                                 </div>
-                                <div class="caption" data-caption-id="sl_trend_timeseries">Loading caption...</div>
+                                <div class="caption" data-caption-id="sl_magnitude_timeseries">Loading caption...</div>
                             
                             </div>
                             </div>
@@ -119,8 +119,7 @@
                                    
                                    <div class="image-container-multi">
                                        <a href="#" download>
-                                           <img id="current-image" src="#" alt="#">
-                                       </a>
+                                           <img id="current-image" src="#" alt="#"></a>
                                    </div>  
                                    <div class="caption" data-caption-id="sl_anomaly_annual_map_decadal">Loading caption...</div>
                                </div>
@@ -135,8 +134,7 @@
                                     <a href="#" download>
                                         <img id="current-image" src="#" alt="#"></a>
                                 </div>  
-                                <div class="caption" data-caption-id="sl_mma_annual_station">Loading caption...</div>
-
+                                <div class="caption" data-caption-id="sl_mma_annual_kawaihae">Loading caption...</div>
                                 <div class="image-container-multi">
                                     <a href="#" download>
                                         <img id="current-image" src="#" alt="#">
@@ -194,7 +192,7 @@
                                 <a href="plotly/SL_top_10_plot_Kahului.html" target="_blank">
                                     <img src="#" alt="Annual Historical Rankings Plot" >
                                 </a>
-                            <div class="caption" data-caption-id="sl_rankings_station">Loading caption...</div>
+                            <div class="caption" data-caption-id="sl_rankings_kahului">Loading caption...</div>
                             </div>
                             
                         </div>
@@ -202,10 +200,10 @@
                             <img src='https://raw.githubusercontent.com/jwfiedler/SL_Hawaii/main/icons/table_icon_small.png' >
                             <div class="hover-content">
                                 <a href="#" download>
-                                   <img src="#" alt="#" >
+                                   <img src="#" alt="Annual Historical Rankings Table" >
                                 </a>
                                 
-                                <div class="caption" data-caption-id="sl_top_10_table_station">Loading caption...</div> 
+                                <div class="caption" data-caption-id="sl_top_10_table_honolulu">Loading caption...</div> 
                             </div>
                         </div>
                     </td>
@@ -1034,9 +1032,12 @@
     
     // Load and update captions from external JSON file
     async function loadCaptions() {
+        console.log('loadCaptions() function started');
         try {
             const response = await fetch('./captions.json');
+            console.log('Fetched captions.json, response:', response);
             const captions = await response.json();
+            console.log('Parsed captions:', Object.keys(captions));
             
             // Update all captions with data-caption-id attributes
             document.querySelectorAll('[data-caption-id]').forEach(element => {
@@ -1047,46 +1048,67 @@
                     
                     // Also update the associated image source, alt text, and download link if it exists
                     if (caption.src) {
-                        // Look for the closest image-container that comes immediately before this caption
-                        let img = null;
-                        let downloadLink = null;
+                        console.log(`Processing caption ID: ${captionId}, src: ${caption.src}`);
                         
-                        // First, try to find the previous sibling that contains an image
-                        const prevSibling = element.previousElementSibling;
-                        if (prevSibling && (prevSibling.classList.contains('image-container-multi') || prevSibling.classList.contains('image-container'))) {
-                            img = prevSibling.querySelector('img:not([src*="icons/"])');
-                            downloadLink = prevSibling.querySelector('a[href] img')?.parentElement;
-                        }
+                        // Look for the image container that contains this caption
+                        const container = element.closest('.hover-content, .image-container, .image-container-multi, .table-container') || element.parentElement;
                         
-                        // If not found, look for any image in the same parent container
-                        if (!img) {
-                            const container = element.closest('.hover-content, .image-container, .table-container') || element.parentElement;
-                            if (container) {
-                                // Find all images and try to match by position
-                                const allImages = container.querySelectorAll('img:not([src*="icons/"])');
-                                const allCaptions = container.querySelectorAll('[data-caption-id]');
-                                const captionIndex = Array.from(allCaptions).indexOf(element);
-                                if (allImages[captionIndex]) {
-                                    img = allImages[captionIndex];
-                                    // Find the corresponding download link - look for the immediate parent if it's an anchor
-                                    if (img.parentElement && img.parentElement.tagName === 'A') {
-                                        downloadLink = img.parentElement;
-                                    }
+                        if (container) {
+                            console.log(`Container for ${captionId}:`, container);
+                            
+                            let img = null;
+                            
+                            // First try to find image in the immediately preceding image-container-multi
+                            let prevElement = element.previousElementSibling;
+                            while (prevElement && prevElement.nodeType !== 1) {
+                                prevElement = prevElement.previousElementSibling;
+                            }
+                            if (prevElement && prevElement.classList.contains('image-container-multi')) {
+                                img = prevElement.querySelector('img');
+                                console.log(`Found image in immediately previous image-container-multi for ${captionId}:`, img);
+                            }
+                            
+                            // If not found, try same container
+                            if (!img) {
+                                img = container.querySelector('img');
+                                console.log(`Image in same container for ${captionId}:`, img);
+                            }
+                            
+                            // If still not found, look in parent container
+                            if (!img) {
+                                const parentContainer = container.parentElement;
+                                if (parentContainer) {
+                                    img = parentContainer.querySelector('img:not([src*="icons/"])');
+                                    console.log(`Found image in parent for ${captionId}:`, img);
                                 }
                             }
-                        }
-                        
-                        // Update the image
-                        if (img && !img.src.includes('icons/')) {
-                            img.src = caption.src;
-                            if (caption.alt) {
-                                img.alt = caption.alt;
+                            
+                            if (img && !img.src.includes('icons/')) { // Don't change icon images
+                                img.src = caption.src;
+                                if (caption.alt) {
+                                    img.alt = caption.alt;
+                                }
                             }
-                        }
-                        
-                        // Update the download link
-                        if (downloadLink && !downloadLink.href.includes('icons/')) {
-                            downloadLink.href = caption.src;
+                            
+                            // Update download links in the same way
+                            let downloadLink = container.querySelector('a[href][download], a[href*="raw.githubusercontent.com"]');
+                            if (!downloadLink) {
+                                const prevContainer = container.previousElementSibling;
+                                if (prevContainer) {
+                                    downloadLink = prevContainer.querySelector('a[href][download], a[href*="raw.githubusercontent.com"]');
+                                }
+                            }
+                            if (!downloadLink) {
+                                // Look in parent container for download links
+                                const parentContainer = container.parentElement;
+                                if (parentContainer) {
+                                    downloadLink = parentContainer.querySelector('a[href][download], a[href*="raw.githubusercontent.com"]');
+                                }
+                            }
+                            
+                            if (downloadLink && !downloadLink.href.includes('icons/')) { // Don't change icon links
+                                downloadLink.href = caption.src;
+                            }
                         }
                     }
                 }

@@ -499,10 +499,11 @@ def run_CI_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_
 
 ## Run All Models
 def run_all_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CIname='PMM', nproc=1):
-    ridString = str(recordID)
+    ridString = str(recordID) # establish which gauge is being processed
     model_output_dir = dirs['model_output_dir']
-    CI_dir = dirs['CI_dir']
-    remove_files(dirs)
+    remove_files(dirs) # remove any previous files in the run directory
+
+    # prepare the model input data
     STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,recordID,dirs, CIname)
 
     # make dictionary of STNDtoMHHW, station_name, year0, mm,t,monthly_max,covariate
@@ -510,11 +511,30 @@ def run_all_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CIname='P
     modelInfo = {'t': mm['t'], 'covariate': mm['CI'], 'monthlyMax': mm['monthly_max'],'covariateName': CIname, 'recordID': recordID, 'station_name': station_name, 'year0': year0, 'ReturnPeriod': ReturnPeriod}
 
     # Run the basic models for seasonal, trend and nodal cycle
+    # Seasonal model
     x_s, w_s = run_seasonal_model(ridString, dirs,runWithoutModel=True, modelType='GEV_SeasonalMu')
+    
+    # Long-term trend model
+    # x_s is the seasonal model parameters, w_s is the seasonal model weights
     x_T, w_T, SignifTrend = run_long_term_trend_model(x_s, w_s, ridString, dirs, modelInfo, runWithoutModel=True, modelType='GEV_S_T_Cv', nproc=nproc)
+    
+    # Nodal cycle model
+    # x_T is the long-term trend model parameters, w_T is the long-term trend weights   
     x_N, w_N, wcomp, SignifN = run_nodal_model(x_T, w_T, x_s, w_s, SignifTrend, ridString, dirs, modelInfo, runWithoutModel=True, modelType='GEV_S_T_Cv_Nodal', nproc=nproc)
+    
+    # Covariate in location model
+    # x_N is the nodal cycle model parameters, w_N is the nodal cycle weights
+    # wcomp is the weights of the [best] previous model (w_s or w_T)
     x_cvte1, w_cvte1, wcomp, SignifCvte1 = run_covariate_in_location_model(x_N, w_N, wcomp, ridString, SignifN, dirs, modelInfo, runWithoutModel=runWithoutModel, modelType='GEV_S_T_Cv_Nodal', nproc=nproc)
+    
+    # Covariate in scale model
+    # x_cvte1 is the covariate in location model parameters, w_cvte1 is the covariate in location model weights
+    # wcomp is the weights of the [best] previous model (w_s or w_T)
     x_cvte2, w_cvte2, wcomp, SignifCvte2 = run_covariate_in_scale_model(x_cvte1, w_cvte1, wcomp, ridString,SignifCvte1, dirs, modelInfo, runWithoutModel=runWithoutModel, modelType='GEV_S_T_Cv_Nodal', nproc=nproc)
+    
+    # Best model
+    # x_cvte2 is the covariate in scale model parameters, w_cvte2 is the covariate in scale model weights
+    # wcomp is the weights of the [best] previous model (w_s or w_T)
     run_best_model(x_cvte2, w_cvte2, w_s, wcomp, SignifCvte2, ridString, dirs, modelInfo, runWithoutModel=runWithoutModel, modelType='GEV_S_T_Cv_Nodal', nproc=nproc)
 
     print('All models run successfully! Results save to ', model_output_dir)
