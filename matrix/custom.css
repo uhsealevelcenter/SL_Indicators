@@ -2,8 +2,7 @@
             font-family: "open-sans", Helvetica, Arial, sans-serif;
             color: #222;
             font-weight: lighter;
-            font-size: 10pt;
-            line-height: 1.4;
+            font-size: 11pt;
         }
         table {
             width: 100%;
@@ -22,10 +21,9 @@
         }
         th {
             background-color: #8cb8e2;
-            color: white;
             text-align: center;
             padding: 8px;
-            text-transform: uppercase;
+            /* text-transform: uppercase; */
             font-size: 13pt;
             font-weight: normal;
         }
@@ -39,7 +37,6 @@
             font-weight: bold;
             margin-top: 30px;
             font-variant-caps: all-small-caps;
-            letter-spacing: 0.5px;
         }
 
         h3_custom {
@@ -95,12 +92,6 @@
             margin-top: 10px;
             font-size: 14px;
             color: #555;
-            text-decoration: none !important;
-            cursor: default !important;
-        }
-        .hover-content .caption:hover {
-            text-decoration: none !important;
-            color: #555 !important;
         }
         .icon {
             height: 20px;
