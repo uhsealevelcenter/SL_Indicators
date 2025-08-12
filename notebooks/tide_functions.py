@@ -37,10 +37,10 @@ def calculate_ntr(ds):
     ds_epoch = ds.sel(time=slice(epoch_start, epoch_end))
 
     #extract time and sea level values for each station
-    time = ds_epoch.time.values
+    time = ds.time.values
     time_days = (time - time[0]) / np.timedelta64(1, 'D')
 
-    stations = ds_epoch['record_id'].values
+    stations = ds['record_id'].values
 
     # reduce stations if already processed
     processed_files = [int(f.stem.split('_')[1]) for f in savepath.glob('ntr_*.csv')]
@@ -63,8 +63,27 @@ def calculate_ntr(ds):
             print(f'Not enough data for station {station_name}')
             continue
 
-        coef_noNodal = solve(time, sea_level, nodal=False, trend=True, method='robust',lat=ds['lat'].sel(record_id=station).values)
-        coef_Nodal = solve(time, sea_level, nodal=True, trend=True, method='robust',lat=ds['lat'].sel(record_id=station).values)
+        #remove trend from sea level data using linear regression
+        # make sea_level a pandas dataframe
+        sea_level_df = pd.DataFrame({'sea_level': sea_level, 'time': pd.to_datetime(ds_epoch.time.values)})
+
+        # truncate the data to the last 18.6 years for the tide analysis
+        # sea_level_df = sea_level_df.iloc[-int(365*18.6*24):]
+        trend_rate = np.polyfit(sea_level_df['time'].astype('datetime64[ns]').values.astype(np.int64), sea_level_df['sea_level'], 1)
+        trend = np.polyval(trend_rate, sea_level_df['time'].astype('datetime64[ns]').values.astype(np.int64))
+        trend = pd.DataFrame({'sea_level': trend, 'time': sea_level_df['time']})
+
+        sea_level_detrended = sea_level - trend['sea_level']
+
+        
+        # truncate the data to the last 18.6 years for the tide analysis, each datapoint is 1 hour
+        # 18.6 years = 18.6 * 365 * 24 = 162768 hours
+        # sea_level_detrended_186 = sea_level_detrended[-int(365*18.6*24):]
+        # t = time[-int(365*18.6*24):]
+
+        t = pd.to_datetime(ds_epoch.time.values)
+        coef_noNodal = solve(t, sea_level_detrended, nodal=False, trend=False, method='robust',lat=float(ds['lat'].sel(record_id=station).values))
+        coef = solve(t, sea_level_detrended, nodal=True, trend=False, method='robust',lat=ds['lat'].sel(record_id=station).values)
 
         time_ALL = ds.time.values
         sea_level_ALL = ds.sea_level.sel(record_id=station).values
@@ -74,14 +93,57 @@ def calculate_ntr(ds):
         time_ALL = time_ALL[start:]
         sea_level_ALL = sea_level_ALL[start:]
 
-        tide_ALL_withNodal = reconstruct(time_ALL, coef_Nodal)
+        #extend trend to the full time series
+        time_index = pd.to_datetime(time_ALL).to_julian_date()
+        trendALL = np.interp(time_index, t.to_julian_date(), trend['sea_level'])
+
+        seasonal_names = ['SA', 'SSA']
+        
+        seasonal_idx = [i for i, name in enumerate(coef['name']) if name in seasonal_names]
+        
+        #create a new coef structure for seasonal terms
+        coef_seasonal = {}
+        coef_seasonal['name'] = [coef['name'][i] for i in seasonal_idx]
+        coef_seasonal['freq'] = [coef['freq'][i] for i in seasonal_idx]
+        coef_seasonal['A'] = [coef['A'][i] for i in seasonal_idx]
+        coef_seasonal['g'] = [coef['g'][i] for i in seasonal_idx]
+        
+        # Remove seasonal terms from main coef
+        non_seasonal_idx = [i for i, name in enumerate(coef['name']) if name not in seasonal_names]
+        coef_no_seasonal = {}
+        coef_no_seasonal['name'] = [coef['name'][i] for i in non_seasonal_idx]
+        coef_no_seasonal['freq'] = [coef['freq'][i] for i in non_seasonal_idx]
+        coef_no_seasonal['A'] = [coef['A'][i] for i in non_seasonal_idx]
+        coef_no_seasonal['g'] = [coef['g'][i] for i in non_seasonal_idx]
+        
+        
+        
+        # Create coef arrays (need to be numpy arrays for reconstruct)
+        for key in ['name', 'freq', 'A', 'g']:
+            coef_seasonal[key] = np.array(coef_seasonal[key])
+            coef_no_seasonal[key] = np.array(coef_no_seasonal[key])
+        
+        coef_seasonal['aux'] = coef['aux']
+        coef_no_seasonal['aux'] = coef['aux']
+
+        
         tide_ALL_noNodal = reconstruct(time_ALL, coef_noNodal)
+        tide_ALL_withNodal_noSeasonal = reconstruct(time_ALL, coef_no_seasonal)
+        tide_ALL_withNodal = reconstruct(time_ALL, coef)
+        seasonal_cycle = reconstruct(time_ALL, coef_seasonal)
 
 
-        ntr = sea_level_ALL - tide_ALL_withNodal.h
-        ntr_withNodal = sea_level_ALL - tide_ALL_noNodal.h
-        nodal_pred = tide_ALL_withNodal.h - tide_ALL_noNodal.h
-        ntr_data = pd.DataFrame({'time': time_ALL, 'ntr': ntr, 'sea_level': sea_level_ALL, 'tide': tide_ALL_withNodal.h, 'nodal': nodal_pred, 'ntr_withNodal': ntr_withNodal})
+        sea_level_detrendedALL = sea_level_ALL - np.nanmean(sea_level) + trend_rate[0]/365.25
+
+        ntr = sea_level_detrendedALL - tide_ALL_withNodal_noSeasonal.h 
+        ntr_withNodal = sea_level_detrendedALL - tide_ALL_noNodal.h 
+        # ntr = sea_level_detrended[start:] - tide_ALL_withNodal_noSeasonal.h 
+        # ntr_withNodal = sea_level_detrended[start:] - tide_ALL_noNodal.h 
+        # nodal_pred = tide_ALL_withNodal.h - tide_ALL_noNodal.h
+        nodal_pred = tide_ALL_noNodal.h - tide_ALL_withNodal.h
+
+
+        ntr_data = pd.DataFrame({'time': time_ALL, 'ntr': ntr, 'sea_level': sea_level_ALL, 'sea_level_detrended': sea_level_detrendedALL,'trend': trendALL,'tide': tide_ALL_withNodal_noSeasonal.h, 'nodal': nodal_pred, 'ntr_withNodal': ntr_withNodal, 'seasonal_cycle': seasonal_cycle.h})
 
         #ensure that the time is in datetime format
         ntr_data['time'] = pd.to_datetime(ntr_data['time'])
@@ -91,7 +153,15 @@ def calculate_ntr(ds):
         ntr_data.to_csv(datapath, index=False, date_format='%Y-%m-%d %H:%M:%S')
         print(f'Saved data for station {station_name} to {datapath}')
 
-## run the function
-# calculate_ntr(ds)
+if __name__ == '__main__':
+    from pathlib import Path
+    import os
+    
+    print('Running tide_functions.py')
+
+
+    ds = xr.open_dataset(data_dir / 'rsl_pacific.nc')
+    
+    calculate_ntr(ds)
 
 
