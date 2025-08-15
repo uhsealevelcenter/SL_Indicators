@@ -1,8 +1,15 @@
 # %%
 # Visualization libraries
+
+
+import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+import matplotlib.ticker as mticker
 
+
+# Adjust Basic Look of All Plots
 ## Set up Plotting
 plt.rcParams['figure.figsize'] = [6, 4]  # Set a default figure size for the notebook
 plt.rcParams['figure.dpi'] = 150  # Set default resolution for inline figures
@@ -22,6 +29,9 @@ plt.rcParams['font.family'] = 'Avenir'
 def add_zebra_frame(ax, lw=2, segment_length=0.5, crs=ccrs.PlateCarree()):
     # Get the current extent of the map
     left, right, bot, top = ax.get_extent(crs=crs)
+    # Check for valid extent
+    if left == right or bot == top:
+        return
 
     # Calculate the nearest 0 or 0.5 degree mark within the current extent
     left_start = left - left % segment_length
@@ -54,8 +64,18 @@ def add_zebra_frame(ax, lw=2, segment_length=0.5, crs=ccrs.PlateCarree()):
         start_y = bot_start + j * segment_length
         end_y = start_y + segment_length
         ax.vlines([left, right], start_y, end_y, colors=color, linewidth=lw, transform=crs)
-
 # %%
+
+def pacific_all_west_formatter(x, pos=None):
+    # Convert to [0, 360)
+    x = (x + 360) % 360
+    deg_west = (180 - x) % 360
+    if deg_west == 0:
+        return "180°W"
+    else:
+        return f"{abs(deg_west):.0f}°W"
+    
+
 def plot_map(vmin, vmax, palette, xlims, ylims):
     """
     Plot a map of the magnitude of sea level change.
@@ -70,22 +90,29 @@ def plot_map(vmin, vmax, palette, xlims, ylims):
     fig (matplotlib.figure.Figure): The matplotlib figure object.
     ax (matplotlib.axes._subplots.AxesSubplot): The matplotlib axes object.
     crs (cartopy.crs.Projection): The cartopy projection object.
-    cmap (matplotlib.colors.Colormap): The colormap used for the plot.
     """
-    crs = ccrs.PlateCarree()
     # if xlims crosses the 180 meridian, set projection to central_longitude=180
+    use_180 = False
     if xlims[1] > 180:
         crs = ccrs.PlateCarree(central_longitude=180)
-        print('moved to central longitude 180')
+        use_180 = True
+        print("Using central_longitude=180 for projection")
+    else:
+        crs = ccrs.PlateCarree()
+        print("Using default projection")
+
     fig, ax = plt.subplots(figsize=(10, 5), subplot_kw={'projection': crs})
-    ax.set_xlim(xlims)
-    ax.set_ylim(ylims)
-    
+    ax.set_extent([xlims[0], xlims[1], ylims[0], ylims[1]], crs=ccrs.PlateCarree())
 
     cmap = palette
 
     ax.coastlines()
     ax.add_feature(cfeature.LAND, color='lightgrey')
+
+
+    gl = ax.gridlines(draw_labels=True, linestyle=':', color='black', alpha=0.5)
+    gl.top_labels = False
+    gl.right_labels = False
 
     return fig, ax, crs
 
@@ -129,6 +156,7 @@ def plot_zebra_frame(ax, lw=5, segment_length=2, crs=ccrs.PlateCarree()):
     - crs: The coordinate reference system of the axes. Default is ccrs.PlateCarree().
     """
     # Call the function to add the zebra frame
+
     add_zebra_frame(ax=ax, lw=lw, segment_length=segment_length, crs=crs)
     # add map grid
     gl = ax.gridlines(draw_labels=True, linestyle=':', color='black',

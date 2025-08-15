@@ -274,101 +274,44 @@ def process_trend_with_nan(sea_level_data, time_column='time', weighted=False):
     """
     import xarray as xr
 
+
     # Handle xarray input
     if isinstance(sea_level_data, xr.DataArray):
-        print("Processing xarray DataArray...")
-        sea_level_data = sea_level_data.transpose('time', ...) if 'time' in sea_level_data.dims else sea_level_data
-        time_index = pd.to_datetime(sea_level_data.time.values).to_julian_date()
-
-        # If it's a single time series
-        if sea_level_data.ndim == 1:
-            print("Processing single time series...")
-            y = sea_level_data.values
-            mask = ~np.isnan(y)
-
-            if np.any(mask):
-                time_masked = time_index[mask]
-                y_masked = y[mask]
-
-                slope, intercept, _, _, _ = stats.linregress(time_masked, y_masked)
-                trend = slope * time_index + intercept
-                detrended = y - trend
-
-                trend_mag = trend[-1] - trend[0]
-                # Remove NaNs from time values before computing time_mag
-                valid_time = pd.to_datetime(sea_level_data.time.values[~np.isnan(sea_level_data.time.values)])
-                if len(valid_time) >= 2:
-                    time_mag = (valid_time[-1] - valid_time[0]).days / 365.25
-                    trend_rate = trend_mag / time_mag
-                else:
-                    time_mag = np.nan
-                    trend_rate = np.nan
-
-                return trend_mag, trend, trend_rate
-            else:
-                return np.nan, np.nan, np.nan
-        elif sea_level_data.ndim > 1:
-            print("Processing multidimensional xarray DataArray...")
-
-        # For multidimensional xarray data
-        sla_flat = sea_level_data.values.reshape(sea_level_data.shape[0], -1)
-        detrended_flat = np.full_like(sla_flat, fill_value=np.nan)
-        trend_mags = np.full(sla_flat.shape[1], np.nan)
-        trend_rates = np.full(sla_flat.shape[1], np.nan)
-
-        for i in range(sla_flat.shape[1]):
-            y = sla_flat[:, i]
-            mask = ~np.isnan(y)
-
-            if np.any(mask):
-                time_masked = time_index[mask]
-                y_masked = y[mask]
-
-                slope, intercept, _, _, _ = stats.linregress(time_masked, y_masked)
-                trend = slope * time_index + intercept
-
-                detrended_flat[:, i] = y - trend
-            
-                trend_at_valid = trend[mask]
-                if len(trend_at_valid) >= 2:
-                    trend_mag = trend_at_valid[-1] - trend_at_valid[0]
-                    times = pd.to_datetime(sea_level_data['time'].values[mask])
-                    time_mag = (times[-1] - times[0]).days / 365.25
-                    trend_rate = trend_mag / time_mag if time_mag != 0 else np.nan
-                    trend_mags[i] = trend_mag
-                    trend_rates[i] = trend_rate
-                else:
-                    trend_mags[i] = np.nan
-                    trend_rates[i] = np.nan
-            else:
-               trend_mags[i] = np.nan
-               trend_rates[i] = np.nan
-
-        # Reshape the detrended data back to original dimensions    
-        detrended = detrended_flat.reshape(sea_level_data.shape)
-        sea_level_trend = sea_level_data - detrended
-
-        trend_mags_xr = xr.DataArray(trend_mags.reshape(sea_level_data.shape[1:]), 
-                             dims=sea_level_data.dims[1:], 
-                             coords={k: v for k, v in sea_level_data.coords.items() if k != 'time' and k != 'storm_time'})
-        trend_rates_xr = xr.DataArray(trend_rates.reshape(sea_level_data.shape[1:]), 
-                              dims=sea_level_data.dims[1:], 
-                              coords={k: v for k, v in sea_level_data.coords.items() if k != 'time' and k != 'storm_time'})
-
+        print("Processing xarray DataArray (vectorized polyfit, time in years)...")
+        # Ensure time is the first dimension
+        if sea_level_data.dims[0] != 'time':
+            sea_level_data = sea_level_data.transpose('time', ...)
+        # Add a time_in_years coordinate
+        time_years = sea_level_data['time'].dt.year + (sea_level_data['time'].dt.dayofyear - 1) / 365.25
+        sea_level_data = sea_level_data.assign_coords(time_in_years=("time", time_years.data))
+        # Use polyfit along time_in_years
+        pf = sea_level_data.polyfit(dim='time_in_years', deg=1, skipna=True)
+        slope = pf.polyfit_coefficients.sel(degree=1)
+        intercept = pf.polyfit_coefficients.sel(degree=0)
+        # Compute trend at each time step
+        trend = slope * sea_level_data['time_in_years'] + intercept
+        # Detrended data
+        detrended = sea_level_data - trend
+        # Trend magnitude and rate
+        trend_mag = (trend.isel(time=-1) - trend.isel(time=0))
+        time_mag = float(sea_level_data['time_in_years'].isel(time=-1) - sea_level_data['time_in_years'].isel(time=0))
+        trend_rate = trend_mag / time_mag
+        # Weighted mean if requested
         if weighted:
             if 'latitude' in sea_level_data.dims:
                 weights = np.cos(np.deg2rad(sea_level_data.latitude))
                 weights.name = 'weights'
-
-                trend_mag = (trend_mags * weights).mean()
-                trend_rate = (trend_rates * weights).mean()
-                sea_level_trend = (sea_level_trend * weights).mean(dim=['latitude', 'longitude'])
+                if 'longitude' in sea_level_data.dims:
+                    weights_broadcast, _ = xr.broadcast(weights, sea_level_data.longitude)
+                else:
+                    weights_broadcast = weights
+                trend_mag_weighted = (trend_mag * weights_broadcast).mean().item()
+                trend_rate_weighted = (trend_rate * weights_broadcast).mean().item()
+                sea_level_trend_weighted = (trend * weights_broadcast).mean(dim=['latitude', 'longitude'])
+                return trend_mag_weighted, sea_level_trend_weighted, trend_rate_weighted
             else:
                 raise ValueError("Weighted trend calculation requires latitude coordinate.")
-
-            return trend_mag, sea_level_trend, trend_rate
-        
-        return trend_mags_xr, sea_level_trend, trend_rates_xr
+        return trend_mag, trend, trend_rate
 
     # Handle DataFrame input
     elif isinstance(sea_level_data, pd.DataFrame):
@@ -379,16 +322,12 @@ def process_trend_with_nan(sea_level_data, time_column='time', weighted=False):
         # time_index = sea_level_data[time_column].dt.to_julian_date()
         time_index = (sea_level_data[time_column] - sea_level_data[time_column].iloc[0]).dt.total_seconds() / (24 * 3600)
 
- 
-
         # time_index = pd.to_datetime(sea_level_data[time_column]).dt.to_julian_date()
         # time_index = sea_level_data[time_column].to_julian_date().values
 
-
-
         # Exclude the time column from analysis
         data_columns = [col for col in sea_level_data.columns if col != time_column]
-        
+
         trend_magnitudes = {}
         trend_series = {}
         trend_rates = {}
@@ -400,7 +339,6 @@ def process_trend_with_nan(sea_level_data, time_column='time', weighted=False):
             if np.any(mask):
                 time_masked = time_index[mask]
                 y_masked = y[mask]
-
 
                 slope, intercept, _, _, _ = stats.linregress(time_masked, y_masked)
                 trend = slope * time_index + intercept
