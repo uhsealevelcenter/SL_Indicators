@@ -9,6 +9,13 @@ import cartopy.feature as cfeature
 import matplotlib.ticker as mticker
 
 
+# We're going to use plotly here, so we need to import it
+import plotly.io as pio
+import plotly.express as px
+import plotly.offline as py
+import plotly.graph_objects as go
+
+
 # Adjust Basic Look of All Plots
 ## Set up Plotting
 plt.rcParams['figure.figsize'] = [6, 4]  # Set a default figure size for the notebook
