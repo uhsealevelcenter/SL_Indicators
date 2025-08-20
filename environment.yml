@@ -1,0 +1,33 @@
+name: SLI311
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - xarray
+  - cartopy
+  - dask
+  - docutils=0.17.1
+  - ipykernel
+  - netcdf4
+  - scipy
+  - seaborn
+  - ipywidgets
+  - lxml
+  - nbformat
+  - utide
+  - joblib
+  - flox
+  - notebook
+  - geopandas
+  - polars
+  - plotly
+  - jupyter-book
+  - pip
+  - pip:
+      - pyextremes
+      - great_tables
+      - spotpy
+      - copernicusmarine
+      

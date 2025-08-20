@@ -1,3 +1,9 @@
+# NOTE:
+# To install all requirements, run first:
+#   conda install --file requirements.txt -c conda-forge
+# Then run:
+#   pip install -r requirements.txt
+# This will install as many packages as possible with conda, and the rest with pip.
 jupyter-book
 numpy
 pandas
