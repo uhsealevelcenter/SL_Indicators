@@ -25,6 +25,7 @@ dependencies:
   - plotly
   - jupyter-book
   - pip
+  - spotpy
   - pip:
       - pyextremes
       - great_tables

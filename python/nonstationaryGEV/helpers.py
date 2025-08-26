@@ -31,7 +31,7 @@ def stepwise(x_inisol, dirs, modelType='GEV_SeasonalMu'):
         if dum.size != 0:
             x_temp = np.tile(x[cont], (len(dum), 1))
             f_temp = np.zeros(len(dum))
-            pa_temp = np.zeros(len(dum))
+            pa_temp = np.empty(len(dum), dtype=object)
             
             for i in range(len(dum)):
                 x_temp[i, dum[i]] = 1
@@ -40,7 +40,7 @@ def stepwise(x_inisol, dirs, modelType='GEV_SeasonalMu'):
             # print(f'f_temp: {f_temp}')
             best, indi = np.max(f_temp), np.argmax(f_temp)
             # Check if the improvement is significant with chi2 test
-            if (best - f[cont]) >= (0.5 * chi2.ppf(prob, df=(pa_temp[indi] - pa[cont]))):
+            if (best - f[cont]) >= (0.5 * chi2.ppf(prob, df=(len(pa_temp[indi]) - len(pa[cont])))):
                 cont += 1
                 x = np.vstack((x, [x_temp[indi]]))
                 f = np.vstack((f, [best]))
@@ -184,7 +184,7 @@ def fitness_withFortran(x, dirs, modelType='GEV_SeasonalMu'):
     
     return bestf, n
 
-def fitness(x, dirs, modelType='GEV_SeasonalMu', nproc = 8):
+def fitness(x, dirs, modelType='GEV_SeasonalMu', nproc = 1):
 
     run_dir = dirs['run_dir']  
 
@@ -192,7 +192,7 @@ def fitness(x, dirs, modelType='GEV_SeasonalMu', nproc = 8):
 
     if nproc == 1:
         bestf, n = run_GEVt_model(x, run_dir, parallel = False)
-
+        return bestf, n
     else:
         x_list = x.tolist() if isinstance(x, np.ndarray) else x
 
@@ -204,7 +204,7 @@ def fitness(x, dirs, modelType='GEV_SeasonalMu', nproc = 8):
         #get path to run_GEVt_mpi.py
         run_GEVt_mpi = str(Path(__file__).parent / 'run_GEVt_mpi.py')
 
-        seed = 955
+        seed = 945
         
         # Run the MPI command using subprocess
         mpirun_command = ["mpirun", "-np", f'{nproc}', "python", run_GEVt_mpi, str(param_file), str(seed)]
@@ -230,7 +230,7 @@ def fitness(x, dirs, modelType='GEV_SeasonalMu', nproc = 8):
             else:
                 break
 
-    
+    best = np.loadtxt(run_dir / 'best.txt')
     # Read the output
     bestf = best[0]
     best_params = best[1:]
@@ -241,17 +241,17 @@ def fitness(x, dirs, modelType='GEV_SeasonalMu', nproc = 8):
 
 def get_monthly_max_time_series(recordID,rsl_hourly):
 
-    ridIndex = np.where(rsl_hourly.record_id == recordID)[0]
-    # find the station name that matches the record_id
+    ridIndex = np.where(rsl_hourly.station_id == recordID)[0]
+    # find the station name that matches the station_id
     station_name = rsl_hourly.station_name[ridIndex].item()
     station_name = rsl_hourly.station_name[ridIndex].item()
 
-    STNDtoMHHW = 0.001*rsl_hourly['MHHW'][ridIndex].values
+    STNDtoMHHW = rsl_hourly['MHHW'][ridIndex].values
 
-    sea_level_series = 0.001*rsl_hourly['sea_level'][ridIndex]
+    sea_level_series = rsl_hourly['sea_level'][ridIndex]
 
-    #get only data from 1993 to 2023
-    sea_level_series = sea_level_series.sel(time=slice('1993', '2023'))
+    #get only data from 1993 to 2024
+    sea_level_series = sea_level_series.sel(time=slice('1993', '2024'))
 
     # remove nans
     sea_level_series = sea_level_series.dropna('time')
@@ -284,6 +284,18 @@ def get_monthly_max_time_series(recordID,rsl_hourly):
     # get decimal year such that t = year_monthly_max + t_yearDay/366
     t = (t_year-t_year[0]) + t_yearDay/366
 
+    # remove spuriously low montly maxima, where MM< mean(MM) - 3*std(MM)
+    mean_monthly_max = np.nanmean(monthly_max)
+    std_monthly_max = np.nanstd(monthly_max)
+    threshold = mean_monthly_max - 3 * std_monthly_max  
+    mask = monthly_max >= threshold
+    
+    t = t[mask]
+    monthly_max = monthly_max[mask]
+    t_monthly_max = t_monthly_max[mask]
+
+
+
     # save t and monthly_max to data frame
     df = pd.DataFrame({'t': t, 'monthly_max': monthly_max, 't_monthly_max': t_monthly_max})
 
@@ -294,11 +306,11 @@ def get_monthly_max_time_series(recordID,rsl_hourly):
 def get_covariate(t_monthly_max, CI_dir, CIname='PMM', recordID=None):
 
     df = pd.read_csv(CI_dir / 'climate_indices_norm.csv', parse_dates=['time'])
-    
+    CIname = CIname.upper()
     if recordID:
         dfLags = pd.read_csv(CI_dir / 'CI_correlation_results_v2.csv')
         # Filter the DataFrame to the specific recordID and climate index
-        lags = dfLags[(dfLags['recordID'] == recordID) & (dfLags['climateIndex'] == CIname)]
+        lags = dfLags[(dfLags['recordID'] == int(recordID)) & (dfLags['climateIndex'] == CIname)]
         lag = lags['lag'].values[0]
         # lag = 0
     else:
@@ -343,7 +355,7 @@ def combine_datasets(model_output_dir):
         ds = xr.open_dataset(file_path)
         
         # Extract important attributes
-        record_id = int(ds.attrs.get('record_id'))    
+        station_id = int(ds.attrs.get('station_id'))    
         station_name = ds.attrs.get('station_name')
         x = ds.attrs.get('x')  # Assuming x is stored as an attribute and has varying lengths
         
@@ -352,7 +364,7 @@ def combine_datasets(model_output_dir):
         return_level = ds['return_level'] if 'return_level' in ds else ds.coords.get('return_level')
         
         # Expand the dataset with the 'station' dimension (coordinate)
-        ds = ds.expand_dims({'record_id': [record_id]})
+        ds = ds.expand_dims({'station_id': [station_id]})
         
         # Store x as a variable with its own dimension (e.g., 'x_dim')
         ds['x'] = xr.DataArray(x, dims=['x_dim'])
@@ -365,13 +377,13 @@ def combine_datasets(model_output_dir):
 
     # Combine all datasets along the 'station' dimension
     try:
-        combined_ds = xr.concat(datasets, dim='record_id', combine_attrs='override')
+        combined_ds = xr.concat(datasets, dim='station_id', combine_attrs='override')
         print("Combined dataset created successfully.")
     except Exception as e:
         print(f"An error occurred during dataset concatenation: {e}")
 
     # remove attributes that are not needed
-    attributes_to_remove = ['station_name', 'model_parameters', 'model_standard_error', 'model', 'x', 'record_id']
+    attributes_to_remove = ['station_name', 'model_parameters', 'model_standard_error', 'model', 'x', 'station_id']
     for attr in attributes_to_remove:
         combined_ds.attrs.pop(attr, None)
         
@@ -639,7 +651,7 @@ def save_model_to_netcdf(x,w,mio,modelName,savepath, modelInfo):
     ds.attrs['station_name'] = modelInfo['station_name']
     ds.attrs['datum'] = 'STND'
     ds.attrs['model_parameters'] = adjust_w_for_plotting(x,w)
-    ds.attrs['record_id'] = modelInfo['recordID']
+    ds.attrs['station_id'] = modelInfo['stationID']
     ds.attrs['units'] = 'm'
     ds.attrs['model'] = modelName
     ds.attrs['x'] = x.tolist()
@@ -669,10 +681,10 @@ def save_model_to_netcdf(x,w,mio,modelName,savepath, modelInfo):
 def make_directories(rsl_xr, dirs):
     """
     Ensure output and model output directories exist and create station subdirectories
-    based on record_id in the given rsl_xr dataset.
+    based on station_id in the given rsl_xr dataset.
     
     Args:
-        rsl_xr: xarray dataset containing record_id as a coordinate.
+        rsl_xr: xarray dataset containing station_id as a coordinate.
         dirs: Dictionary containing output and model output directory paths.
     """
     # Convert directories to Path objects if they aren't already
@@ -685,10 +697,10 @@ def make_directories(rsl_xr, dirs):
     model_output_dir.mkdir(parents=True, exist_ok=True)
     model_run_dir = run_dir.mkdir(parents=True, exist_ok=True)
 
-    # Create subdirectories for each station in rsl_xr.record_id
-    for rid in rsl_xr.record_id:
-        ridString = str(rid.values)
-        station_dir = model_output_dir / ridString
+    # Create subdirectories for each station in rsl_xr.station_id
+    for sid in rsl_xr.station_id:
+        sidString = str(sid.values)
+        station_dir = model_output_dir / sidString
         station_dir.mkdir(parents=True, exist_ok=True)
 
     # Cleanup: Remove specific files from the current working directory

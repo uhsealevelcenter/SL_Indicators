@@ -3,18 +3,18 @@ from helpers import *
 
 
 
-def prep_model_input_data(rsl_xr,recordID,dirs, CIname):
+def prep_model_input_data(rsl_xr,stationID,dirs, CIname):
     CI_dir = dirs['CI_dir']
     run_dir = dirs['run_dir']
 
-    mm, STNDtoMHHW, station_name, year0 = get_monthly_max_time_series(recordID,rsl_xr)
+    mm, STNDtoMHHW, station_name, year0 = get_monthly_max_time_series(stationID,rsl_xr)
     
 
     mm['t'].to_csv(run_dir / 'T.txt', header=False, index=False)
     mm['monthly_max'].to_csv(run_dir / 'Y.txt', header=False, index=False)
 
     if CIname != 'None' and CIname != None and CIname != 'O':
-        mm['CI'] = get_covariate(mm['t_monthly_max'], CI_dir, CIname, recordID)
+        mm['CI'] = get_covariate(mm['t_monthly_max'], CI_dir, CIname, stationID)
         mm['CI'].to_csv(run_dir / 'CI.txt', header=False, index=False)
 
 

@@ -200,7 +200,7 @@ class gev_spot_setup:
         Dynamically define the parameters based on `icromo` flags.
         """
         param_list = [
-            Uniform('b0', low=0.01, high=7.5, optguess=0.001),
+            Uniform('b0', low=0.01, high=7.5, optguess=0.05),
             Uniform('a0', low=0.001, high=2.5, optguess=0.001),
             Uniform('g0', low=-0.35, high=0.15, optguess=-0.001)
         ]
@@ -340,7 +340,7 @@ def run_GEVt_model(icromo, run_dir, parallel= True):
 
 
     # attempt to set random seed for reproducibility
-    seed = 955
+    seed = 995
     np.random.seed(seed)
     random.seed(seed)
 

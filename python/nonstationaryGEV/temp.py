@@ -52,13 +52,13 @@ climateIndex = ['AO','BEST','ONI','PDO','PMM','PNA','TNA']
 dataframes_list = []
 
 #%% Get dataset of hourly sea level data
-rsl = xr.open_dataset(dirs['data_dir'] / 'rsl_hawaii.nc')
+rsl = xr.open_dataset(dirs['data_dir'] / 'rsl_hawaii_noaa.nc')
 
 # Remove stations 547, 548, 14
-rsl_hourly = rsl.sel(record_id=~rsl.record_id.isin([547,548,14]))
+# rsl_hourly = rsl.sel(record_id=~rsl.record_id.isin([547,548,14]))
 
 #%% Loop through each station
-for recordID in rsl_hourly.record_id.values:  # Ensure recordID is a value
+for recordID in rsl_hourly.station_id.values:  # Ensure recordID is a value
     # Get dataset of monthly max sea level data
     mm, STNDtoMHHW, station_name, year0 = get_monthly_max_time_series(recordID, rsl_hourly)
     mmax = mm['monthly_max'].to_numpy()
@@ -119,7 +119,7 @@ for recordID in rsl_hourly.record_id.values:  # Ensure recordID is a value
         #if CIname is ONI or BEST, enforce 18-month lag
         # # This is based on Long et al 2020
         ## ONLY DO THIS FOR HAWAII STATIONS ###
-        if recordID in [57,58,59,60,61,552]:
+        if recordID in [57,58,59,60,61,552,1611400,1612340,1612480,1615680,1617433,1617760]:
             if CIname in ['ONI', 'BEST']:
                 CIcorr_max_lag[indCI] = 18
                 CIcorr_max_peaks[indCI] = CIcorr[indCI, 18]

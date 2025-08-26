@@ -2,7 +2,7 @@ from helpers import adjust_w_for_plotting
 
 from imports import *
 
-def plotTimeDependentReturnValue_plotly(ridString, STNDtoMHHW, model_output_dir, station_name, year0plot, meanmaxSL, rangemaxSL):
+def plotTimeDependentReturnValue_plotly(ridString, STNDtoMHHW, model_output_dir, station_name, mm, year0plot, meanmaxSL, rangemaxSL):
     # Load the dataset
     ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muN.nc'))
     dsMHHW = ds - STNDtoMHHW
@@ -104,7 +104,6 @@ def plotTimeDependentReturnValue_plotly(ridString, STNDtoMHHW, model_output_dir,
 
 
 
-
     # Assuming `mm` is defined
     fig.add_trace(go.Scatter(
         x=mm['t'].values + year0,
@@ -124,6 +123,7 @@ def plotTimeDependentReturnValue_plotly(ridString, STNDtoMHHW, model_output_dir,
     #save html
     matrix_dir = Path('../../matrix/plotly')
     fig.write_html(matrix_dir / savename, full_html=True)
+    return fig
 
 def plotExtremeSeasonality(T0, seaLevel, x_s,w_s, recordID, STNDtoMHHW, dirs, station_name, ReturnPeriod=50, SampleRate=12, saveToFile=True):
     
@@ -237,8 +237,7 @@ def plotExtremeSeasonality(T0, seaLevel, x_s,w_s, recordID, STNDtoMHHW, dirs, st
         savedir = os.path.join(dirs['output_dir'], savename)
         plt.savefig(savedir, dpi=250, bbox_inches='tight')
 
-    return fig, cmap
-
+    return fig, cmap, seaLevelS
 
 def plotTimeDependentReturnValue(ridString, STNDtoMHHW, model_output_dir, station_name, output_dir, mm, year0plot, saveToFile=True):
     # Load the dataset
