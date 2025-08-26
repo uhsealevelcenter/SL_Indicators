@@ -56,11 +56,11 @@ rsl = xr.open_dataset(dirs['data_dir'] / 'rsl_hawaii_noaa.nc')
 
 # Remove stations 547, 548, 14
 # rsl_hourly = rsl.sel(record_id=~rsl.record_id.isin([547,548,14]))
-
+rsl_hourly = rsl
 #%% Loop through each station
-for recordID in rsl_hourly.station_id.values:  # Ensure recordID is a value
+for stationID in rsl_hourly.station_id.values:  # Ensure stationID is a value
     # Get dataset of monthly max sea level data
-    mm, STNDtoMHHW, station_name, year0 = get_monthly_max_time_series(recordID, rsl_hourly)
+    mm, STNDtoMHHW, station_name, year0 = get_monthly_max_time_series(stationID, rsl_hourly)
     mmax = mm['monthly_max'].to_numpy()
     CIcorr = np.zeros((len(climateIndex), 30))
 
@@ -119,23 +119,25 @@ for recordID in rsl_hourly.station_id.values:  # Ensure recordID is a value
         #if CIname is ONI or BEST, enforce 18-month lag
         # # This is based on Long et al 2020
         ## ONLY DO THIS FOR HAWAII STATIONS ###
-        if recordID in [57,58,59,60,61,552,1611400,1612340,1612480,1615680,1617433,1617760]:
-            if CIname in ['ONI', 'BEST']:
-                CIcorr_max_lag[indCI] = 18
-                CIcorr_max_peaks[indCI] = CIcorr[indCI, 18]
+        # if stationID in [57,58,59,60,61,552,1611400,1612340,1612480,1615680,1617433,1617760]:
 
-            # if CIname is PDO, enforce 16-month lag
-            if CIname == 'PDO':
-                CIcorr_max_lag[indCI] = 16
-                CIcorr_max_peaks[indCI] = CIcorr[indCI, 16]
+        # if int(stationID) in [1611400,1612340,1612480,1615680,1617433,1617760]:
+        #     if CIname in ['ONI', 'BEST']:
+        #         CIcorr_max_lag[indCI] = 18
+        #         CIcorr_max_peaks[indCI] = CIcorr[indCI, 18]
 
-            # if CIname is PMM, enforce 10-month lag
-            if CIname == 'PMM':
-                CIcorr_max_lag[indCI] = 10
-                CIcorr_max_peaks[indCI] = CIcorr[indCI, 10]
+        #     # if CIname is PDO, enforce 16-month lag
+        #     if CIname == 'PDO':
+        #         CIcorr_max_lag[indCI] = 16
+        #         CIcorr_max_peaks[indCI] = CIcorr[indCI, 16]
 
-        ####****##### REMOVE THIS SECTION TO ALLOW FOR AUTOMATIC LAG DETECTION ####***
-        ##****######****### THE ABOVE LINES SET THE LAGS!!!#######****######****###***
+        #     # if CIname is PMM, enforce 10-month lag
+        #     if CIname == 'PMM':
+        #         CIcorr_max_lag[indCI] = 10
+        #         CIcorr_max_peaks[indCI] = CIcorr[indCI, 10]
+
+        # ####****##### REMOVE THIS SECTION TO ALLOW FOR AUTOMATIC LAG DETECTION ####***
+        # ##****######****### THE ABOVE LINES SET THE LAGS!!!#######****######****###***
 
     #% Plot correlation for each climate index
     fig, ax = plt.subplots()
@@ -189,9 +191,9 @@ for recordID in rsl_hourly.station_id.values:  # Ensure recordID is a value
     # Add significance column
     CI_lags_df['significant'] = CI_lags_df['p_value'] < 0.05
 
-    # Add station name and recordID
+    # Add station name and stationID
     CI_lags_df['station'] = station_name
-    CI_lags_df['recordID'] = recordID
+    CI_lags_df['stationID'] = stationID
 
     # Append the DataFrame to the list
     dataframes_list.append(CI_lags_df)
@@ -200,7 +202,7 @@ for recordID in rsl_hourly.station_id.values:  # Ensure recordID is a value
 master_df = pd.concat(dataframes_list, ignore_index=True)
 
 
-# master_df.to_csv(dirs['CI_dir'] / 'CI_correlation_results.csv', index=False)
+master_df.to_csv(dirs['CI_dir'] / 'CI_correlation_results.csv', index=False)
 
 
 # # Enforce 18-month lag for ONI, BEST
@@ -221,7 +223,7 @@ print(master_df)
 
 #%%
 # Save master DataFrame to CSV
-master_df.to_csv(dirs['CI_dir'] / 'CI_correlation_results_v2.csv', index=False)
+# master_df.to_csv(dirs['CI_dir'] / 'CI_correlation_results_v2.csv', index=False)
 
 #%%
 # look at PMM for all stations

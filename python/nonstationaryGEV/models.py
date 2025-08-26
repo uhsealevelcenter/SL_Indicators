@@ -391,18 +391,18 @@ def run_best_model(x_cvte2, w_cvte2, wcomp, SignifCvte2, ridString, dirs, modelI
 
 
 ## Run All Models
-def run_noClimateIndex_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CIname='None', nproc=1):
+def run_noClimateIndex_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPeriod, CIname='None', nproc=1):
     print('')
     print('******Running models without climate index...******')
 
-    ridString = str(recordID)
+    ridString = str(stationID)
     model_output_dir = dirs['model_output_dir']
     CI_dir = dirs['CI_dir']
     remove_files(dirs)
 
       
 
-    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,recordID,dirs, CIname)
+    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CIname)
 
     #make empty CI.txt file
     run_dir = dirs['run_dir']
@@ -419,7 +419,7 @@ def run_noClimateIndex_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod
                  'monthlyMax': mm['monthly_max'],
                  'covariate': None, 
                  'covariateName': CIname, 
-                 'recordID': recordID, 
+                 'stationID': stationID, 
                  'station_name': station_name, 
                  'year0': year0, 
                  'ReturnPeriod': ReturnPeriod,
@@ -433,10 +433,10 @@ def run_noClimateIndex_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod
 
     return STNDtoMHHW, station_name, year0, mm, x_s, w_s, x_N, w_N, wcomp, SignifN
 
-def run_CI_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_N, w_N, wcomp, SignifN, nproc=1):
+def run_CI_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_N, w_N, wcomp, SignifN, nproc=1):
     print('')
     print('****Running models with climate index...****')
-    ridString = str(recordID)
+    ridString = str(stationID)
     model_output_dir = dirs['model_output_dir']
     CI_dir = dirs['CI_dir']
     remove_files(dirs)
@@ -447,12 +447,12 @@ def run_CI_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_
 
     # Run the models with covariates, looping through the covariates
     for i,CIname in enumerate(CI_list):
-        STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,recordID,dirs, CIname)
+        STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CIname)
         modelInfo = {'t': mm['t'], 
                  'monthlyMax': mm['monthly_max'],
                  'covariate': None, 
                  'covariateName': CIname, 
-                 'recordID': recordID, 
+                 'stationID': stationID, 
                  'station_name': station_name, 
                  'year0': year0, 
                  'ReturnPeriod': ReturnPeriod,
@@ -468,12 +468,12 @@ def run_CI_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_
     # Find the model with the best fit in location
     best_model = np.nanargmax(SignifCvte1)
     print('Best model is ' + CI_list[best_model])
-    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,recordID,dirs, CI_list[best_model])
+    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CI_list[best_model])
     modelInfo = {'t': mm['t'], 
                  'covariate': mm['CI'], 
                  'monthlyMax': mm['monthly_max'], 
                  'covariateName': CI_list[best_model], 
-                 'recordID': recordID, 
+                 'stationID': stationID, 
                  'station_name': station_name, 
                  'year0': year0, 
                  'ReturnPeriod': ReturnPeriod,
@@ -498,17 +498,17 @@ def run_CI_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_
 
 
 ## Run All Models
-def run_all_models(rsl_xr,recordID,runWithoutModel,dirs, ReturnPeriod, CIname='PMM', nproc=1):
-    ridString = str(recordID) # establish which gauge is being processed
+def run_all_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPeriod, CIname='PMM', nproc=1):
+    ridString = str(stationID) # establish which gauge is being processed
     model_output_dir = dirs['model_output_dir']
     remove_files(dirs) # remove any previous files in the run directory
 
     # prepare the model input data
-    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,recordID,dirs, CIname)
+    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CIname)
 
     # make dictionary of STNDtoMHHW, station_name, year0, mm,t,monthly_max,covariate
     #make dictionary of stuff that goes into xarray: t,covariate,standard_error,ReturnPeriod,modelName='Model_GEV_S_T_Cv_N.exe',ridString=ridString,savepath=savepath, station_name=station_name,year0=year0)
-    modelInfo = {'t': mm['t'], 'covariate': mm['CI'], 'monthlyMax': mm['monthly_max'],'covariateName': CIname, 'recordID': recordID, 'station_name': station_name, 'year0': year0, 'ReturnPeriod': ReturnPeriod}
+    modelInfo = {'t': mm['t'], 'covariate': mm['CI'], 'monthlyMax': mm['monthly_max'],'covariateName': CIname, 'stationID': stationID, 'station_name': station_name, 'year0': year0, 'ReturnPeriod': ReturnPeriod}
 
     # Run the basic models for seasonal, trend and nodal cycle
     # Seasonal model

@@ -10,7 +10,7 @@ def get_stationinfo(data_dir):
     # Use a context manager to ensure the dataset is closed properly
     with xr.load_dataset(data_dir/ 'rsl_daily_hawaii.nc') as rsl:
         # Convert relevant data from xarray to a pandas DataFrame
-        station_info = rsl[['lat', 'lon', 'station_name', 'record_id']].to_dataframe().reset_index()
+        station_info = rsl[['lat', 'lon', 'station_name', 'station_id']].to_dataframe().reset_index()
 
         # Convert station_name to string and remove everything after the comma
         station_info['station_name'] = station_info['station_name'].astype(str).str.split(',').str[0]
