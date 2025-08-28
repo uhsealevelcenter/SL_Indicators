@@ -553,7 +553,9 @@ def derivative_first_order(k, w, x, t00, t11, return_period, T, covariate):
     return derivative
 
 def calculate_std(w, x, t00,t11, T,serieCV, mio, r):
+    mio = np.array(mio)
     
+
     # Note here that "mio" stands for "Maximum Information Operator" and is same as the Hessian matrix
     # if mio is not a singular matrix, then the covariance matrix of the parameters is the inverse of the Hessian
     if np.linalg.det(mio) == 0:
@@ -561,7 +563,7 @@ def calculate_std(w, x, t00,t11, T,serieCV, mio, r):
         cov_params = np.eye(len(mio)) # if the Hessian is singular, we'll use the identity matrix as a placeholder
     else:
         cov_params = np.linalg.inv(mio) # the covariance matrix of the parameters is the inverse of the Hessian
-    
+
     n = len(w)
     Zp1 = np.zeros(n)
 
@@ -576,7 +578,13 @@ def calculate_std(w, x, t00,t11, T,serieCV, mio, r):
     # remove elements of J where wbest is zero (parameter not included, J should be 0 here as well anyway...)
     J = J[wbest != 0] ## is this correct? I think so...
 
-    # Note here J is a row vector
+    # Ensure J is a row vector
+    J = J.reshape(1, -1)
+
+    # check size of J vs size of cov_params
+    if J.shape[1] != cov_params.shape[0]:
+        raise ValueError("Incompatible shapes: J is {} and cov_params is {}".format(J.shape, cov_params.shape))
+    
     # propagate the covariance matrix (e.g. 1x9 * 9x9 * 9x1 = 1x1)
     cov_solution = J @ cov_params @ J.T  #should be a scalar! 
 
@@ -616,10 +624,16 @@ def getTimeDependentReturnValue(T0, serieCV, w, x, ReturnPeriod, mio):
             x0 = YR[idx, i]
             # print('calculating return value for year interval:', t00, t11)  
             # Calculate the confidence intervals
-            ic_sqrt[idx,i] = calculate_std(w, x, t00,t11, T,serieCV, mio, r)
-            # print('ic_sqrt:', ic_sqrt[idx,i])
-            upper_confidence[idx, i] = YR[idx,i] + 1.96*ic_sqrt[idx,i]
-            lower_confidence[idx, i] = YR[idx,i] - 1.96*ic_sqrt[idx,i]
+            try:
+                ic_sqrt[idx,i] = calculate_std(w, x, t00,t11, T,serieCV, mio, r)
+                # print('ic_sqrt:', ic_sqrt[idx,i])
+                upper_confidence[idx, i] = YR[idx,i] + 1.96*ic_sqrt[idx,i]
+                lower_confidence[idx, i] = YR[idx,i] - 1.96*ic_sqrt[idx,i]
+            except Exception as e:
+                print('Error calculating standard error:', e)
+                ic_sqrt[idx,i] = np.nan
+                upper_confidence[idx, i] = np.nan
+                lower_confidence[idx, i] = np.nan
 
     print('Time-dependent return values calculated')
     return years, YR, upper_confidence, lower_confidence
