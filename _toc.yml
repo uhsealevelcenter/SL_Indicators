@@ -34,7 +34,7 @@ parts:
     - file: notebooks/SL_intra-annual.md
       sections:
       - file: notebooks/regional_and_local/SL_anomaly_intra-annual.ipynb
-      - file: notebooks/regional_and_local/SL_Rankings_intra-annual.md
+      - file: notebooks/regional_and_local/SL_Rankings_intra-annual.ipynb
       - file: notebooks/regional_and_local/SL_Extremes_intra-annual.ipynb
     - file: notebooks/Flood_intra-annual.md
       sections:
