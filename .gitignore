@@ -24,3 +24,4 @@ github_metadata_to_csv.py
 notebooks/sla_monthly_2015_2018.gif
 sla_monthly_2015_2018.gif
 .*
+matrix/*

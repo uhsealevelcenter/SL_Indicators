@@ -303,14 +303,14 @@ def get_monthly_max_time_series(recordID,rsl_hourly):
 
     return df, STNDtoMHHW, station_name, year0
 
-def get_covariate(t_monthly_max, CI_dir, CIname='PMM', recordID=None):
+def get_covariate(t_monthly_max, CI_dir, CIname='PMM', stationID=None):
 
     df = pd.read_csv(CI_dir / 'climate_indices_norm.csv', parse_dates=['time'])
     CIname = CIname.upper()
-    if recordID:
+    if stationID:
         dfLags = pd.read_csv(CI_dir / 'CI_correlation_results_v2.csv')
-        # Filter the DataFrame to the specific recordID and climate index
-        lags = dfLags[(dfLags['recordID'] == int(recordID)) & (dfLags['climateIndex'] == CIname)]
+        # Filter the DataFrame to the specific stationID and climate index
+        lags = dfLags[(dfLags['stationID'] == int(stationID)) & (dfLags['climateIndex'] == CIname)]
         lag = lags['lag'].values[0]
         # lag = 0
     else:

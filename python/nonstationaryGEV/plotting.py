@@ -2,20 +2,27 @@ from helpers import adjust_w_for_plotting
 
 from imports import *
 
-def plotTimeDependentReturnValue_plotly(ridString, STNDtoMHHW, model_output_dir, station_name, mm, year0plot, meanmaxSL, rangemaxSL):
+def plotTimeDependentReturnValue_plotly(ridString, STNDtoMHHW, model_output_dir, station_name, mm, year0plot, meanmaxSL, rangemaxSL, specModel=None):
     # Load the dataset
-    # This is sort of silly and should be fixed to just make the RL_BEST
-    if os.path.exists(os.path.join(model_output_dir, ridString, 'RL_BEST.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_BEST.nc'))
-    elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc'))
-    elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc'))
-    elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muN.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muN.nc'))
-    else:
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT.nc'))
+
+    if specModel is None:
+        # This is sort of silly and should be fixed to just make the RL_BEST
+        if os.path.exists(os.path.join(model_output_dir, ridString, 'RL_BEST.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_BEST.nc'))
+        elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc'))
+        elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc'))
+        elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muN.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muN.nc'))
+        else:
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT.nc'))
+    elif specModel:
+        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, specModel))
+    
     dsMHHW = ds - STNDtoMHHW
+    
+    
     dsMHHW.attrs['units'] = 'm, MHHW'
 
     # Get the first year
@@ -249,19 +256,23 @@ def plotExtremeSeasonality(T0, seaLevel, x_s,w_s, recordID, STNDtoMHHW, dirs, st
 
     return fig, cmap, seaLevelS
 
-def plotTimeDependentReturnValue(ridString, STNDtoMHHW, model_output_dir, station_name, output_dir, mm, year0plot, saveToFile=True):
+def plotTimeDependentReturnValue(ridString, STNDtoMHHW, model_output_dir, station_name, output_dir, mm, year0plot, saveToFile=True, specModel=None):
     # Load the dataset
-    # This is sort of silly and should be fixed to just make the RL_BEST
-    if os.path.exists(os.path.join(model_output_dir, ridString, 'RL_BEST.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_BEST.nc'))
-    elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc'))
-    elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc'))
-    elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muN.nc')):
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muN.nc'))
-    else:
-        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT.nc'))
+
+    if specModel is None:
+        # This is sort of silly and should be fixed to just make the RL_BEST
+        if os.path.exists(os.path.join(model_output_dir, ridString, 'RL_BEST.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_BEST.nc'))
+        elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv2.nc'))
+        elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT_N_cv1.nc'))
+        elif os.path.exists(os.path.join(model_output_dir, ridString, 'RL_muN.nc')):
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muN.nc'))
+        else:
+            ds = xr.open_dataset(os.path.join(model_output_dir, ridString, 'RL_muT.nc'))
+    elif specModel:
+        ds = xr.open_dataset(os.path.join(model_output_dir, ridString, specModel))
 
         
     dsMHHW = ds - STNDtoMHHW
