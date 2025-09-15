@@ -35,7 +35,7 @@ You can also do things in mamba if that's what you're into:
 ### 1. Clone the Repository
 First, clone the repository to your local machine:
 ```bash
-git clone <repository-url>
+git clone https://github.com/jwfiedler/SL_Hawaii.git
 cd SL_Hawaii 
 ```
 
