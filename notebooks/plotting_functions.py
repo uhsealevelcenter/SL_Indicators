@@ -120,6 +120,8 @@ def plot_map(vmin, vmax, palette, xlims, ylims):
     gl = ax.gridlines(draw_labels=True, linestyle=':', color='black', alpha=0.5)
     gl.top_labels = False
     gl.right_labels = False
+    gl.xlabel_style = {'size': 8}
+    gl.ylabel_style = {'size': 8}
 
     return fig, ax, crs
 

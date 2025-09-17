@@ -23,11 +23,10 @@ dependencies:
   - cartopy
   - geopandas
   - plotly
-  - myst-nb
+  - polars
   - pip
   - pip:
       - pyextremes
       - great_tables
       - copernicusmarine
       - spotpy
-      
