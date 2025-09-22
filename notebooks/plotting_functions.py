@@ -30,8 +30,7 @@ plt.rcParams['font.size'] = 12 # Set the font size for the text in the figure (c
 plt.rcParams['legend.fontsize'] = 9  # Set the font size for legends
 
 # set font to Avenir
-plt.rcParams['font.family'] = 'Avenir'
-
+plt.rcParams['font.family'] = ['Avenir', 'Helvetica', 'Arial', 'sans-serif']
 # %%
 def add_zebra_frame(ax, lw=2, segment_length=0.5, crs=ccrs.PlateCarree()):
     # Get the current extent of the map
