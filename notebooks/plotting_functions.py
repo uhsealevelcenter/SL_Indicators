@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
 import matplotlib.ticker as mticker
-
+import platform
 
 # We're going to use plotly here, so we need to import it
 import plotly.io as pio
@@ -29,8 +29,13 @@ plt.rcParams['ytick.labelsize'] = 9 # Set the font size for y-axis tick labels
 plt.rcParams['font.size'] = 12 # Set the font size for the text in the figure (can affect legend)
 plt.rcParams['legend.fontsize'] = 9  # Set the font size for legends
 
-# set font to Avenir
-plt.rcParams['font.family'] = ['Avenir', 'Helvetica', 'Arial', 'sans-serif']
+# set font to Avenir (or whatever you want, really. I just like how it looks.)
+system = platform.system()  # "Darwin" (macOS), "Windows", "Linux"
+
+if system == "Darwin":  # macOS
+    plt.rcParams['font.family'] = ['Avenir', 'sans-serif']
+else:  # Windows or Linux
+    plt.rcParams['font.family'] = ['sans-serif']
 # %%
 def add_zebra_frame(ax, lw=2, segment_length=0.5, crs=ccrs.PlateCarree()):
     # Get the current extent of the map
