@@ -30,4 +30,5 @@ dependencies:
       - great_tables
       - copernicusmarine
       - spotpy
+      - selenium ## This one is only if you want to colorize your dataframes...
       
