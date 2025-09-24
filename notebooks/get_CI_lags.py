@@ -13,7 +13,12 @@ from pathlib import Path
 from setup import data_dir
 base_dir = Path(data_dir).parent
 
-sys.path.append("../python/nonstationaryGEV")
+nsGEVpath = Path(__file__).parent.parent / 'python' / 'nonstationaryGEV'
+
+if str(nsGEVpath) not in sys.path:
+    sys.path.append(str(nsGEVpath))
+
+
 from models import run_CI_models, run_noClimateIndex_models
 from imports import *
 from plotting import plotExtremeSeasonality, plotTimeDependentReturnValue
@@ -107,7 +112,7 @@ def get_CI_lags_dataframe(rsl_hourly, set_lags=True):
                 ####****##### REMOVE THIS SECTION TO ALLOW FOR AUTOMATIC LAG DETECTION ####***
                 ##****######****### THE ABOVE LINES SET THE LAGS!!!#######****######****###***
 
-        #% Plot correlation for each climate index
+        #% Plot correlation for each climate 
         fig, ax = plt.subplots()
 
         # fill zeros with nan
@@ -179,6 +184,6 @@ df_nosetlag.to_csv(dirs['CI_dir'] / 'CI_correlation_results.csv', index=False)
 df_setlag = get_CI_lags_dataframe(rsl_hourly, set_lags=True)
 df_setlag.to_csv(dirs['CI_dir'] / 'CI_correlation_results_setLag.csv', index=False)
 
-print(df_setlag)
+print(df_nosetlag)
 
 # %%

@@ -240,13 +240,6 @@ def fitness(x, dirs, modelType='GEV_SeasonalMu', nproc = 1):
     return bestf, n
 
 def get_monthly_max_time_series(recordID,rsl_hourly):
-    # Ensure recordID is the right type for comparison
-    if isinstance(recordID, str):
-        # If station_id is numeric, convert recordID to int
-        try:
-            recordID = int(recordID)
-        except ValueError:
-            pass
         
     ridIndex = np.where(rsl_hourly.station_id == recordID)[0]
     # find the station name that matches the station_id
