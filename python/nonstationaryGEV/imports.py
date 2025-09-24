@@ -17,9 +17,9 @@ import seaborn as sns
 import matplotlib.colors as mcolors
 import plotly.graph_objects as go
 
-#set up directories as environment variables
-os.environ["DATA_DIR"] = "~/Documents/SL_Hawaii_data/data"
-os.environ["OUTPUT_DIR"] = "~/Documents/SL_Hawaii_data/output"
+# #set up directories as environment variables
+# os.environ["DATA_DIR"] = "~/Documents/SL_Hawaii_data/data"
+# os.environ["OUTPUT_DIR"] = "~/Documents/SL_Hawaii_data/output"
 
 #set up directories as Path objects
 data_dir = Path(os.environ["DATA_DIR"]).expanduser()
