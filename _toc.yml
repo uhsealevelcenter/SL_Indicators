@@ -20,7 +20,7 @@ parts:
       - file: notebooks/regional_and_local/SL_anomaly_annual.ipynb
       - file: notebooks/regional_and_local/SL_Rankings_annual.ipynb
       - file: notebooks/regional_and_local/SL_Extremes_annual.ipynb
-      - file: notebooks/nonstationaryGEV/monthly_extremes_non-stationaryGEV.ipynb
+      - file: notebooks/monthly_extremes_non-stationaryGEV.ipynb
       - file: notebooks/contributions.ipynb
       - file: notebooks/ranking_and_return_level_summary.ipynb
       - file: notebooks/components.ipynb
