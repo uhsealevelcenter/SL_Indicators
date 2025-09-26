@@ -6,6 +6,8 @@ import pandas as pd
 import numpy as np
 from scipy.signal import find_peaks
 from scipy.stats import t
+import matplotlib
+matplotlib.use('Agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
 import xarray as xr
 import os
@@ -133,6 +135,7 @@ def get_CI_lags_dataframe(rsl_hourly, set_lags=True):
         savedir = dirs['output_dir'] / 'CI'
         savedir.mkdir(parents=True, exist_ok=True)
         fig.savefig(savedir / f'{station_name}_correlation_plot.png')
+        plt.close(fig)  
 
         #% Create DataFrame for current station
         CI_lags_df = pd.DataFrame({
@@ -184,6 +187,6 @@ df_nosetlag.to_csv(dirs['CI_dir'] / 'CI_correlation_results.csv', index=False)
 df_setlag = get_CI_lags_dataframe(rsl_hourly, set_lags=True)
 df_setlag.to_csv(dirs['CI_dir'] / 'CI_correlation_results_setLag.csv', index=False)
 
-print(df_nosetlag)
+# print(df_nosetlag)
 
 # %%

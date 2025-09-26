@@ -3,7 +3,7 @@ from helpers import *
 
 
 
-def prep_model_input_data(rsl_xr,stationID,dirs, CIname):
+def prep_model_input_data(rsl_xr,stationID,dirs, CIname, lag=True):
     CI_dir = dirs['CI_dir']
     run_dir = dirs['run_dir']
 
@@ -14,7 +14,7 @@ def prep_model_input_data(rsl_xr,stationID,dirs, CIname):
     mm['monthly_max'].to_csv(run_dir / 'Y.txt', header=False, index=False)
 
     if CIname != 'None' and CIname != None and CIname != 'O':
-        mm['CI'] = get_covariate(mm['t_monthly_max'], CI_dir, CIname, stationID)
+        mm['CI'] = get_covariate(mm['t_monthly_max'], CI_dir, CIname, stationID,lag)
         mm['CI'].to_csv(run_dir / 'CI.txt', header=False, index=False)
 
 

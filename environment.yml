@@ -24,6 +24,8 @@ dependencies:
   - geopandas
   - plotly
   - myst-nb
+  - mpich
+  - mpi4py
   - pip
   - pip:
       - pyextremes

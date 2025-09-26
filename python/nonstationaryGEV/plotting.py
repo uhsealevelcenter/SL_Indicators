@@ -138,8 +138,10 @@ def plotTimeDependentReturnValue_plotly(ridString, STNDtoMHHW, model_output_dir,
     # Optional: Display the figure
     fig.show()
     #save html
-    matrix_dir = Path('../../matrix/plotly')
-    fig.write_html(matrix_dir / savename, full_html=True)
+    # make plotly dir
+    plotly_dir = Path(model_output_dir) / 'plotly'
+    plotly_dir.mkdir(parents=True, exist_ok=True)
+    fig.write_html(plotly_dir / savename, full_html=True)
     return fig
 
 def plotExtremeSeasonality(T0, seaLevel, x_s,w_s, recordID, STNDtoMHHW, dirs, station_name, ReturnPeriod=50, SampleRate=12, saveToFile=True):
