@@ -1,7 +1,7 @@
 # %%
 # Visualization libraries
 
-
+import warnings
 import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
@@ -36,12 +36,24 @@ if system == "Darwin":  # macOS
     plt.rcParams['font.family'] = ['Avenir', 'sans-serif']
 else:  # Windows or Linux
     plt.rcParams['font.family'] = ['sans-serif']
+
+# Suppress the common Shapely warning that occurs with cartopy
+def suppress_shapely_warnings():
+    """Suppress the 'invalid value encountered in create_collection' warning from Shapely."""
+    warnings.filterwarnings("ignore", category=RuntimeWarning, 
+                          message="invalid value encountered in create_collection")
+
 # %%
 def add_zebra_frame(ax, lw=2, segment_length=0.5, crs=ccrs.PlateCarree()):
     # Get the current extent of the map
     left, right, bot, top = ax.get_extent(crs=crs)
     # Check for valid extent
     if left == right or bot == top:
+        return
+    
+    # Check for NaN or infinite values
+    if not all(np.isfinite([left, right, bot, top])):
+        warnings.warn("Invalid extent values detected, skipping zebra frame")
         return
 
     # Calculate the nearest 0 or 0.5 degree mark within the current extent
@@ -117,8 +129,12 @@ def plot_map(vmin, vmax, palette, xlims, ylims):
 
     cmap = palette
 
-    ax.coastlines()
-    ax.add_feature(cfeature.LAND, color='lightgrey')
+    # Suppress shapely warnings for coastlines and features
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", category=RuntimeWarning, 
+                              message="invalid value encountered in create_collection")
+        ax.coastlines()
+        ax.add_feature(cfeature.LAND, color='lightgrey')
 
 
     gl = ax.gridlines(draw_labels=True, linestyle=':', color='black', alpha=0.5)
@@ -152,8 +168,11 @@ def plot_map_grid(vmin, vmax, xlims, ylims, nrows, ncols):
         ax.set_xlim(xlims)
         ax.set_ylim(ylims)
     
-        ax.coastlines()
-        ax.add_feature(cfeature.LAND, color='lightgrey')
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore", category=RuntimeWarning, 
+                                  message="invalid value encountered in create_collection")
+            ax.coastlines()
+            ax.add_feature(cfeature.LAND, color='lightgrey')
 
     return fig, axs, crs
 

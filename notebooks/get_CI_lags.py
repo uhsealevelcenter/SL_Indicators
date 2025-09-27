@@ -6,9 +6,8 @@ import pandas as pd
 import numpy as np
 from scipy.signal import find_peaks
 from scipy.stats import t
-import matplotlib
-matplotlib.use('Agg')  # Use non-interactive backend
 import matplotlib.pyplot as plt
+plt.ioff()  # Turn off interactive plotting
 import xarray as xr
 import os
 from pathlib import Path
@@ -43,9 +42,14 @@ climateIndex = ['AO','BEST','ONI','PDO','PMM','PNA','TNA']
 rsl_hourly = xr.open_dataset(dirs['data_dir'] / 'rsl_hawaii_noaa.nc')
 
 #%% Loop through each station
-def get_CI_lags_dataframe(rsl_hourly, set_lags=True):
+def get_CI_lags_dataframe(rsl_hourly, set_lags=True, show_plots=False):
     # Initialize a list to store DataFrames for each station
     dataframes_list = []
+    
+    # Store original interactive state
+    was_interactive = plt.isinteractive()
+    if not show_plots:
+        plt.ioff()  # Turn off interactive plotting
 
     for stationID in rsl_hourly.station_id.values:  # Ensure stationID is a value
         # Get dataset of monthly max sea level data
@@ -135,7 +139,7 @@ def get_CI_lags_dataframe(rsl_hourly, set_lags=True):
         savedir = dirs['output_dir'] / 'CI'
         savedir.mkdir(parents=True, exist_ok=True)
         fig.savefig(savedir / f'{station_name}_correlation_plot.png')
-        plt.close(fig)  
+        plt.close(fig) ; 
 
         #% Create DataFrame for current station
         CI_lags_df = pd.DataFrame({
@@ -176,6 +180,10 @@ def get_CI_lags_dataframe(rsl_hourly, set_lags=True):
 
     # After the loop, concatenate all DataFrames into a master DataFrame
     master_df = pd.concat(dataframes_list, ignore_index=True)
+    
+    # Restore original interactive state
+    if was_interactive and not show_plots:
+        plt.ion()
 
     return master_df
 
@@ -186,7 +194,5 @@ df_nosetlag.to_csv(dirs['CI_dir'] / 'CI_correlation_results.csv', index=False)
 
 df_setlag = get_CI_lags_dataframe(rsl_hourly, set_lags=True)
 df_setlag.to_csv(dirs['CI_dir'] / 'CI_correlation_results_setLag.csv', index=False)
-
-# print(df_nosetlag)
 
 # %%

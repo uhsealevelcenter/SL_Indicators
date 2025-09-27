@@ -17,13 +17,34 @@ import seaborn as sns
 import matplotlib.colors as mcolors
 import plotly.graph_objects as go
 
-# #set up directories as environment variables
-# os.environ["DATA_DIR"] = "~/Documents/SL_Hawaii_data/data"
-# os.environ["OUTPUT_DIR"] = "~/Documents/SL_Hawaii_data/output"
+# Set up directories using the same approach as setup.ipynb
+try:
+    # Try to import paths from a local config file (not in version control)
+    import sys
+    # Add the notebooks directory to path so we can import config_env
+    notebooks_dir = Path(__file__).resolve().parent.parent / 'notebooks'
+    if str(notebooks_dir) not in sys.path:
+        sys.path.insert(0, str(notebooks_dir))
+    
+    from config_env import DATA_DIR as data_dir_path
+    from config_env import OUTPUT_DIR as output_dir_path
+    print("Using custom paths from config_env.py")
+except ImportError:
+    # Fallback to default local directories if config_env.py doesn't exist
+    print("config_env.py not found. Using default 'data' and 'output' directories.")
+    data_dir_path = 'data'
+    output_dir_path = 'output'
 
-#set up directories as Path objects
-data_dir = Path(os.environ["DATA_DIR"]).expanduser()
-output_dir = Path(os.environ["OUTPUT_DIR"]).expanduser()
+# Set up directories as Path objects
+data_dir = Path(data_dir_path).expanduser()
+output_dir = Path(output_dir_path).expanduser()
+
+# Create directories if they don't exist to prevent errors later
+data_dir.mkdir(parents=True, exist_ok=True)
+output_dir.mkdir(parents=True, exist_ok=True)
+
+print(f"Data directory: {data_dir}")
+print(f"Output directory: {output_dir}")
 
 
 param_names = ['Annual seasonal cycle',
