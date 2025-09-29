@@ -25,10 +25,16 @@ def calculate_ntr(ds):
     #     OUTPUT_DIR = os.path.join(os.environ['HOME'], 'Documents', 'SL_Hawaii_data','output')
     #     os.environ["OUTPUT_DIR"] = OUTPUT_DIR
 
-    data_dir = Path(os.environ["DATA_DIR"]).expanduser()
-    output_dir = Path(os.environ["OUTPUT_DIR"]).expanduser()
-
+    # Set up directories using the same approach as setup.ipynb
     
+    from config_env import DATA_DIR as data_dir_path
+    from config_env import OUTPUT_DIR as output_dir_path
+    
+
+    # Set up directories as Path objects
+    data_dir = Path(data_dir_path).expanduser()
+    output_dir = Path(output_dir_path).expanduser()
+
 
     savepath = Path(data_dir / 'ntr_data')
     if not savepath.exists():
@@ -205,8 +211,11 @@ if __name__ == '__main__':
     
     print('Running tide_functions.py')
 
+    from config_env import DATA_DIR as data_dir_path
+    
 
-    data_dir = Path('/Users/juliafiedler/Documents/SL_Hawaii_data/data')
+    # Set up directories as Path objects
+    data_dir = Path(data_dir_path).expanduser()
     ds = xr.open_dataset(data_dir / 'rsl_hawaii.nc')
     
     calculate_ntr(ds)

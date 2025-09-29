@@ -35,13 +35,18 @@ def assess_std_error(mio):
         standard_error = np.zeros_like(np.diag(mio))
     return standard_error
 
-def run_fitness(x, dirs, modelType, nproc):
+def run_fitness(x, dirs, modelType, nproc, runError=True):
     remove_files(dirs)
 
     fitness(x, dirs, modelType, nproc)
     w = np.loadtxt(dirs['run_dir'] / 'best.txt', dtype=float)
     mio = np.loadtxt(dirs['run_dir'] / 'mio.txt',dtype=float)
-    standard_error = assess_std_error(mio)
+    if runError:
+        print('Assessing standard error...')
+        standard_error = assess_std_error(mio)
+    else:
+        print('Skipping standard error calculation...')
+        standard_error = np.zeros_like(np.diag(mio))
     return w, mio, standard_error
 
 ## Seasonal model
@@ -278,9 +283,10 @@ def run_covariate_in_scale_model(x_cvte1, w_cvte1, wcomp, ridString, SignifCvte1
         x_cvte2[5] = 0 # set the covariate in scale component to zero
         print('Covariate in scale is not significant! \nUse previous model without no covariate in scale.\n New x_cvte2 is: ', x_cvte2)
         # COMMENTING OUT, NOT SURE WE NEED THIS
-        # w_cvte2, mio, standard_error = run_fitness(x_cvte2, dirs, modelType, nproc)
-        
-        
+        #running the model again to get w_cvte2 without covariate in scale
+        print('Setting error assessment to False to speed up computation...')
+        w_cvte2, mio, standard_error = run_fitness(x_cvte2, dirs, modelType, nproc, runError=False)
+  
 
 
     output = {'w': w_cvte2.tolist(), 'mio': mio.tolist(), 'standard_error': standard_error.tolist(), 'x': x_cvte2.tolist()}
