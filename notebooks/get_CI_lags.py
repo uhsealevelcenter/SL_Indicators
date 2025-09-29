@@ -57,7 +57,27 @@ def get_CI_lags_dataframe(rsl_hourly, set_lags=True, show_plots=False):
 
         
         mm, STNDtoMHHW, station_name, year0 = get_monthly_max_time_series(stationID_str, rsl_hourly)
-        mmax = mm['monthly_max'].to_numpy()
+
+        mm_detrended = mm.copy()
+        # remove linear trend from mm_detrended
+        # Convert datetime to numeric values for polyfit
+        if 't' in mm.columns:
+            # Use existing numeric time column if available
+            t_for_polyfit = mm['t'].to_numpy()
+        else:
+            # Convert datetime to numeric values
+            t_for_polyfit = pd.to_numeric(mm['t_monthly_max']) / 1e9  # Convert to seconds since epoch
+        
+        coeffs = np.polyfit(t_for_polyfit, mm['monthly_max'], 1)
+        trend = np.polyval(coeffs, t_for_polyfit)
+        mm_detrended['monthly_max'] = mm['monthly_max'] - trend
+        
+        # # make plot of mm_detrended and mm
+        # fig,ax = fig, ax = plt.subplots()
+        # ax.plot(mm_detrended['t_monthly_max'],mm_detrended['monthly_max'])
+        # ax.plot(mm['t_monthly_max'],mm['monthly_max'])
+        # plt.show() 
+        mmax = mm_detrended['monthly_max'].to_numpy()
         CIcorr = np.zeros((len(climateIndex), 30))
 
         # Arrays to store peak correlation and lag for each climate index
@@ -139,7 +159,7 @@ def get_CI_lags_dataframe(rsl_hourly, set_lags=True, show_plots=False):
         savedir = dirs['output_dir'] / 'CI'
         savedir.mkdir(parents=True, exist_ok=True)
         fig.savefig(savedir / f'{station_name}_correlation_plot.png')
-        plt.close(fig) ; 
+        
 
         #% Create DataFrame for current station
         CI_lags_df = pd.DataFrame({
