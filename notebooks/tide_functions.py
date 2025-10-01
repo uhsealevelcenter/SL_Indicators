@@ -51,6 +51,8 @@ def calculate_ntr(ds):
     epoch_end = np.datetime64('2001-12-31')
     ds_epoch = ds.sel(time=slice(epoch_start, epoch_end))
 
+    # ds_epoch = ds.copy()
+
     # # use NTDE 2002-2020 as epoch
     # epoch_start = np.datetime64('2002-01-01')
     # epoch_end = np.datetime64('2020-12-31')
@@ -79,8 +81,10 @@ def calculate_ntr(ds):
     stations = [s for s in stations if s not in processed_files]
 
     for station in stations:
-        sea_level = ds_epoch.sea_level.sel(station_id=station
-                           ).values
+        t = pd.to_datetime(ds_epoch.time.values)
+        sea_level = ds_epoch.sea_level.sel(station_id=station).values
+        time_ALL = pd.to_datetime(ds.time.values)
+        sea_level_ALL = ds.sea_level.sel(station_id=station).values
         # sea_level_df = pd.DataFrame({'sea_level': ds.sea_level.sel(station_id=station).values, 'time': pd.to_datetime(ds.time.values)})
 
         station_name = ds_epoch.station_name.sel(station_id=station).item()
@@ -91,7 +95,7 @@ def calculate_ntr(ds):
             print(f'Not enough data for station {station_name}')
             continue
 
-        #truncate dataset if gaps are longer than 2 months. keep the latter part of the record
+        #truncate dataset if gaps are longer than 3 months. keep the latter part of the record
         max_gap = np.timedelta64(90, 'D') # 3 months
         time_days = np.array(time_days, dtype='datetime64[D]')
 
@@ -105,10 +109,22 @@ def calculate_ntr(ds):
         #remove trend from sea level data using linear regression
         # make sea_level a pandas dataframe
         sea_level_df = pd.DataFrame({'sea_level': sea_level, 'time': pd.to_datetime(ds_epoch.time.values)})
-        
+        sea_level_df_ALL = pd.DataFrame({'sea_level': sea_level_ALL,'time':pd.to_datetime(ds.time.values)})
         # truncate the data to the last 18.6 years for the tide analysis
         # sea_level_df = sea_level_df.iloc[-int(365*18.6*24):]
+        
+
+        
         trend_mag, trend, trend_rate = process_trend_with_nan(sea_level_df, time_column='time', weighted=False)
+        #extend trend to the full time series
+
+        time_index = pd.to_datetime(time_ALL).to_julian_date()
+        f = interp1d(t.to_julian_date(), trend['sea_level'],kind='linear', fill_value='extrapolate')
+        trend_epoch_extended = f(time_index)
+
+        trend_magALL, trendALL, trend_rate = process_trend_with_nan(sea_level_df_ALL,time_column='time', weighted=False)
+
+        trendDiff = trend_epoch_extended - trendALL['sea_level']
 
         # make trend same time period as sea_level
         # trend = trend[(trend.index >= pd.to_datetime(epoch_start)) & (trend.index < pd.to_datetime(epoch_end))]
@@ -118,7 +134,7 @@ def calculate_ntr(ds):
         # sea_level_detrended = sea_level_detrended[(sea_level_df['time'] >= pd.to_datetime(epoch_start)) & (sea_level_df['time'] <= pd.to_datetime(epoch_end))]
         # sea_level_detrended = sea_level_detrended.values
 
-        sea_level_detrended = sea_level - trend['sea_level']
+        sea_level_detrended = sea_level_ALL - trendALL['sea_level']
 
         # print what type sea_level_detrended is
         print(f'sea_level_detrended is of type {type(sea_level_detrended)} and has shape {sea_level_detrended.shape}')
@@ -128,23 +144,19 @@ def calculate_ntr(ds):
         # sea_level_detrended_186 = sea_level_detrended[-int(365*18.6*24):]
         # t = time[-int(365*18.6*24):]
 
-        t = pd.to_datetime(ds_epoch.time.values)
-        print(f'time has shape {t.shape} and type {type(t)}')
-        coef_noNodal = solve(t, sea_level_detrended, nodal=False, trend=False, method='robust',lat=float(ds['lat'].sel(station_id=station).values))
-        coef = solve(t, sea_level_detrended, nodal=True, trend=False, method='robust',lat=ds['lat'].sel(station_id=station).values)
+        # These next two lines will take some time, especially if doing the full timeseries
+        # Using OLS method instead of robust to speed things up
+        coef_noNodal = solve(time_ALL, sea_level_detrended, nodal=False, trend=False, method='ols',lat=float(ds['lat'].sel(station_id=station).values))
+        coef = solve(time_ALL, sea_level_detrended, nodal=True, trend=False, method='ols',lat=ds['lat'].sel(station_id=station).values)
 
-        time_ALL = ds.time.values
-        sea_level_ALL = ds.sea_level.sel(station_id=station).values
+        
 
         # find beginning of data in timeseries
         start = np.where(~np.isnan(sea_level_ALL))[0][0]
         time_ALL = time_ALL[start:]
         sea_level_ALL = sea_level_ALL[start:]
 
-        #extend trend to the full time series
-        time_index = pd.to_datetime(time_ALL).to_julian_date()
-        f = interp1d(t.to_julian_date(), trend['sea_level'],kind='linear', fill_value='extrapolate')
-        trendALL = f(time_index)
+        
         seasonal_names = ['SA', 'SSA']
         
         seasonal_idx = [i for i, name in enumerate(coef['name']) if name in seasonal_names]
@@ -174,21 +186,37 @@ def calculate_ntr(ds):
         tide_ALL_withNodal = reconstruct(time_ALL, coef)
         seasonal_cycle = reconstruct(time_ALL, coef_seasonal)
 
+        # tide_ALL_withNodal_MHHWepoch = tide_ALL_withNodal.h-trendDiff[start:]
+        sea_level_detrendedALL = sea_level_detrended[start:]
 
         # sea_level_detrendedALL = sea_level_ALL - np.nanmean(sea_level) + trend_rate['sea_level']/365.25
         # sea_level_detrendedALL = sea_level_ALL - np.nanmean(sea_level_ALL) 
-        sea_level_detrendedALL = sea_level_ALL - trendALL
+        # sea_level_detrendedALL = sea_level_ALL - trendALL
 
-        ntr = sea_level_detrendedALL - tide_ALL_withNodal.h 
-        ntr_withNodal = sea_level_detrendedALL - tide_ALL_noNodal.h 
-        ntr_noASA = sea_level_detrendedALL - tide_ALL_withNodal_noSeasonal.h
+        # ensure that the NTRs returned are relative to the epoch with trendDiff
+        ntr = sea_level_detrended[start:] - tide_ALL_withNodal.h 
+        ntr_withNodal = sea_level_detrended[start:] - tide_ALL_noNodal.h 
+        ntr_noASA = sea_level_detrended[start:] - tide_ALL_withNodal_noSeasonal.h 
         # ntr = sea_level_detrended[start:] - tide_ALL_withNodal_noSeasonal.h 
         # ntr_withNodal = sea_level_detrended[start:] - tide_ALL_noNodal.h 
         # nodal_pred = tide_ALL_withNodal.h - tide_ALL_noNodal.h
         nodal_pred =  tide_ALL_noNodal.h - tide_ALL_withNodal.h
+        trendALL = trendALL['sea_level'][start:]
+        trendDiff = trendDiff[start:]
 
-
-        ntr_data = pd.DataFrame({'time': time_ALL, 'ntr': ntr, 'ntr_noASA': ntr_noASA ,'sea_level': sea_level_ALL, 'sea_level_detrended': sea_level_detrendedALL,'trend': trendALL ,'tide': tide_ALL_withNodal.h, 'nodal': nodal_pred, 'ntr_withNodal': ntr_withNodal, 'seasonal_cycle': seasonal_cycle.h})
+        ntr_data = pd.DataFrame({
+            'time': time_ALL, 
+            'ntr': ntr, 
+            'ntr_noASA': ntr_noASA,
+            'sea_level': sea_level_ALL, 
+            'sea_level_detrended': sea_level_detrendedALL,
+            'trend': trendALL,
+            'trendDiffEpoch': trendDiff,
+            'tide': tide_ALL_withNodal.h, 
+            'nodal': nodal_pred, 
+            'ntr_withNodal': ntr_withNodal, 
+            'seasonal_cycle': seasonal_cycle.h
+        })
 
         #ensure that the time is in datetime format
         ntr_data['time'] = pd.to_datetime(ntr_data['time'])
