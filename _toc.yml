@@ -8,37 +8,36 @@ parts:
     chapters:
     - url: https://uhslc.soest.hawaii.edu/jfiedler/SeaLevelIndicators/
       title: Indicator Matrix
-    - file: gettingStarted.md
+    - file: notebooks/0_0_gettingStarted.md
       sections:
-      - file: notebooks/setup.ipynb
-      - file: notebooks/SL_Data_Wrangling.ipynb
+      - file: notebooks/0_1_setup.ipynb
+      - file: notebooks/0_2_SL_Data_Wrangling.ipynb
   - caption: ANNUAL
     chapters:
-    - file: notebooks/SL_annual.md
+    - file: notebooks/1_0_SL_annual.md
       sections:
-      - file: notebooks/regional_and_local/SL_Trend.ipynb
-      - file: notebooks/regional_and_local/SL_anomaly_annual.ipynb
-      - file: notebooks/regional_and_local/SL_Rankings_annual.ipynb
-      - file: notebooks/regional_and_local/SL_Extremes_annual.ipynb
-      - file: notebooks/monthly_extremes_non-stationaryGEV.ipynb
-      - file: notebooks/contributions.ipynb
-      - file: notebooks/ranking_and_return_level_summary.ipynb
-      - file: notebooks/components.ipynb
-    - file: notebooks/Flood.md
+      - file: notebooks/Annual/1_1_SL_Trend_annual.ipynb
+      - file: notebooks/Annual/1_2_SL_anomaly_annual.ipynb
+      - file: notebooks/Annual/1_3_SL_Rankings_annual.ipynb
+      - file: notebooks/Annual/1_4_1_SL_Extremes_annual.ipynb
+      - file: notebooks/Annual/1_4_2_SL_Extremes_nonstationaryGEV.ipynb
+      - file: notebooks/Annual/1_5_ranking_and_return_level_summary.ipynb
+      - file: notebooks/Annual/1_6_1_SL_contributions_to_extremes.ipynb
+      - file: notebooks/Annual/1_6_3_SL_contributions_to_daily_sea_level.ipynb
+    - file: notebooks/Annual/2_0_Flood.md
       sections:
-      - file: notebooks/FloodFrequency_setup.ipynb
-      - file: notebooks/FloodFrequency.ipynb
-      - file: notebooks/FloodDuration.ipynb  
+      - file: notebooks/Annual/2_0_FloodFrequency_setup.ipynb
+      - file: notebooks/Annual/2_1_FloodFrequency.ipynb
+      - file: notebooks/Annual/2_2_FloodDuration.ipynb
   - caption: INTRA-ANNUAL
     chapters:
-    - file: notebooks/SL_intra-annual.md
+    - file: notebooks/Intra-Annual/1_0_SL_intra-annual.md
       sections:
-      - file: notebooks/regional_and_local/SL_anomaly_intra-annual.ipynb
-      - file: notebooks/regional_and_local/SL_Rankings_intra-annual.ipynb
-      - file: notebooks/regional_and_local/SL_Extremes_intra-annual.ipynb
-      - file: notebooks/components_intra-annual.ipynb
-    - file: notebooks/Flood_intra-annual.md
+      - file: notebooks/Intra-Annual/1_1_SL_anomaly_intra-annual.ipynb
+      - file: notebooks/Intra-Annual/1_2_SL_Rankings_intra-annual.ipynb
+      - file: notebooks/Intra-Annual/1_3_SL_Extremes_intra-annual.ipynb
+      - file: notebooks/Intra-Annual/1_4_1_components_intra-annual.ipynb
+    - file: notebooks/Intra-Annual/2_0_Flood_intra-annual.md
       sections:
-      - file: notebooks/FloodFrequency_intra-annual.ipynb
-      - file: notebooks/FloodDuration_intra-annual.ipynb
-  
+      - file: notebooks/Intra-Annual/2_1_FloodFrequency_intra-annual.ipynb
+      - file: notebooks/Intra-Annual/2_2_FloodDuration_intra-annual.ipynb

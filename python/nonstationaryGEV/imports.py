@@ -17,7 +17,7 @@ import seaborn as sns
 import matplotlib.colors as mcolors
 import plotly.graph_objects as go
 
-# Set up directories using the same approach as setup.ipynb
+# Set up directories using the same approach as 0_1_setup.ipynb
 try:
     # Try to import paths from a local config file (not in version control)
     import sys

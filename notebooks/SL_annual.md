@@ -1,4 +1,0 @@
-# Sea Level Magnitude
-
-```{tableofcontents}
-```
