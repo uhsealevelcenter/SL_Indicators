@@ -11,7 +11,11 @@ plt.ioff()  # Turn off interactive plotting
 import xarray as xr
 import os
 from pathlib import Path
-from setup import data_dir
+sys.path.append(str(Path(__file__).parent.parent / 'notebooks'))
+from config_env import DATA_DIR as data_dir_path
+data_dir = Path(data_dir_path).expanduser()
+
+
 base_dir = Path(data_dir).parent
 
 nsGEVpath = Path(__file__).parent.parent / 'python' / 'nonstationaryGEV'
