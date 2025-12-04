@@ -71,6 +71,9 @@ You'll want to configure your data input and output directories for your own mac
 # Get your Copernicus Marine credentials set up
 In order to access and download the CMEMS data (altimetry), you'll need to have [Copernicus Marine credentials](https://help.marine.copernicus.eu/en/articles/4220332-how-to-sign-up-for-copernicus-marine-service) stored in a configuration file on your machine. This configuration file will automatically be read when requesting data from the copernicus marine toolbox. You can read about how to do that [here](https://help.marine.copernicus.eu/en/articles/8185007-copernicus-marine-toolbox-credentials-configuration). Note: the downloaded datasets can be big.  
 
+# Running the Notebooks
+In order to run the notebooks succesfully, we suggest you follow the order given in the [table of contents](https://jwfiedler.github.io/SL_Hawaii/intro.html). If you want to be a rebel, you can try them out of order, but you'll still need to run the [data wrangling](notebooks/0_2_SL_Data_Wrangling.ipynb) first. 
+
 
 ## Citation
 If you use this project in your research, please cite:
