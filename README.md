@@ -3,8 +3,8 @@
 Coastal flooding takes many forms, ranging from major flooding associated with surge and heavy rains of strong storms to minor tidal flooding associated with seasonally high tides and variations in ocean currents. This repository, developed using BIL funds, contains the documented codes necessary to produce a diverse set of water-level monitoring products for the Hawaiian Island region using either hourly tide gauge data from the UHSLC database or NOAA CO-OPS API. These outputs can be
 translated for use in reports, bulletins, portals and dashboards used by NOAA and its partners.
 
-Jupyter Book Page is available at:
- https://jwfiedler.github.io/SL_Hawaii/
+Click here to access the [Jupyter Book Page](https://uhslc.soest.hawaii.edu/jfiedler/SLI_JB/intro.html).
+
 
 # SLI311 Environment Setup
 
