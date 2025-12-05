@@ -66,7 +66,7 @@ def _select_series(rsl, station_id, month=None):
         # if sel is already a pandas-like object
         series = pd.Series(sel.values, index=pd.to_datetime(sel['time'].values))
 
-    return series.dropna()
+    return series.dropna(), name
 
 
 def get_top_ten(rsl_subset, station_id, month=None, mode='max', min_sep_days=3):
@@ -79,7 +79,7 @@ def get_top_ten(rsl_subset, station_id, month=None, mode='max', min_sep_days=3):
     - mode: 'max' or 'min'
     - min_sep_days: minimum separation (days) between independent events
     """
-    sea_level_series = _select_series(rsl_subset, station_id, month=month)
+    sea_level_series, name = _select_series(rsl_subset, station_id, month=month)
 
     if mode == 'max':
         top_values = sea_level_series.nlargest(100)
@@ -111,11 +111,18 @@ def get_top_ten(rsl_subset, station_id, month=None, mode='max', min_sep_days=3):
         except Exception:
             station_name = ''
 
-    df = pd.DataFrame({
-        'rank': rank,
-        'date': [t[0] for t in top_10_values],
-        'sea level (m)': [t[1] for t in top_10_values]
-    })
+    if name == "sea_level_mhhw":
+        df = pd.DataFrame({
+            'rank': rank,
+            'date': [t[0] for t in top_10_values],
+            'sea level (m, MHHW)': [t[1] for t in top_10_values]
+        })
+    else:
+        df = pd.DataFrame({
+            'rank': rank,
+            'date': [t[0] for t in top_10_values],
+            'sea level (m)': [t[1] for t in top_10_values]
+        })
 
     if month is not None:
         # keep column name compatible with intra-annual notebook

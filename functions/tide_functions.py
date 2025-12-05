@@ -1,50 +1,38 @@
 # run this code in the SLI311 environment
 # This code is used to calculate the non-tidal residuals for the Hawaii tide gauge data
 
+import pandas as pd
+import xarray as xr
+import numpy as np
+from pathlib import Path
+from utide import solve, reconstruct
+import os
+from copy import deepcopy
+from scipy.interpolate import interp1d
+
+# Set up directories using the same approach as 0_1_setup.ipynb
+import sys
+sys.path.append(str(Path(__file__).resolve().parent))
+from tseries_functions import process_trend_with_nan
+
+sys.path.append(str(Path(__file__).resolve().parent/'..'/'notebooks'))
+    
+from config_env import DATA_DIR as data_dir_path
+from config_env import OUTPUT_DIR as output_dir_path
+    
+# Set up directories as Path objects
+data_dir = Path(data_dir_path).expanduser()
+output_dir = Path(output_dir_path).expanduser()
+
 
 def calculate_ntr(ds):
     """"
     "This function calculates the non-tidal residuals (NTR) for the Hawaii tide gauge data"
     """
-    import pandas as pd
-    import xarray as xr
-    import numpy as np
-    from pathlib import Path
-    from utide import solve, reconstruct
-    import os
-    from python.functions.tseries_functions import process_trend_with_nan
-    from copy import deepcopy
-    from scipy.interpolate import interp1d
-
-    # #set up directories as Path objects, this assumes the environment variables
-    # # DATA_DIR and OUTPUT_DIR are set
-    # if 'DATA_DIR' not in os.environ:
-    #     DATA_DIR = os.path.join(os.environ['HOME'], 'Documents', 'SL_Hawaii_data','data')
-    #     os.environ["DATA_DIR"] = DATA_DIR
-    # if 'OUTPUT_DIR' not in os.environ:
-    #     OUTPUT_DIR = os.path.join(os.environ['HOME'], 'Documents', 'SL_Hawaii_data','output')
-    #     os.environ["OUTPUT_DIR"] = OUTPUT_DIR
-
-    # Set up directories using the same approach as 0_1_setup.ipynb
-    
-    from config_env import DATA_DIR as data_dir_path
-    from config_env import OUTPUT_DIR as output_dir_path
-    
-
-    # Set up directories as Path objects
-    data_dir = Path(data_dir_path).expanduser()
-    output_dir = Path(output_dir_path).expanduser()
-
 
     savepath = Path(data_dir / 'ntr_data')
     if not savepath.exists():
         savepath.mkdir()
-
-    # #load the data
-    # ds = xr.open_dataset(data_dir / 'rsl_hawaii.nc')
-
-
-
 
     # # use NTDE 1983-2001 as epoch:
     epoch_start = np.datetime64('1983-01-01')
