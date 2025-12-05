@@ -29,3 +29,4 @@ sla_monthly_2015_2018.gif
 /.vscode
 notebooks/config_env.py
 /output
+/_build

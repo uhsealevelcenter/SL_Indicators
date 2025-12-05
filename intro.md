@@ -1,4 +1,5 @@
-# Introduction
+# Hawaii Sea Level Indicators
+## Introduction
 ```{figure} https://www.hawaii.edu/news/wp-content/uploads/2021/06/manoa-soest-coastal-flooding.jpg
 ---
 width: 300px
