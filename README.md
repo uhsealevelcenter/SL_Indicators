@@ -66,7 +66,7 @@ conda list
 ```
 ---
 # Data input and output directories
-You'll want to configure your data input and output directories for your own machine. These data directories are established in the [setup](notebooks/0_1_setup.ipynb) notebook.
+You'll want to configure your data input and output directories for your own machine. This is where we will save our downloaded raw and intermediate (calculated) data. The output directory will contain our figures, tables, and csv files produced by the notebooks. You can put these folders wherever makes sense to your workflow. These data directories are established in the [getting started](notebooks/0_0_gettingStarted.md) chapter.
 
 # Get your Copernicus Marine credentials set up
 In order to access and download the CMEMS data (altimetry), you'll need to have [Copernicus Marine credentials](https://help.marine.copernicus.eu/en/articles/4220332-how-to-sign-up-for-copernicus-marine-service) stored in a configuration file on your machine. This configuration file will automatically be read when requesting data from the copernicus marine toolbox. You can read about how to do that [here](https://help.marine.copernicus.eu/en/articles/8185007-copernicus-marine-toolbox-credentials-configuration). Note: the downloaded datasets can be big.  
