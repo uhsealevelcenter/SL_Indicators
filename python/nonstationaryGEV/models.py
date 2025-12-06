@@ -284,8 +284,8 @@ def run_covariate_in_scale_model(x_cvte1, w_cvte1, wcomp, ridString, SignifCvte1
         print('Covariate in scale is not significant! \nUse previous model without no covariate in scale.\n New x_cvte2 is: ', x_cvte2)
         # COMMENTING OUT, NOT SURE WE NEED THIS
         #running the model again to get w_cvte2 without covariate in scale
-        print('Setting error assessment to False to speed up computation...')
-        w_cvte2, mio, standard_error = run_fitness(x_cvte2, dirs, modelType, nproc, runError=False)
+        # print('Setting error assessment to False to speed up computation...')
+        # w_cvte2, mio, standard_error = run_fitness(x_cvte2, dirs, modelType, nproc, runError=False)
   
 
 
@@ -442,7 +442,7 @@ def run_noClimateIndex_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPerio
 
     return STNDtoMHHW, station_name, year0, mm, x_s, w_s, x_N, w_N, wcomp, SignifN
 
-def run_CI_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_N, w_N, wcomp, SignifN, nproc=1):
+def run_CI_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPeriod, CI_list,x_N, w_N, wcomp, SignifN, nproc=1, lag=False):
     print('')
     print('****Running models with climate index...****')
     ridString = str(stationID)
@@ -456,7 +456,7 @@ def run_CI_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPeriod, CI_list,x
 
     # Run the models with covariates, looping through the covariates
     for i,CIname in enumerate(CI_list):
-        STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CIname)
+        STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CIname,lag=lag)
         modelInfo = {'t': mm['t'], 
                  'monthlyMax': mm['monthly_max'],
                  'covariate': None, 
@@ -477,7 +477,7 @@ def run_CI_models(rsl_xr,stationID,runWithoutModel,dirs, ReturnPeriod, CI_list,x
     # Find the model with the best fit in location
     best_model = np.nanargmax(SignifCvte1)
     print('Best model is ' + CI_list[best_model])
-    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CI_list[best_model])
+    STNDtoMHHW, station_name, year0, mm = prep_model_input_data(rsl_xr,stationID,dirs, CI_list[best_model],lag=lag)
     modelInfo = {'t': mm['t'], 
                  'covariate': mm['CI'], 
                  'monthlyMax': mm['monthly_max'], 

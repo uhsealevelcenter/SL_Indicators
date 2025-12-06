@@ -306,7 +306,7 @@ def get_covariate(t_monthly_max, CI_dir, CIname='PMM', stationID=None, lag = Tru
 
     df = pd.read_csv(CI_dir / 'climate_indices_norm.csv', parse_dates=['time'])
     CIname = CIname.upper()
-    if stationID:
+    if lag:
         dfLags = pd.read_csv(CI_dir / 'CI_correlation_results_setLag.csv')
         # Filter the DataFrame to the specific stationID and climate index
         lags = dfLags[(dfLags['stationID'] == int(stationID)) & (dfLags['climateIndex'] == CIname)]

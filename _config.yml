@@ -2,7 +2,7 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Hawaii Sea Level Indicators
-author: Playground Coordinator
+author: Julia Fiedler, Ayesha Genz
 logo: icons/trend_map.png
 copyright                   : "2024"  # Copyright year to be placed in the footer
 only_build_toc_files : true
