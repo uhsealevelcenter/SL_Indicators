@@ -21,7 +21,7 @@ parts:
       - file: notebooks/Annual/1_3_SL_Rankings_annual.ipynb
       - file: notebooks/Annual/1_4_1_SL_Extremes_annual.ipynb
       - file: notebooks/Annual/1_4_2_1_SL_Extremes_nonstationaryGEV.ipynb
-      - file: notebooks/Annual/1_4_2_2_nonstationaryGEV_ClimateIndex.ipynb
+      - file: notebooks/Annual/1_4_2_2_SL_Extremes_nonstationaryGEV_ClimateIndex.ipynb
       - file: notebooks/Annual/1_5_ranking_and_return_level_summary.ipynb
       - file: notebooks/Annual/1_6_1_SL_contributions_to_extremes.ipynb
       - file: notebooks/Annual/1_6_3_contributions_to_daily_sea_level.ipynb
