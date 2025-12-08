@@ -200,6 +200,7 @@ def plot_zebra_frame(ax, lw=5, segment_length=2, crs=ccrs.PlateCarree()):
 
 
 def get_stationinfo(data_dir):
+    import xarray as xr
     # Use a context manager to ensure the dataset is closed properly
     with xr.load_dataset(data_dir/ 'rsl_daily_hawaii.nc') as rsl:
         # Convert relevant data from xarray to a pandas DataFrame
