@@ -1,7 +1,7 @@
-# Getting Started
+# 0.0 Getting Started
 These sections establish basic libaries that we'll be using for data handling and plotting, as well as the initial data acquisition and reformatting for analysis.
 
-## Directory Setup
+## 0.0.1 Directory Setup
 
 This project requires a `data` directory to store downloaded files and an `output` directory to save results like plots and tables.
 
