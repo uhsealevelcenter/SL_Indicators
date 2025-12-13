@@ -13,14 +13,14 @@ def get_station(ds, identifier):
     
     # if identifier is an integer, assume it's a station_id
     if isinstance(identifier, int):
-        station_name = ds['station_name'].where(ds['station_id'] == identifier, drop=True).values.item()
+        station_name = str(ds['station_name'].where(ds['station_id'] == identifier, drop=True).values.item())
         station_id = int(identifier)
     # if identifier is a string, it can be an int in string form or a station name
     elif isinstance(identifier, str):
         try:
             # case 1: identifier is an int in string form
             station_id = int(identifier)
-            station_name = ds['station_name'].where(ds['station_id'] == station_id, drop=True).values.item()
+            station_name = str(ds['station_name'].where(ds['station_id'] == station_id, drop=True).values.item())
         except ValueError:
             #
             matched_stations = ds.where(ds.station_name.str.contains(identifier, case=False), drop=True)
@@ -28,7 +28,7 @@ def get_station(ds, identifier):
                 raise ValueError(f"No station found with name containing '{identifier}'")
             elif len(matched_stations['station_id']) > 1:
                 raise ValueError(f"Multiple stations found with name containing '{identifier}': {matched_stations['station_name'].values}")
-            station_name = matched_stations.station_name.values[0]
+            station_name = str(matched_stations.station_name.values[0])
             station_id = int(matched_stations.station_id.values[0])
     else:
         raise ValueError("Identifier must be an integer (station_id) or string (station name or station_id in string form).")
