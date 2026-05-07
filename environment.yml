@@ -26,6 +26,7 @@ dependencies:
   - myst-nb
   - mpich
   - mpi4py
+  - numba
   - pip
   - pip:
       - pyextremes
@@ -33,4 +34,5 @@ dependencies:
       - copernicusmarine
       - spotpy
       - selenium ## This one is only if you want to colorize your dataframes...
+      - git+https://github.com/jwfiedler/nsGEV.git  ## nonstationary GEV package
       

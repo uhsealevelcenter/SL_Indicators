@@ -30,3 +30,4 @@ copernicusmarine
 geopandas
 polars
 plotly
+# numba — install via conda (environment.yml), not pip
