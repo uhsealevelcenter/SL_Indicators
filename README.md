@@ -77,4 +77,5 @@ In order to run the notebooks succesfully, we suggest you follow the order given
 
 ## Citation
 If you use this project in your research, please cite:
+Fiedler, J.W., Genz, A. (2026). _Sea Level Indicators: Hawaiian Island Region_ [Software]. University of Hawaiʻi Sea Level Center. https://doi.org/10.5281/zenodo.21910929
 
